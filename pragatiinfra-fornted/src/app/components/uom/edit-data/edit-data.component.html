@@ -1,0 +1,41 @@
+<div class="section-wrapper">
+
+  <div class="section-header">
+    <div class="header-left">
+      <h2>Edit UOM</h2>
+    </div>
+    <div class="header-right">
+      <div class="buttons-containers">
+        <button mat-button class="submit-btn" (click)="saveData()">Submit</button>
+        <button mat-button class="cancel-btn" (click)="list()">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-body">
+    <form [formGroup]="editForm">
+      <div class="row">
+        <div class="col-md-3">
+          <mat-form-field appearance="outline">
+            <mat-label>UOM Name</mat-label>
+            <input matInput formControlName="uom_name">
+            <mat-error *ngIf="editForm.controls.uom_name.errors?.['required']">
+              this field is required.
+            </mat-error>
+          </mat-form-field>
+
+        </div>
+        <div class="col-md-3">
+          <mat-form-field appearance="outline">
+            <mat-label>Code</mat-label>
+            <input matInput formControlName="unit">
+            <mat-error *ngIf="editForm.controls.unit.errors?.['required']">
+              this field is required.
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+    </form>
+  </div>
+
+</div>

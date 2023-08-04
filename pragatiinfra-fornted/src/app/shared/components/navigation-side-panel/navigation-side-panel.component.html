@@ -1,0 +1,103 @@
+<div class="navigation-panel">
+  <!-- <br> <br>
+  <div class="user-profile">
+    <img class="avatar"
+      src="https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcTF_erFD1SeUnxEpvFjzBCCDxLvf-wlh9ZuPMqi02qGnyyBtPWdE-3KoH3s"
+      alt="Ash" />
+    <div class="username">{{permissions?.user?.name}}</div>
+  </div>-->
+  <br> 
+
+  <div style="margin-top: 20px;margin-left: 30px;">
+    <img src=".\assets\images\logo3.svg">
+  </div>
+
+  <form class="Search-form" style="width:80%;margin-left: 20px;">
+    <span matPrefix> </span>
+    <input type="text" placeholder="Search" name="search" [(ngModel)]="link_name">
+    <button style="bottom: 35px;left:200px;position: relative;background-color: #233A61;border: none;"><i
+        class="fa fa-search" aria-hidden="true" style="color: #97989D;"></i></button>
+  </form>
+
+  <ul class="navigation-panel-menu" *ngIf="links && links.length > 0">
+    <div class="scroll-bar2" width="10%">
+
+
+
+      <li *ngFor="let item of sidebarMenu;let i = index" class="sidebar" #itemEl routerLinkActive="active">
+        <div class="dropdown-title">
+          <a routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" (click)="addSubItems(item,i)">
+            <div class="allignSvg">
+              <img [src]="item.img">
+              &nbsp;&nbsp;&nbsp;&nbsp;
+              <span class="link_name">{{ caseconverter(item.link_name) }} <span><mat-icon
+                    *ngIf="item.sub_menu && item.sub_menu.length>0"
+                    style="top: 9px;position: relative;">arrow_drop_down</mat-icon></span></span>
+            </div>
+          </a>
+        </div>
+        <ul class="sub-menu" [ngClass]="{'open-submenu':openMenu[i]}">
+          <li *ngFor="let item_sub of item.sub_menu" routerLinkActive="active">
+            <a [routerLink]="[item_sub.link]">
+              <div class="allignSvg">              
+                {{item_sub.link_name | lowercase}}
+              </div>
+            </a>
+          </li>
+        </ul>
+      </li>
+
+
+<!--       
+      <li *ngFor="let item of menuSidebar | menuFilter:link_name" class="sidebar" #itemEl routerLinkActive="active">
+        <div class="dropdown-title">
+          <a routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" (click)="addSubItems(item)">
+            <div class="allignSvg">
+              <img [src]="item.img">
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              <span class="link_name">{{ caseconverter(item.link_name) }} <span><mat-icon
+                    *ngIf="item.link_name == 'User Management'"
+                    style="top: 9px;position: relative;">arrow_drop_down</mat-icon></span></span>
+            </div>
+          </a>
+        </div>
+        <ul class="sub-menu">
+          <li *ngFor="let item_sub of item.sub_menu" routerLinkActive="active">
+            <a [routerLink]="[item_sub.link]">
+              <div class="allignSvg">
+                <img [src]="item_sub.img"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                {{item_sub.link_name | lowercase}}
+              </div>
+            </a>
+          </li>
+        </ul>
+      </li> -->
+
+
+
+
+
+
+
+
+
+
+
+      <hr >
+      <li>
+        <a [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact: true}">
+          <span [ngClass]="currentPanelState">
+            <img src="../../../assets/images/support.svg" style="position: relative;top:5px">
+            &nbsp;&nbsp;&nbsp;&nbsp;Support</span>
+        </a>
+      </li>
+      <li>
+        <a (click)="logout()" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact: true}">
+          <span [ngClass]="currentPanelState">
+            <img src="../../../assets/images/icons/Blogout.svg">&nbsp;&nbsp;&nbsp;&nbsp;Log
+            out</span>
+        </a>
+      </li>
+    </div>
+  </ul>
+</div>

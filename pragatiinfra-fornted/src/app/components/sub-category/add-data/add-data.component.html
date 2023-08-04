@@ -1,0 +1,45 @@
+<div class="section-wrapper">
+
+  <div class="section-header">
+    <div class="header-left">
+      <h2>Add Sub Category</h2>
+    </div>
+    <div class="header-right">
+      <div class="buttons-containers">
+        <button mat-button class="submit-btn" (click)="saveData()">Submit</button>
+        <button mat-button class="cancel-btn" (click)="list()">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-body">
+    <form [formGroup]="addForm">
+      <div class="row">
+        <div class="col-md-3">
+          <mat-form-field appearance="outline">
+            <mat-label>Sub Category Name</mat-label>
+            <input matInput formControlName="subcategory_name">
+            <mat-error *ngIf="addForm.controls.subcategory_name.errors?.['required']">
+              this field is required.
+            </mat-error>
+          </mat-form-field>
+
+        </div>
+        <div class="col-md-3">
+          <mat-form-field>
+            <mat-label>Category</mat-label>
+            <mat-select matInput formControlName="category">
+              <mat-option *ngFor="let category of categoryList" [value]="category?._id">
+                {{category?.name}}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="addForm.controls.category.errors?.['required']">
+              this field is required.
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+    </form>
+  </div>
+
+</div>

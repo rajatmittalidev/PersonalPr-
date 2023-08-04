@@ -1,0 +1,191 @@
+li {
+    float: left;
+  
+  }
+
+  li a {
+    /* display: block; */
+    color: black;
+    text-align: center;
+    padding: 16px;
+    text-decoration: none;
+
+  }
+  .toptext{
+    display: flex;
+    margin-left: 10px;
+   
+    background-color: #fff !important;
+    font-family: 'Poppins';
+  }
+  .example-card{
+    max-width: 400px;
+}
+.example-header-image {
+    background-image: url('https://material.angular.io/assets/img/examples/shiba1.jpg');
+    background-size: cover;
+    margin-left: 20px;
+    
+
+  }
+ 
+
+  table {
+    font-family: 'Poppins', sans-serif !important;
+    border-collapse: collapse;
+    width: 98%;
+   
+    
+ 
+ 
+  }
+  
+  th{
+    background-color:#233A61 ;
+    color: #fff;
+  
+  }
+  td, th {
+    border: 1px solid #94A3B8;
+    text-align: left;
+    padding: 8px;
+  
+  }
+  
+
+   .scroll-bar{
+        
+   height: 350px;
+    
+ 
+    
+   
+    overflow-y:auto;
+   overflow-x: hidden;
+    
+    }
+
+::-webkit-scrollbar {
+width: 10px;
+}
+::-webkit-scrollbar-track{
+border: 1px solid lightgrey;
+border-radius: 5px;
+background-color:lightgrey ;
+}
+::-webkit-scrollbar-thumb{
+background: #1E293B;
+border-radius: 5px;
+}
+::-webkit-scrollbar-thumb:hover{
+background: lightblue;
+} 
+
+
+.scroll-bar1{
+        
+  height: 80%;
+  width: 100%;
+
+  overflow: auto;
+  
+  }
+
+::-webkit-scrollbar {
+width: 7px;
+height:7px;
+}
+::-webkit-scrollbar-track{
+border: 1px solid lightgrey;
+border-radius: 5px;
+background-color:lightgrey ;
+}
+::-webkit-scrollbar-thumb{
+background: #1E293B;
+border-radius: 5px;
+}
+::-webkit-scrollbar-thumb:hover{
+background: lightblue;
+}
+
+.calenderForm{
+  width:90% !important;
+  height: 100% !important;
+ 
+}
+.calender{
+ margin-bottom: 100px;
+}
+
+/* .top_container{
+
+ 
+} */
+
+.scroll-bar2{
+        
+ 
+  height: 530px;
+    
+ 
+    
+   
+  overflow-y:auto;
+ overflow-x: hidden;
+
+  
+  }
+
+::-webkit-scrollbar {
+width: 7px;
+
+}
+::-webkit-scrollbar-track{
+border: 1px solid lightgrey;
+border-radius: 5px;
+background-color:lightgrey ;
+}
+::-webkit-scrollbar-thumb{
+background: #1E293B;
+border-radius: 5px;
+}
+::-webkit-scrollbar-thumb:hover{
+background: lightblue;
+}
+.aboutcard-spaceset{
+  display: flex;
+  flex: none !important;
+}
+.v-line{
+  height:2850px;
+  border-left: 3px solid #D9D9D9;
+  position: relative;
+  left: 500px;
+  bottom: 2850px;
+  }
+  .columnLayout{
+    column-count: 4;
+    column-gap: 10px;
+    column-rule: 2px solid #E5E5E5;
+  
+    
+    
+  }
+  .parent{
+    display: flex;
+    flex-direction: row;
+    gap:10px;
+    font-family: Poppins;
+    color: #233A61;
+    /* height: 100px; */
+    
+  }
+
+
+  td.disabled-field {
+    opacity: 0.5 !important;
+}
+
+input[readonly],button[disabled],textarea[readonly] {
+  cursor: not-allowed  !important;
+}

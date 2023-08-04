@@ -1,0 +1,238 @@
+<mat-toolbar style="background-color: #fff !important;">
+  <mat-toolbar-row fxLayoutAlign="space-between center">
+    <div style="padding: 40px;margin-top: 50px">
+      <span style="font-weight: bold;display: flex;"> {{project?.projectName}}
+        <div class="on-track">
+          <img src=".\assets\images\ontrack.svg">&nbsp; On Track
+        </div>
+      </span>
+    </div>
+    <div>
+      <button mat-button class="button" [routerLink]="['/add-project']">Add Project + </button>
+
+      <button mat-button class="button" (click)="addMember()"> <mat-icon
+          style="font-size: medium;position: relative;right:-10px;">group_add</mat-icon>
+        Add Member </button>
+
+      <button mat-button [matMenuTriggerFor]="menu"><mat-icon [matBadge]="recentActivitiesLen" matBadgeColor="warn"
+          style="margin-left:-10px">notifications</mat-icon></button>
+      <mat-menu #menu="matMenu">
+        <div style="height: 450px;margin-top: 20px;">
+          <div class="scroll-bar2" fxLayout="column">
+            <div fxFlex="row" fxLayoutAlign="start" *ngFor="let data of recentActivities">
+              <div mat-card-avatar class="example-header-image"></div>
+
+              <div class="notification-container">
+                <div class="content">{{data.description}}
+                  <div class="time" style="color: #BBBBBB;">{{data.time}}</div><br>
+                </div>
+              </div>
+
+            </div><br>
+
+
+          </div>
+        </div>
+      </mat-menu>
+
+    </div>
+  </mat-toolbar-row>
+
+  <mat-toolbar-row>
+    <hr style="width:100%">
+  </mat-toolbar-row>
+</mat-toolbar>
+
+<div>
+  <ul class="toptext" style="background-color: #fff !important;list-style: none;">
+    <li style="border-right: 1px solid #D9D9D9;padding-right: 10px;"><a style="color: #000;" [routerLink]="['/dpr']"
+        routerLinkActive="active-link"><i class="fa fa-eye" aria-hidden="true" style="color:#97989D;"></i> <span
+          style="color:#97989D;"> Projects</span></a></li>
+    <li style="border-right: 1px solid #D9D9D9;padding-right: 20px;"><a style="color: #000;"
+        [routerLink]="['/view-project/data-analysis',projectId]" routerLinkActive="active-link-active"
+        [routerLinkActiveOptions]="{exact: true}"><i class="fa fa-eye" aria-hidden="true" style="color:#97989D;"></i>
+        <span style="color:#97989D;"> Data-Analysis</span></a></li>
+    <li style="border-right: 1px solid #D9D9D9; padding-right: 20px;"><a style="color: #000;"
+        [routerLink]="['/view-project/progress-sheet',projectId]" routerLinkActive="active-link-active"><i
+          class="fa fa-edit" aria-hidden="true" style="color:#233A61;"></i> <span style="color:#233A61">
+          Progress-sheet</span></a></li>
+    <li><a style="color: #000;" [routerLink]="['/view-project/calender',projectId]" routerLinkActive="active-link"><i
+          class="fa fa-edit" aria-hidden="true" style="color:#97989D;"></i><span style="color:#97989D;">
+          Calender</span></a></li>
+  </ul>
+</div>
+
+<br>
+
+<div style="background-color: #fff !important;margin-top: 20px;margin-left: 50px;">
+  <h3 style="font-family: 'Poppins';">Project progress monitoring sheets(PPMS)</h3>
+</div>
+
+<body>
+  <div class="scroll-bar1" style="width: 93%;">
+    <table *ngIf="progressPermissionsView?.isSelected; else noView" style="direction: ltr !important;">
+      <tr>
+        <th>
+          <div class="section-container">
+            <div class="left-cont">Description</div>
+            <div class="right-cont"><mat-icon matTooltip="Add location" (click)="addLocation()">add</mat-icon></div>
+          </div>
+        </th>
+        <th>R1 End Date</th>
+        <th>R2 End Date</th>
+        <th>R3 End Date</th>
+        <th>Actual Revised Start Date</th>
+        <th>Working Days Revised</th>
+        <th>Baseline Start Date</th>
+        <th>Baseline End Date</th>
+        <th>Base Line Working Days</th>
+        <th>Target Till Date as per Baseline</th>
+        <th>No of Days Balance as per Baseline</th>
+        <th>Daily Asking Rate as per Baseline</th>
+        <th>UOM</th>
+        <th>Total Quantity</th>
+        <th>Cumulative Completed</th>
+        <th>Target Till Date as per Revised End Date</th>
+        <th>No of Days Balance as per revised dates</th>
+        <th>Daily Asking Rate as per Revised End Date</th>
+        <th>Activity Balance (%)</th>
+        <th>Total</th>
+        <th>Remarks</th>
+      </tr>
+      <tbody>
+        <ng-container *ngFor=" let locationItem of projectLocationsList;let locationIndex=index ">
+          <tr style="color:#233A61 !important;font-weight: bolder ;background-color: #aaa">
+            <td class="location-first-td">
+              <div class="section-container">
+                <div class="left-cont location-name" style="font-size: 16px;">{{locationItem.location_name}}</div>
+                <div class="right-cont">
+                  <mat-icon matTooltip="Add Activity" (click)="addStructure(locationIndex)">add</mat-icon>
+                  <mat-icon matTooltip="Delete location" (click)="deleteLocation(locationIndex)">delete</mat-icon>
+                </div>
+              </div>
+            </td>
+            <td>{{locationItem.structures | psMinTableDate:'location':'r1EndDate':'max'}}</td>
+            <td>{{locationItem.structures | psMinTableDate:'location':'r2EndDate':'max'}}</td>
+            <td>{{locationItem.structures | psMinTableDate:'location':'r3EndDate':'max'}}</td>
+            <td>{{locationItem.structures | psMinTableDate:'location':'actual_revised_start_date':'min'}}</td>
+            <td></td>
+            <td>{{locationItem.structures | psMinTableDate:'location':'base_line_start_date':'min'}}</td>
+            <td>{{locationItem.structures | psMinTableDate:'location':'base_line_end_date':'max'}}</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+
+          <ng-container *ngFor="let structureItem of locationItem.structures;let structureIndex=index">
+            <tr style="color:#233A61 !important; font-weight: bolder;background-color: #ddd;">
+              <td class="structure-first-td">
+                <div class="section-container">
+                  <div class="left-cont structure_name"> {{structureItem.structure_name}} </div>
+                  <div class="right-cont">
+                    <mat-icon matTooltip="Add sub activity"
+                      (click)="addActivity(locationIndex,structureIndex)">add</mat-icon>
+                    <mat-icon matTooltip="Delete Activity"
+                      (click)="deleteStructure(locationIndex,structureIndex)">delete</mat-icon>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <ng-container>
+                  {{structureItem.activities | psMinTableDate:'structure':'r1EndDate':'max'}}
+                </ng-container>
+              </td>
+              <td>{{structureItem.activities | psMinTableDate:'structure':'r2EndDate':'max'}}</td>
+              <td>{{structureItem.activities | psMinTableDate:'structure':'r3EndDate':'max'}}</td>
+              <td>{{structureItem.activities | psMinTableDate:'structure':'actual_revised_start_date':'min'}}</td>
+              <td></td>
+              <td>{{structureItem.activities | psMinTableDate:'structure':'base_line_start_date':'min'}}</td>
+              <td>{{structureItem.activities | psMinTableDate:'structure':'base_line_end_date':'max'}}</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+
+            <tr *ngFor="let activityItem of structureItem.activities,let activityIndex=index" style="font-size: 10px;">
+              <td style="color:#595b5d;" class="activity-first-td">
+                <div class="section-container">
+                  <div class="left-cont activity_name" style="font-size: 12px;"> {{activityItem.activity_name}} </div>
+                  <div class="right-cont">
+                    <mat-icon matTooltip="Edit sub activity"
+                      (click)="addData(activityItem,locationIndex,structureIndex,activityIndex)">edit</mat-icon>
+                    <mat-icon matTooltip="Delete sub activity"
+                      (click)="deleteActivity(locationIndex,structureIndex,activityIndex)">delete</mat-icon>
+                  </div>
+                </div>
+              </td>
+              <td>{{activityItem?.r1EndDate | date}}</td>
+              <td>{{activityItem?.r2EndDate | date}}</td>
+              <td>{{activityItem?.r3EndDate | date}}</td>
+              <td>{{activityItem?.actual_revised_start_date | date}}</td>
+              <td>{{activityItem?.workingDaysRevised}}</td>
+              <td>{{activityItem?.base_line_start_date| date}}</td>
+              <td>{{activityItem?.base_line_end_date | date}}</td>
+              <td>{{activityItem?.baseLineWorkingDays}}</td>
+              <td>
+                <span
+                  *ngIf="(activityItem?.dailyCumulativeTotal == activityItem?.total) && activityItem?.dailyCumulativeTotal">Completed</span>
+                <span
+                  *ngIf="activityItem?.dailyCumulativeTotal !== activityItem?.total">{{activityItem?.dailyCumulativeTotal}}</span>
+
+              </td>
+              <td>{{activityItem?.noofDaysBalanceasperbaseLine}}</td>
+              <td>{{activityItem?.dailyAskingRateasperbaseLine}}</td>
+              <td>{{activityItem?.uom}}</td>
+              <td>{{activityItem?.quantity}}</td>
+              <td>{{activityItem?.dailyCumulativeTotal}}</td>
+              <td>
+                <span
+                  *ngIf="(activityItem?.dailyCumulativeTotal == activityItem?.total) && activityItem?.dailyCumulativeTotal">Completed</span>
+                <span
+                  *ngIf="activityItem?.dailyCumulativeTotal !== activityItem?.total">{{activityItem?.dailyCumulativeTotal}}</span>
+
+              </td>
+              <td>{{activityItem?.noofDaysBalanceasperrevisedEnddate}}</td>
+              <td>{{activityItem?.dailyAskingRateasperRevisedEndDate}}</td>
+              <td>{{(100-(100 * activityItem.dailyCumulativeTotal) / activityItem.total).toFixed(0)}}</td>
+              <td>{{activityItem?.dailyCumulativeTotal}}</td>
+              <td><button mat-button class="remark-btn" (click)="addremarks(activityItem)">View remarks</button></td>
+
+
+            </tr>
+
+          </ng-container>
+
+        </ng-container>
+
+
+
+
+      </tbody>
+
+    </table>
+    <ng-template #noView>
+      <h3>you don't have permissions to view Progress sheet</h3>
+    </ng-template>
+
+  </div>
+</body>

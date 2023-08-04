@@ -1,0 +1,282 @@
+.container {
+  margin: 10px;
+}
+
+.example-container {
+  height: 60vh;
+  overflow: auto;
+}
+td:first-child {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+}
+th:first-child {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  background-color: #233a61;
+}
+// tbody tr:nth-child(even) td:first-child {
+//   // background-color: #f2f2f2;
+
+// }
+/* table {
+    width: 100%;
+    height: 100vh;
+    margin-left: 20px;
+
+
+  }
+  table th{
+    background-color: #233A61;
+    color: white;
+   margin: auto;
+   padding: 10px;
+   text-align: center;
+
+
+  }
+  table td{
+
+   background-color: hsla(240, 36%, 96%, 0.984);
+    margin: auto;
+    padding: 10px;
+
+  } */
+
+.toptext {
+  display: flex !important;
+  margin-left: 30px;
+  color: black !important;
+}
+
+.toptext li {
+  margin: 0 20px;
+}
+
+table {
+  font-family: "Poppins", sans-serif !important;
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 1px solid #999;
+  width: 100%;
+  font-size: 12px;
+  margin-left: 10px;
+  margin-bottom: 20px;
+  margin-right: 20px;
+}
+
+th {
+  background-color: #233a61;
+  border-right: 1px solid #999;
+  border-bottom: 1px solid #999;
+  text-align: left;
+  padding: 10px 20px !important;
+  color: white;
+  font-weight: 300;
+  font-size: 15px;
+  font-style: normal;
+  white-space: nowrap;
+}
+
+td {
+  border-right: 1px solid #999;
+  border-bottom: 1px solid #999;
+  text-align: center;
+  padding: 15px 20px;
+  color: #233a61;
+  font-style: normal;
+  font-size: 14px;
+
+  /* width:100px; */
+}
+
+.descriptionalign {
+  display: flex !important;
+  align-items: center !important;
+  text-align: left !important;
+  justify-content: flex-start !important;
+}
+
+.activityalign {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 15px !important;
+  text-align: left;
+}
+
+.example-card {
+  max-width: 400px;
+}
+
+.example-header-image {
+  background-image: url("https://material.angular.io/assets/img/examples/shiba1.jpg");
+  background-size: cover;
+  margin-top: 10px;
+}
+
+.scroll-bar1 {
+  min-height: 200px;
+  width: 93%;
+  margin-left: 40px;
+  margin-bottom: 100px;
+  overflow: auto;
+}
+
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+::-webkit-scrollbar-track {
+  border: 1px solid lightgrey;
+  border-radius: 5px;
+  background-color: lightgrey;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1e293b;
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: lightblue;
+}
+
+::ng-deep.mat-menu-panel {
+  max-width: none !important;
+  margin-right: 20px;
+}
+
+.notification-container {
+  width: 500px;
+  margin-top: 10px;
+}
+
+.scroll-bar2 {
+  height: 400px;
+  width: 93%;
+  margin-left: 20px;
+  overflow: auto;
+  overflow-x: hidden;
+}
+
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+::-webkit-scrollbar-track {
+  border: 1px solid lightgrey;
+  border-radius: 5px;
+  background-color: lightgrey;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1e293b;
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: lightblue;
+}
+
+::ng-deep.mat-menu-panel {
+  max-width: none !important;
+}
+
+.notification-container {
+  width: 200px;
+  margin-left: 10px;
+}
+
+.structureAlign {
+  margin-left: 10px;
+}
+
+.activityAlign {
+  margin-left: 20px;
+}
+
+.button {
+  background-color: #fff;
+  padding: 1px 1px;
+  width: 150px;
+  margin-top: 50px;
+  margin-left: 20px;
+  position: relative;
+  border: 1px solid #97989d;
+  border-radius: 5px;
+  color: #97989d;
+  font-family: "Poppins";
+}
+
+.section-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 250px;
+  word-break: break-all;
+
+  mat-icon {
+    font-size: 19px;
+    width: 20px;
+    height: 20px;
+    line-height: 22px;
+    cursor: pointer;
+
+    &:hover {
+      opacity: 0.7;
+    }
+  }
+
+  .right-cont {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+  }
+}
+
+.remark-btn {
+  background-color: #233a61;
+  color: #fff;
+  font-family: Poppins;
+  padding: 10px 10px !important;
+  line-height: 1;
+  font-size: 14px;
+}
+
+.location-name {
+  font-weight: 700;
+}
+
+.structure_name {
+  font-weight: normal;
+  color: #333;
+  margin-left: 20px;
+}
+
+.activity_name {
+  color: #888;
+  margin-left: 40px;
+}
+
+.on-track {
+  margin: 0 0 0 25px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.location-first-td{
+  background-color: #aaa;
+}
+.structure-first-td{
+  background-color: #ccc;
+}
+
+.activity-first-td{
+  background-color: #fff;
+}

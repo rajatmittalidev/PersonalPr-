@@ -1,0 +1,125 @@
+/* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@200;400;600;700&display=swap');
+@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css");
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+
+$background: #fff;
+$font-color: #FFFF;
+
+html, body, ul, p, h1, h2, h3, h4, h5, h6, blockquote {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif !important;
+}
+
+html {
+  font-size: 16px;
+}
+
+body {
+  background: $background;
+}
+
+
+.snack-success {
+  background: #44b444;
+}
+
+.snack-error {
+  background: #f33333;
+}
+
+.snackStyle *{
+  color: #fff;
+}
+
+.snackStyle ul {
+  margin: 0;
+  padding: 0px 10px 0px 20px;
+  color: #fff;
+}
+
+.snackStyle li {
+  padding: 1px 0 1px 0;
+}
+
+a {
+  color: $font-color;
+  font-weight: 400;
+  text-decoration: none;
+}
+html, body { height: 100%; }
+body { margin: 0; font-family: 'Poppins', sans-serif !important; }
+
+
+
+.labeled-outlined-field-wrapper {
+  display: flex;
+  flex-direction: column;
+
+  .outline-filter-field-label {
+      font-size: 14px;
+      color: #555;
+  }
+}
+
+.outline-filter-field {
+  direction: ltr;
+   .mat-form-field-icon-prefix>.mat-icon,
+   .mat-form-field-icon-suffix>.mat-icon {
+       padding: 2px;
+   }
+
+   .mat-form-field-wrapper{
+    margin: 0 !important;
+    padding: 0 !important;
+
+       &-text-field--outlined .mat-form-field-infix {
+           padding-top: 8px;
+           padding-bottom: 8px;
+       }
+
+       .mat-floating-label {
+           top: 20px !important;
+           font-size: 14px;
+       }
+   }
+
+
+   &.mat-form-field-appearance-outline {
+       .cstm-prefix-style {
+           padding: 0 !important;
+           width: 20px;
+           height: 20px;
+           line-height: 22px;
+           font-size: 21px;
+           position: relative;
+           top: 1px;
+       }
+
+       .mat-form-field-infix {
+        padding: 4px 0 9px 0 !important;
+    }
+   }
+
+
+   .mat-icon-button.mat-button-base {
+      width: 30px !important;
+      height: 30px !important;
+      padding: 0 !important;
+  }
+
+
+  &.hide-form-bottom-field{
+      .mat-form-field-subscript-wrapper{
+          display: none;
+      }
+  }
+
+
+  .mat-date-range-input-inner {
+      text-align: left !important;
+  }
+
+}
