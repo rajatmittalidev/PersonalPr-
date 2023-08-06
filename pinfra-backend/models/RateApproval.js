@@ -4,7 +4,9 @@ const config = require('../config/env');
 
 const RateApprovalSchema = new mongoose.Schema({
 
-
+    purchase_request_number: {
+        type: String,
+    },
     title: {
         type: String,
         required: true
@@ -69,7 +71,7 @@ const RateApprovalSchema = new mongoose.Schema({
                 },
                 item_subtotal: {
                     type: Number,
-                    default:0
+                    default: 0
                 },
                 item_total_amount: {
                     type: Number,
@@ -121,7 +123,7 @@ const RateApprovalSchema = new mongoose.Schema({
                 default: 0
             },
         }
-    ],  
+    ],
     created_by: String,
     updated_by: String
 }, {

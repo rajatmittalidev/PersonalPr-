@@ -74,6 +74,12 @@ export const routes: Routes = [
       .then(mod => mod.ProcurmentModuleModule),
     canActivate: [AuthGuard]
   },
+  {
+    path: 'rate-comparative',
+    loadChildren: () => import('./../components/rate-comparative/rate-comparative.module')
+      .then(mod => mod.RateComparativeModule),
+    canActivate: [AuthGuard]
+  },
 
   {
     path: 'site',

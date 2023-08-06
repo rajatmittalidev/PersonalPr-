@@ -91,6 +91,7 @@ async function getList(req, res) {
                             },
                             {
                                 "$project": {
+                                    "purchase_request_number": 1,
                                     "title": 1,
                                     "handle_by": 1,
                                     "date": 1,
@@ -259,7 +260,7 @@ async function getDetails(req, res) {
                     "created_by": 1,
                     "created_at": 1,
                     "updated_at": 1,
-                    "itemDetail": { "$arrayElemAt": ["$items.itemDetail", 0] }              
+                    "itemDetail": { "$arrayElemAt": ["$items.itemDetail", 0] }
                 }
             },
             {
@@ -302,17 +303,17 @@ async function getDetails(req, res) {
                     "created_by": 1,
                     "created_at": 1,
                     "updated_at": 1,
-                    "items.qty":"$items.qty",
-                    "items.tax":"$items.tax",
-                    "items.vendors":"$items.vendors",
-                    "items.attachment":"$items.attachment",
-                    "items.remark":"$items.remark",
-                    "items._id":"$items._id",
-                    "items.item_id":"$items.item_id",
-                    "items.item_name":"$itemDetail.item_name",
-                    "items.categoryDetail":{ "$arrayElemAt": ["$items.categoryDetail", 0] },
-                    "items.subCategoryDetail":{ "$arrayElemAt": ["$items.subCategoryDetail", 0] },
-                    "items.uomDetail":{ "$arrayElemAt": ["$items.uomDetail", 0] }    
+                    "items.qty": "$items.qty",
+                    "items.tax": "$items.tax",
+                    "items.vendors": "$items.vendors",
+                    "items.attachment": "$items.attachment",
+                    "items.remark": "$items.remark",
+                    "items._id": "$items._id",
+                    "items.item_id": "$items.item_id",
+                    "items.item_name": "$itemDetail.item_name",
+                    "items.categoryDetail": { "$arrayElemAt": ["$items.categoryDetail", 0] },
+                    "items.subCategoryDetail": { "$arrayElemAt": ["$items.subCategoryDetail", 0] },
+                    "items.uomDetail": { "$arrayElemAt": ["$items.uomDetail", 0] }
                 }
             },
             {
@@ -330,21 +331,21 @@ async function getDetails(req, res) {
                     "created_by": 1,
                     "created_at": 1,
                     "updated_at": 1,
-                    "items.qty":"$items.qty",
-                    "items.tax":"$items.tax",
-                    "items.vendors":"$items.vendors",
-                    "items.attachment":"$items.attachment",
-                    "items.remark":"$items.remark",
-                    "items._id":"$items._id",
-                    "items.item_id":"$items.item_id",
-                    "items.item_name":"$itemDetail.item_name",
-                    "items.categoryDetail._id":1,
-                    "items.categoryDetail.name":1,
-                    "items.categoryDetail.code":1,
-                    "items.subCategoryDetail._id":1,
-                    "items.subCategoryDetail.subcategory_name":1,
-                    "items.uomDetail._id":1,  
-                    "items.uomDetail.uom_name":1,  
+                    "items.qty": "$items.qty",
+                    "items.tax": "$items.tax",
+                    "items.vendors": "$items.vendors",
+                    "items.attachment": "$items.attachment",
+                    "items.remark": "$items.remark",
+                    "items._id": "$items._id",
+                    "items.item_id": "$items.item_id",
+                    "items.item_name": "$itemDetail.item_name",
+                    "items.categoryDetail._id": 1,
+                    "items.categoryDetail.name": 1,
+                    "items.categoryDetail.code": 1,
+                    "items.subCategoryDetail._id": 1,
+                    "items.subCategoryDetail.subcategory_name": 1,
+                    "items.uomDetail._id": 1,
+                    "items.uomDetail.uom_name": 1,
                 }
             },
             {
@@ -367,9 +368,9 @@ async function getDetails(req, res) {
                 }
             }
         ]);
-       
+
         if (recordDetail && recordDetail.length > 0) {
-            res.status(200).json(await Response.success({details:recordDetail,vendorsList:getVendorList}, responseMessage(reqObj.langCode, 'SUCCESS')));
+            res.status(200).json(await Response.success({ details: recordDetail, vendorsList: getVendorList }, responseMessage(reqObj.langCode, 'SUCCESS')));
         } else {
             res.status(422).json(await Response.success({}, responseMessage(reqObj.langCode, 'NO_RECORD_FOUND'), req));
         }
