@@ -215,13 +215,13 @@
       <div class="vendor-value-cont" style="background-color: #186D3C14;">
         <div class="vendor-value-label">Freight</div>
         <div class="vendor-value">
-          <input type="number" min="0" (keyup)="onChangeFreightCharges($event,item)" (change)="onChangeFreightCharges($event,item)" [value]="item.freight_charges">
+          <input type="number" min="0" (keyup)="onChangeFreightCharges($event,item)" (change)="onChangeFreightCharges($event,item)" [value]="item.freight_charges" [readonly]="item.subtotal == 0">
         </div>
       </div>
       <div class="vendor-value-cont" style="background-color: #186D3C14;">
         <div class="vendor-value-label">Freight GST(%)</div>
         <div class="vendor-value">
-          <input type="number" min="0" (keyup)="onChangeFreightTaxPercent($event,item)" (change)="onChangeFreightTaxPercent($event,item)" [value]="item.freight_tax">
+          <input type="number" min="0" (keyup)="onChangeFreightTaxPercent($event,item)" (change)="onChangeFreightTaxPercent($event,item)" [value]="item.freight_tax" [readonly]="item.subtotal == 0">
         </div>
       </div>
       <div class="vendor-value-cont" style="background-color: #073B4C14;">
