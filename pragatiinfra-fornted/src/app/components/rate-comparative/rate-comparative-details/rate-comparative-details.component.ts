@@ -34,8 +34,7 @@ export class RateComparativeDetailsComponent implements OnInit {
     items: this.formBuilder.array([]),
     _id: new FormControl()
   });
-  uomList: any;
-  itemList: any;
+
   details: any = {};
 
   constructor(
@@ -61,6 +60,7 @@ export class RateComparativeDetailsComponent implements OnInit {
       }
     });
     dialogPopup.afterClosed().subscribe((result:any) => {
+      console.log('result', result)
 
       if (result && result['option'] === 1) {
         
@@ -71,14 +71,11 @@ export class RateComparativeDetailsComponent implements OnInit {
 
 
   getList() {
-    const UOM = this.http.get<any>(`${environment.api_path}${UOM_API}`);
-    const item = this.http.get<any>(`${environment.api_path}${ITEM_API}`);
+
     const site = this.http.get<any>(`${environment.api_path}${GET_SITE_API}`);
-    this.httpService.multipleRequests([UOM, item, site], {}).subscribe(res => {
+    this.httpService.multipleRequests([site], {}).subscribe(res => {
       if (res) {
-        this.uomList = res[0].data;
-        this.itemList = res[1].data;
-        this.siteList = res[2].data;
+        this.siteList = res[0].data;
       }
     })
   }
@@ -143,9 +140,7 @@ export class RateComparativeDetailsComponent implements OnInit {
     })
   }
 
-  getItemName(id: any) {
-    return this.itemList.filter(obj => obj._id == id)[0].item_name;
-  }
+
 
   updateRequest(status: any) {
     this.httpService.PUT(RATE_COMPARATIVE_DETAIL_API, { _id: this.details._id, status: status, remarks: this.purchaseRequestForm.value.remarks }).subscribe(res => {

@@ -338,7 +338,7 @@ async function getDetails(req, res) {
                     "items.remark": "$items.remark",
                     "items._id": "$items._id",
                     "items.item_id": "$items.item_id",
-                    "items.item_name": "$itemDetail.item_name",
+                    "items.item_name": "$items.item_name",
                     "items.categoryDetail._id": 1,
                     "items.categoryDetail.name": 1,
                     "items.categoryDetail.code": 1,

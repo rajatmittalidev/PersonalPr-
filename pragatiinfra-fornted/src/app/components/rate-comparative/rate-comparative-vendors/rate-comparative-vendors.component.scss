@@ -55,6 +55,7 @@
             background-color: #233a61;
             color: #fff;
             padding: 10px 20px;
+            font-weight: normal;
         }
         td {
             padding: 10px 20px;
@@ -93,4 +94,13 @@
     border: 1px solid #ccc;
     border-radius: 4px;
     padding: 5px 10px;
+}
+
+.td-subtitle {
+    font-size: 11px;
+    font-weight: normal;
+}
+.header-subtitle {
+    font-size: 14px;
+    font-weight: normal;
 }

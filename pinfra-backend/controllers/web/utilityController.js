@@ -125,6 +125,7 @@ function addRateApproval(dataObj, langCode, currentUserId) {
             delete cloneData._id;
             delete cloneData.items;
             delete cloneData.purchase_request_number;
+            delete cloneData.remark;
             cloneData.purchase_request_id = dataObj._id;
             cloneData.status = 'pending';
             cloneData.vendors_total = vendorTotal;
