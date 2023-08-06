@@ -53,14 +53,14 @@
 
       <div class="flex-div" style="display: flex;flex-direction: column;">
         <label style="color: #4272BF;font-size: 14px;">Request title </label>
-        <input placeholder="Enter title" formControlName="title"
+        <input placeholder="Enter title" formControlName="title" readonly
           style="width:100%;padding:10px;border-radius: 6px;border:1px solid #ccc;cursor: pointer;margin-top: 3px;font-family: 'Poppins';    height: 50px;">
       </div>
 
       <div class="flex-div" style="display: flex;flex-direction: column;">
         <label style="color: #4272BF;font-size: 14px;">Request date</label>
         <mat-form-field appearance="outline">
-          <input matInput [matDatepicker]="date" formControlName="date" placeholder="Auto generate Request Date" />
+          <input matInput [matDatepicker]="date" formControlName="date" placeholder="Auto generate Request Date" readonly/>
           <mat-datepicker-toggle matSuffix [for]="date"></mat-datepicker-toggle>
           <mat-datepicker #date></mat-datepicker>
         </mat-form-field>
@@ -73,7 +73,7 @@
         <div class="custom-form-control">
           <mat-form-field appearance="outline">
             <input matInput [matDatepicker]="requiredByStartDate" formControlName="expected_delivery_date"
-              placeholder="Enter Required by" />
+              placeholder="Enter Required by" readonly/>
             <mat-datepicker-toggle matSuffix [for]="requiredByStartDate"></mat-datepicker-toggle>
             <mat-datepicker #requiredByStartDate></mat-datepicker>
 
@@ -104,7 +104,7 @@
       <div class="flex-div" style="display: flex;flex-direction: column;">
         <label style="color: #4272BF;font-size: 14px;">Site name <span class="star">*</span></label>
 
-        <mat-select id="site" placeholder="Select site" formControlName="site"
+        <mat-select id="site" placeholder="Select site" formControlName="site" [disabled]="true"
           style="padding: 10px;width: 100;border:1px solid #ccc;border-radius: 6px;cursor: pointer;margin-top: 10px;font-family: 'Poppins';">
           <mat-option [value]="item._id" *ngFor="let item of siteList">
             {{item.site_name}}

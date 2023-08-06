@@ -255,3 +255,7 @@ form {
     min-width: 144px;
   }
 }
+
+input[readonly="true"],input[readonly],.mat-select-disabled {
+  opacity: 0.6;
+}
