@@ -36,7 +36,7 @@ export class RateComparativeVendorsComponent implements OnInit {
 
     this.pageDetail = data.dataObj;
     this.itemVendors = data.dataObj.vendors;
-
+    this.itemVendors.map((o:any)=>this.totalInputQuantity = this.totalInputQuantity+o.quantity)
   }
 
 

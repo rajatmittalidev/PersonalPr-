@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { FormGroup, FormControl, Validators, FormBuilder, FormArray } from '@angular/forms';
-import { RATE_COMPARATIVE_DETAIL_API, GET_SITE_API, ITEM_API, UOM_API } from '@env/api_path';
+import { RATE_COMPARATIVE_DETAIL_API, GET_SITE_API, ITEM_API, UOM_API, RATE_COMPARATIVE_API } from '@env/api_path';
 import { RequestService } from '@services/https/request.service';
 import { SnackbarService } from '@services/snackbar/snackbar.service';
 
@@ -9,6 +9,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '@env/environment';
 import { RateComparativeVendorsComponent } from '../rate-comparative-vendors/rate-comparative-vendors.component';
+import {isEmpty} from 'lodash';
 
 @Component({
   selector: 'app-rate-comparative-details',
@@ -63,6 +64,13 @@ export class RateComparativeDetailsComponent implements OnInit {
       console.log('result', result)
 
       if (result && result['option'] === 1) {
+
+        this.details.items = this.details.items.map((o:any)=>{
+          if(o._id == dataObj._id){
+            o.vendors = result.data.itemVendors;
+          }
+          return o;
+        });
         
       }
     });
@@ -86,6 +94,7 @@ export class RateComparativeDetailsComponent implements OnInit {
       date: data.date,
       expected_delivery_date: data.expected_delivery_date,
       rate_approval_number: data.rate_approval_number,
+      handle_by: data.handle_by,
       site: data.site,
       local_purchase: data.local_purchase,
       remarks: data.remarks,
@@ -142,9 +151,32 @@ export class RateComparativeDetailsComponent implements OnInit {
 
 
 
-  updateRequest(status: any) {
-    this.httpService.PUT(RATE_COMPARATIVE_DETAIL_API, { _id: this.details._id, status: status, remarks: this.purchaseRequestForm.value.remarks }).subscribe(res => {
+  updateRequest() {
+
+    if(!this.purchaseRequestForm.valid){
+      return;
+    }
+
+    let requestedData:any = this.purchaseRequestForm.value; 
+    requestedData['_id'] = this.details._id;
+    requestedData['items'] = this.details.items;
+    this.load = true;
+    this.httpService.PUT(RATE_COMPARATIVE_API, requestedData).subscribe(res => {
       // this.router.navigate(['/procurement/prlist'])
+      this.load = false;
+    },(err:any)=>{
+      this.load = false;
+      if (err.errors && !isEmpty(err.errors)) {
+        let errMessage = '<ul>';
+        for (let e in err.errors) {
+          let objData = err.errors[e];
+          errMessage += `<li>${objData[0]}</li>`;
+        }
+        errMessage += '</ul>';
+        this.snack.notifyHtml(errMessage, 2);
+      } else {
+        this.snack.notify(err.message, 2);
+      }
     })
   }
 
