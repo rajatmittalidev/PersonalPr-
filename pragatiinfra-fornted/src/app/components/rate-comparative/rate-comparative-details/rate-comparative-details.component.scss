@@ -6,6 +6,7 @@ mat-toolbar {
 .example-spacer {
   flex: 1 1 auto;
 }
+
 .requests {
   height: 40px;
   width: 1140px;
@@ -17,6 +18,7 @@ mat-toolbar {
   margin-left: 30px;
   font-size: 14px;
 }
+
 .innerreq {
   color: #233a61;
   font-family: "Poppins";
@@ -24,6 +26,7 @@ mat-toolbar {
   font-style: normal;
   font-size: 14px;
 }
+
 .createreq {
   background-color: #233a61;
   color: #fff;
@@ -38,6 +41,7 @@ mat-toolbar {
   align-items: center;
   justify-content: center;
 }
+
 .topcard {
   width: 100%;
   height: auto;
@@ -56,6 +60,7 @@ table {
   margin-right: 20px;
   margin-top: 8px;
 }
+
 th {
   background-color: #233a61;
   border: 1px solid #94a3b8;
@@ -78,9 +83,11 @@ td {
   font-family: "Poppins";
   /* width:100px; */
 }
+
 tr:nth-child(even) {
   background-color: #e5e6eb !important;
 }
+
 form {
   padding: 10px 20px 10px 20px;
 }
@@ -93,15 +100,18 @@ form {
   width: 7px;
   height: 7px;
 }
+
 ::-webkit-scrollbar-track {
   border: 1px solid lightgrey;
   border-radius: 5px;
   background-color: lightgrey;
 }
+
 ::-webkit-scrollbar-thumb {
   background: #1e293b;
   border-radius: 5px;
 }
+
 ::-webkit-scrollbar-thumb:hover {
   background: lightblue;
 }
@@ -183,30 +193,65 @@ form {
   border: none;
 }
 
-  
-  .p-btns {
-    background: #233a61;
-    padding: 5px 10px;
-    border-radius: 4px;
-    font-size: 12px;
-    cursor: pointer;
 
-    &:hover{
-      opacity: 0.7;
-    }
+.p-btns {
+  background: #233a61;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  cursor: pointer;
+
+  &:hover {
+    opacity: 0.7;
+  }
 }
-  
 
-  .p-btns-button {
+
+.p-btns-button {
+  background: #233a61;
+  border: 1px solid #233a61;
+  padding: 7px 40px;
+  border-radius: 4px;
+  font-size: 12px;
+  cursor: pointer;
+  color: #fff;
+
+  &:hover {
+    opacity: 0.7;
+  }
+}
+
+
+.vendor-wapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 40px;
+
+  .vendor-name-cl {
+    padding: 6px 15px;
     background: #233a61;
-    border: 1px solid #233a61;
-    padding: 7px 40px;
-    border-radius: 4px;
-    font-size: 12px;
-    cursor: pointer;
     color: #fff;
+  }
 
-    &:hover{
-      opacity: 0.7;
+  .vendor-value-cont {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #073B4C0D;
+    padding: 6px 15px;
+    margin-bottom: 10px;
+    gap: 10px;
+
+    input {
+      width: 80px;
+      border: 1px solid #ccc;
+      border-radius: 2px;
+      padding: 5px 5px;
+      outline: none;
     }
+  }
+
+  .vendor-value-label {
+    min-width: 144px;
+  }
 }

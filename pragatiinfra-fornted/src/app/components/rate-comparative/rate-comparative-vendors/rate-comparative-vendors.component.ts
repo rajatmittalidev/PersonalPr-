@@ -37,6 +37,11 @@ export class RateComparativeVendorsComponent implements OnInit {
     this.pageDetail = data.dataObj;
     this.itemVendors = data.dataObj.vendors;
     this.itemVendors.map((o:any)=>this.totalInputQuantity = this.totalInputQuantity+o.quantity)
+
+    this.data.vendorsList.map((o: any) => {
+      this.vendorAssociatedData[o._id] = o;
+      return o;
+    });
   }
 
 
@@ -47,17 +52,7 @@ export class RateComparativeVendorsComponent implements OnInit {
   onYesClick(): void {
     this.dialogRef.close({ option: 1, data: this.data });
   }
-
-  getVendorList() {
-    this.request.GET(VENDOR_API, {}).subscribe((res: any) => {
-      if (res && res.data && res.data.length > 0) {
-        res.data.map((o: any) => {
-          this.vendorAssociatedData[o._id] = o;
-          return o;
-        });
-      }
-    })
-  }
+ 
 
 
   onChangeQuantity(event, itemObj) {
@@ -117,7 +112,7 @@ export class RateComparativeVendorsComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this.getVendorList();
+
   }
 
 }

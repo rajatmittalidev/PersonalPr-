@@ -37,6 +37,8 @@ export class RateComparativeDetailsComponent implements OnInit {
   });
 
   details: any = {};
+  vendorsList: Array<any> = [];
+  vendorAssociatedData: Array<any> = [];
 
   constructor(
     private router: Router,
@@ -57,18 +59,25 @@ export class RateComparativeDetailsComponent implements OnInit {
 
     const dialogPopup = this.dialog.open(RateComparativeVendorsComponent, {
       data: {
-        dataObj:dataObj
+        dataObj:dataObj,
+        vendorsList:this.vendorsList
       }
     });
     dialogPopup.afterClosed().subscribe((result:any) => {
       console.log('result', result)
 
       if (result && result['option'] === 1) {
+        
+       let vendorTotalData: Array<any> = [];
 
         this.details.items = this.details.items.map((o:any)=>{
           if(o._id == dataObj._id){
             o.vendors = result.data.itemVendors;
           }
+
+          o.vendors.map((vendorObj:any)=>{
+
+          })
           return o;
         });
         
@@ -186,6 +195,12 @@ export class RateComparativeDetailsComponent implements OnInit {
         this.httpService.GET(`${RATE_COMPARATIVE_DETAIL_API}`, { _id: params['id'] }).subscribe({
           next: res => {
             this.details = res.data.details;
+            this.vendorsList = res.data.vendorsList;
+            this.vendorsList.map((o: any) => {
+              this.vendorAssociatedData[o._id] = o;
+              return o;
+            });
+
             this.patchData(res.data.details);
           }, error: (error) => {
             // this.router.navigate(['/procurement/prlist'])
