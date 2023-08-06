@@ -80,11 +80,7 @@ const RateApprovalSchema = new mongoose.Schema({
                 item_total_amount: {
                     type: Number,
                     default: 0
-                },
-                selected: {
-                    type: Boolean,
-                    default: false
-                },
+                }
             }
         ]
 

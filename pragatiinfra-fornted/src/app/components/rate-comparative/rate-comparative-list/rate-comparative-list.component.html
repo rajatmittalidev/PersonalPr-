@@ -89,7 +89,6 @@
 
 </div>
 
-
 <div class="scroll-bar1" style="width: 93%;">
   <table style="direction: ltr !important;margin-top: -20px;">
     <tbody>
@@ -100,7 +99,7 @@
         <td style="color: #4272BF;width:200px;font-size: 15px;">Title&nbsp;{{obj.title}} </td>
         <hr style="border: 1px solid #D9D9D9;height: 30px;">
         <td style="color: #4272BF;width:800px;text-align: left;padding: 10px;font-size: 15px;">Site&nbsp;{{obj.siteData.site_name}}</td>
-        <td style="background-color: #233A61;color:#fff;width:200px;font-size: 14px;">Create&nbsp;Comparative</td>
+        <td style="background-color: #233A61;color:#fff;width:200px;font-size: 14px;" [routerLink]="['/rate-comparative/details',obj._id]">Create&nbsp;Comparative</td>
         <td style="width: 100px;"><mat-icon>
             arrow_forward_ios
           </mat-icon></td>
