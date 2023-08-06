@@ -8,6 +8,7 @@ import { RateComparativeUpdateComponent } from './rate-comparative-update/rate-c
 import { RateComparativeStatusUpdateComponent } from './rate-comparative-status-update/rate-comparative-status-update.component';
 import { CustomMaterialModule } from 'app/ang-material.module';
 import { ReactiveFormsModule } from '@angular/forms';
+import { RateComparativeVendorsModule } from './rate-comparative-vendors/rate-comparative-vendors.module';
 
 
 const routes: Routes = [
@@ -20,10 +21,10 @@ const routes: Routes = [
   //   path: "prlist",
   //   component: PurchaseRequestListComponent
   // },
-  // {
-  //   path: "details/:id",
-  //   component: PurchaseRequestDetailsComponent
-  // },
+  {
+    path: "details/:id",
+    component: RateComparativeDetailsComponent
+  },
   // {
   //   path: "update/:id",
   //   component: UpdatePrStatusComponent
@@ -47,6 +48,7 @@ const routes: Routes = [
     RouterModule,
     CustomMaterialModule,
     ReactiveFormsModule,
+    RateComparativeVendorsModule,
     DirectiveModule,
     [RouterModule.forChild(routes)],
   ]

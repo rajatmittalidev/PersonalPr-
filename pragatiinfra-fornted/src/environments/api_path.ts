@@ -1,10 +1,12 @@
 export const GET_SITE_API = "/site";
 export const PURCHASE_REQUEST_API = "/purchase-request";
 export const RATE_COMPARATIVE_API = "/rate-approval";
+export const RATE_COMPARATIVE_DETAIL_API = "/rate-approval/detail";
 export const ORG_REQUEST_API = "/organisation";
 export const CATEGORY_API = "/category";
 export const ITEM_API = "/item";
 export const VENDOR_API = "/vendor";
+export const VENDOR_DETAIL_API = "/vendor/detail";
 export const SUB_CATEGORY_API = "/subcategory";
 export const SITE_API = "/site";
 export const GST_API = "/gst";

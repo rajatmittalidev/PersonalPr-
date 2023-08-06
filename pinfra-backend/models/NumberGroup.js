@@ -9,7 +9,7 @@ const NumberingGroupSchema = new schema({
     },
     module:{
         type:String,
-        enum:['purchase_request'],
+        enum:['purchase_request','rate_approval'],
         default:''
     }
 }, {

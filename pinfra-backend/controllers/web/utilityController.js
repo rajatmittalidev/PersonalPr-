@@ -124,6 +124,7 @@ function addRateApproval(dataObj, langCode, currentUserId) {
 
             delete cloneData._id;
             delete cloneData.items;
+            delete cloneData.purchase_request_number;
             cloneData.purchase_request_id = dataObj._id;
             cloneData.status = 'pending';
             cloneData.vendors_total = vendorTotal;
@@ -202,7 +203,16 @@ function addRateApproval(dataObj, langCode, currentUserId) {
                 cloneData.items = itemArray;
             }
 
+            let getNumber = await getNextNumberGroupId('', 'rate_approval');
+
+            cloneData.rate_approval_number = getNumber;
+
             let savedData = await new RateApprovalSchema(cloneData).save();
+
+            /* Update numbering group */
+            updateNextNumberGroupId('', 'rate_approval');
+
+
             resolve(savedData)
 
 

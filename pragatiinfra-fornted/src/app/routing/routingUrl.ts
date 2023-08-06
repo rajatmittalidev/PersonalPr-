@@ -262,7 +262,7 @@ export const routes: Routes = [
   { path: 'vendorscomparativeapproved', component: VendorscomparativeapprovedComponent, canActivate: [AuthGuard] },
   { path: 'vendorscomparativerejected', component: VendorscomparativerejectedComponent, canActivate: [AuthGuard] },
   { path: 'vendorscomparativerevised', component: VendorscomparativerevisedComponent, canActivate: [AuthGuard] },
-  { path: 'rateapprovals', component: RateapprovalsComponent, canActivate: [AuthGuard] },
+  { path: 'rateapprovals/:id', component: RateapprovalsComponent, canActivate: [AuthGuard] },
   { path: 'rateapprovalsummary', component: RateapprovalsummaryComponent, canActivate: [AuthGuard] },
   { path: 'rejectedratessummary', component: RejectedratessummaryComponent, canActivate: [AuthGuard] },
   { path: 'pendingrates', component: PendingratesComponent, canActivate: [AuthGuard] },
