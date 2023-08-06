@@ -9,7 +9,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '@env/environment';
 import { RateComparativeVendorsComponent } from '../rate-comparative-vendors/rate-comparative-vendors.component';
-import {isEmpty} from 'lodash';
+import { isEmpty } from 'lodash';
 
 @Component({
   selector: 'app-rate-comparative-details',
@@ -55,32 +55,71 @@ export class RateComparativeDetailsComponent implements OnInit {
   }
 
 
-  vendorData(dataObj:any) {
+  vendorData(dataObj: any) {
 
     const dialogPopup = this.dialog.open(RateComparativeVendorsComponent, {
       data: {
-        dataObj:dataObj,
-        vendorsList:this.vendorsList
+        dataObj: dataObj,
+        vendorsList: this.vendorsList
       }
     });
-    dialogPopup.afterClosed().subscribe((result:any) => {
+    dialogPopup.afterClosed().subscribe((result: any) => {
       console.log('result', result)
 
       if (result && result['option'] === 1) {
-        
-       let vendorTotalData: Array<any> = [];
 
-        this.details.items = this.details.items.map((o:any)=>{
-          if(o._id == dataObj._id){
+        let vendorTotalData: Array<any> = [];
+
+        this.details.items = this.details.items.map((o: any) => {
+          if (o._id == dataObj._id) {
             o.vendors = result.data.itemVendors;
           }
 
-          o.vendors.map((vendorObj:any)=>{
+          o.vendors.map((vendorObj: any) => {
+            if (!(vendorTotalData[vendorObj.vendor_id])) {
+              vendorTotalData[vendorObj.vendor_id] = { tax_total: 0, vendor_subtotal: 0 };
+            }
+            if (!vendorTotalData[vendorObj.vendor_id]['tax_total']) {
+              vendorTotalData[vendorObj.vendor_id]['tax_total'] = 0;
+            }
+            if (!vendorTotalData[vendorObj.vendor_id]['vendor_subtotal']) {
+              vendorTotalData[vendorObj.vendor_id]['vendor_subtotal'] = 0;
+            }
 
+            let taxamount = 0;
+            if (o.tax && o.tax.amount) {
+              taxamount = (vendorObj.item_subtotal * o.tax.amount) / 100;
+            }
+            vendorTotalData[vendorObj.vendor_id]['tax_total'] += taxamount;
+            vendorTotalData[vendorObj.vendor_id]['vendor_subtotal'] += vendorObj.item_subtotal;
           })
           return o;
         });
-        
+
+
+
+        this.details.vendors_total = this.details.vendors_total.map((o: any) => {
+          let dataObj = vendorTotalData[o.vendor_id];
+          o.subtotal = dataObj.vendor_subtotal;
+          o.total_tax = dataObj.tax_total;
+          let total = o.subtotal + o.total_tax;
+
+          if (o.freight_charges) {
+            total += Number(o.freight_charges);
+          }
+          if (o.freight_tax) {
+            total += (Number(o.freight_charges) * Number(o.freight_tax)) / 100;
+          }
+          o.total_amount = total;
+          return o;
+        })
+
+
+
+
+
+        console.log('vendorTotalData', vendorTotalData)
+
       }
     });
   }
@@ -162,18 +201,20 @@ export class RateComparativeDetailsComponent implements OnInit {
 
   updateRequest() {
 
-    if(!this.purchaseRequestForm.valid){
+    if (!this.purchaseRequestForm.valid) {
       return;
     }
 
-    let requestedData:any = this.purchaseRequestForm.value; 
+    let requestedData: any = this.purchaseRequestForm.value;
     requestedData['_id'] = this.details._id;
     requestedData['items'] = this.details.items;
+    requestedData['vendors_total'] = this.details.vendors_total;
     this.load = true;
     this.httpService.PUT(RATE_COMPARATIVE_API, requestedData).subscribe(res => {
+      this.snack.notify("Detail has been updated", 1);
       // this.router.navigate(['/procurement/prlist'])
       this.load = false;
-    },(err:any)=>{
+    }, (err: any) => {
       this.load = false;
       if (err.errors && !isEmpty(err.errors)) {
         let errMessage = '<ul>';
@@ -186,6 +227,51 @@ export class RateComparativeDetailsComponent implements OnInit {
       } else {
         this.snack.notify(err.message, 2);
       }
+    })
+  }
+
+  onChangeFreightCharges(event: any, item: any) {
+    let value = (event.target.value && event.target.value >= 0) ? Number(event.target.value) : 0;
+
+    this.details.vendors_total = this.details.vendors_total.map((o: any) => {
+
+      if (o.vendor_id == item.vendor_id) {
+        o.freight_charges = value;
+        let total = o.subtotal + o.total_tax;
+
+        if (o.freight_charges) {
+          total += Number(o.freight_charges);
+        }
+        if (o.freight_tax) {
+          total += (Number(o.freight_charges) * Number(o.freight_tax)) / 100;
+        }
+        o.total_amount = total;
+      }
+
+      return o;
+    })
+
+  }
+
+
+  onChangeFreightTaxPercent(event: any, item: any) {
+    let value = (event.target.value && event.target.value >= 0) ? Number(event.target.value) : 0;
+
+    this.details.vendors_total = this.details.vendors_total.map((o: any) => {
+
+      if (o.vendor_id == item.vendor_id) {
+          o.freight_tax = value;
+        let total = o.subtotal + o.total_tax;
+
+        if (o.freight_charges) {
+          total += Number(o.freight_charges);
+        }
+        if (o.freight_tax) {
+          total += (Number(o.freight_charges) * Number(o.freight_tax)) / 100;
+        }
+        o.total_amount = total;
+      }
+      return o;
     })
   }
 

@@ -215,13 +215,13 @@
       <div class="vendor-value-cont" style="background-color: #186D3C14;">
         <div class="vendor-value-label">Freight</div>
         <div class="vendor-value">
-          <input type="number">
+          <input type="number" min="0" (keyup)="onChangeFreightCharges($event,item)" (change)="onChangeFreightCharges($event,item)" [value]="item.freight_charges">
         </div>
       </div>
       <div class="vendor-value-cont" style="background-color: #186D3C14;">
         <div class="vendor-value-label">Freight GST(%)</div>
         <div class="vendor-value">
-          <input type="number">
+          <input type="number" min="0" (keyup)="onChangeFreightTaxPercent($event,item)" (change)="onChangeFreightTaxPercent($event,item)" [value]="item.freight_tax">
         </div>
       </div>
       <div class="vendor-value-cont" style="background-color: #073B4C14;">
@@ -246,7 +246,10 @@
   </div>
   <div class=" button-list">
 
-    <button class="p-btns-button" (click)="updateRequest()">Submit</button>
+    <button class="p-btns-button" (click)="updateRequest()" [disabled]="load">
+      <span *ngIf="!load">Submit</span>
+      <span *ngIf="load">Please wait...</span>
+    </button>
 
 
   </div>
