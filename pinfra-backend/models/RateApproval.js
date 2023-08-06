@@ -81,6 +81,10 @@ const RateApprovalSchema = new mongoose.Schema({
                     type: Number,
                     default: 0
                 },
+                selected: {
+                    type: Boolean,
+                    default: false
+                },
             }
         ]
 
