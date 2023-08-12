@@ -55,7 +55,7 @@ async function updateData(req, res) {
 
 
 async function getList(req, res) {
-
+    // stage
     try {
 
         let reqObj = req.body;
@@ -75,9 +75,15 @@ async function getList(req, res) {
             }
         }
 
+        let filterRequest = {};
+        if(filter_by && filter_value){
+            filterRequest[filter_by] = filter_value
+        }
+
 
         if (page > 0) {
             let allRecords = await RateApprovalSchema.aggregate([
+                {$match:filterRequest},
                 {
                     $facet: {
                         data: [
@@ -99,6 +105,7 @@ async function getList(req, res) {
                                     "purchase_request_number": 1,
                                     "site": 1,
                                     "local_purchase": 1,
+                                    "stage": 1,
                                     "items": 1,
                                     "status": 1,
                                     "remarks": 1,
@@ -118,6 +125,7 @@ async function getList(req, res) {
                                     "purchase_request_number": 1,
                                     "site": 1,
                                     "local_purchase": 1,
+                                    "stage": 1,
                                     "items": 1,
                                     "status": 1,
                                     "remarks": 1,
@@ -142,6 +150,7 @@ async function getList(req, res) {
             res.status(200).json(await Response.pagination(allRecords, responseMessage(reqObj.langCode, 'SUCCESS'), pageData, req));
         } else {
             let allRecords = await RateApprovalSchema.aggregate([
+                {$match:filterRequest},
                 {
                     $lookup: {
                         from: 'sites',
@@ -159,6 +168,7 @@ async function getList(req, res) {
                         "purchase_request_number": 1,
                         "site": 1,
                         "local_purchase": 1,
+                        "stage": 1,
                         "items": 1,
                         "status": 1,
                         "remarks": 1,
@@ -178,6 +188,7 @@ async function getList(req, res) {
                         "purchase_request_number": 1,
                         "site": 1,
                         "local_purchase": 1,
+                        "stage": 1,
                         "items": 1,
                         "status": 1,
                         "remarks": 1,
@@ -253,6 +264,7 @@ async function getDetails(req, res) {
                     "purchase_request_number": 1,
                     "site": 1,
                     "local_purchase": 1,
+                    "stage": 1,
                     "items": 1,
                     "vendors_total": 1,
                     "status": 1,
@@ -298,6 +310,7 @@ async function getDetails(req, res) {
                     "purchase_request_number": 1,
                     "site": 1,
                     "local_purchase": 1,
+                    "stage": 1,
                     "status": 1,
                     "remarks": 1,
                     "updated_by": 1,
@@ -306,6 +319,7 @@ async function getDetails(req, res) {
                     "updated_at": 1,
                     "vendors_total": 1,
                     "items.qty": "$items.qty",
+                    "items.brand": "$items.brand",
                     "items.tax": "$items.tax",
                     "items.vendors": "$items.vendors",
                     "items.attachment": "$items.attachment",
@@ -327,6 +341,7 @@ async function getDetails(req, res) {
                     "purchase_request_number": 1,
                     "site": 1,
                     "local_purchase": 1,
+                    "stage": 1,
                     "status": 1,
                     "remarks": 1,
                     "updated_by": 1,
@@ -336,6 +351,7 @@ async function getDetails(req, res) {
                     "vendors_total": 1,
                     "items.qty": "$items.qty",
                     "items.tax": "$items.tax",
+                    "items.brand": "$items.brand",
                     "items.vendors": "$items.vendors",
                     "items.attachment": "$items.attachment",
                     "items.remark": "$items.remark",
@@ -362,6 +378,7 @@ async function getDetails(req, res) {
                     purchase_request_number: { $first: '$purchase_request_number' },
                     site: { $first: '$site' },
                     local_purchase: { $first: '$local_purchase' },
+                    stage: { $first: '$stage' },
                     status: { $first: '$status' },
                     remarks: { $first: '$remarks' },
                     updated_by: { $first: '$updated_by' },

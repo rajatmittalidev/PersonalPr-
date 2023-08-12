@@ -47,9 +47,8 @@ const RateApprovalSchema = new mongoose.Schema({
         },
         qty: {
             type: Number,
-            required: true,
             default: 1
-        },
+        },     
         attachment: {
             type: String,
             default: ''
@@ -64,10 +63,13 @@ const RateApprovalSchema = new mongoose.Schema({
                     type: schema.Types.ObjectId,
                     required: true
                 },
-
                 quantity: {
                     type: Number,
                     default: 0
+                },
+                brand: {
+                    type: String,
+                    default: ""
                 },
                 item_rate: {
                     type: Number,
@@ -89,6 +91,11 @@ const RateApprovalSchema = new mongoose.Schema({
         type: String,
         enum: ['pending', 'approved', 'rejected', 'revise', 'revised'],
         default: 'pending'
+    },
+    stage: {
+        type: String,
+        enum: ['rate_comparitive', 'rate_approval'],
+        default: 'rate_comparitive'
     },
     new_request: {
         type: Boolean,

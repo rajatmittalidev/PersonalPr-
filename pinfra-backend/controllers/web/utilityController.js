@@ -114,6 +114,7 @@ function addRateApproval(dataObj, langCode, currentUserId) {
                 vendorTotal.push({
                     vendor_id: o.vendor_id,
                     vendor_name: o.vendor_name,
+                    brand: '',
                     subtotal: 0,
                     total_tax: 0,
                     freight_charges: 0,
@@ -129,6 +130,7 @@ function addRateApproval(dataObj, langCode, currentUserId) {
             cloneData.purchase_request_id = dataObj._id;
             cloneData.status = 'pending';
             cloneData.vendors_total = vendorTotal;
+            cloneData.stage = 'rate_comparitive';
 
             console.log('cloneData', cloneData)
 
