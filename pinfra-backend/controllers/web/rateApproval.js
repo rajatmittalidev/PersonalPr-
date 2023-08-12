@@ -60,7 +60,7 @@ async function getList(req, res) {
 
         let reqObj = req.body;
 
-        let { page, per_page, sort_by, sort_order, list_type, filter_by, filter_value } = req.query;
+        let { page, per_page, sort_by, sort_order, list_type, filter_by, filter_value,stage } = req.query;
         let requestedParam = req.query;
 
         let pageData = Response.validationPagination(page, per_page);
@@ -79,6 +79,11 @@ async function getList(req, res) {
         if(filter_by && filter_value){
             filterRequest[filter_by] = filter_value
         }
+        if(stage){
+            filterRequest[stage] = stage
+        }
+
+
 
 
         if (page > 0) {
