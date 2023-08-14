@@ -7,11 +7,12 @@ import { SnackbarService } from '@services/snackbar/snackbar.service';
 import { isEmpty } from 'lodash';
 
 @Component({
-  selector: 'app-rate-comparative-list',
-  templateUrl: './rate-comparative-list.component.html',
-  styleUrls: ['./rate-comparative-list.component.scss']
+  selector: 'app-rate-approval-list',
+  templateUrl: './rate-approval-list.component.html',
+  styleUrls: ['./rate-approval-list.component.scss']
 })
-export class RateComparativeListComponent implements OnInit {
+export class RateApprovalListComponent implements OnInit {
+
   statusOption = new FormControl('pending');
   statusList = [
     {
@@ -26,10 +27,10 @@ export class RateComparativeListComponent implements OnInit {
       value: 'rejected',
       label: 'Rejected'
     },
-    // {
-    //   value: 'revise',
-    //   label: 'Revise'
-    // },
+    {
+      value: 'revise',
+      label: 'Revise'
+    },
   ]
   rateComparativeList: any;
   filter_by = "status";
@@ -40,7 +41,7 @@ export class RateComparativeListComponent implements OnInit {
     private httpService: RequestService,
     private snack: SnackbarService,
   ) {
-    this.getList({ filter_by: this.filter_by, filter_value: this.filter_value, stage: 'rate_comparitive' });
+    this.getList({ filter_by: this.filter_by, filter_value: this.filter_value, stage: 'rate_approval' });
   }
 
   getList(filterObj: any) {
@@ -67,14 +68,7 @@ export class RateComparativeListComponent implements OnInit {
   }
 
   onStatusChange(item) {
-    let stage;
-    if (item == 'pending') {
-      stage = 'rate_comparitive';
-    }
-    else {
-      stage = 'rate_approval'
-    }
-    this.getList({ filter_by: this.filter_by, filter_value: item.value, stage: stage })
+    this.getList({ filter_by: this.filter_by, filter_value: item.value, stage: 'rate_approval' })
 
   }
 
@@ -115,4 +109,5 @@ export class RateComparativeListComponent implements OnInit {
   ngOnInit(): void {
 
   }
+
 }

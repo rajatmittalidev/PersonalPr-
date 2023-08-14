@@ -25,10 +25,10 @@ const routes: Routes = [
     path: "details/:id",
     component: RateComparativeDetailsComponent
   },
-  // {
-  //   path: "update/:id",
-  //   component: UpdatePrStatusComponent
-  // },
+  {
+    path: "update/:id",
+    component: RateComparativeUpdateComponent
+  },
   // {
   //   path: "revise/:id",
   //   component: RevisePurchaseRequestComponent
@@ -51,6 +51,6 @@ const routes: Routes = [
     RateComparativeVendorsModule,
     DirectiveModule,
     [RouterModule.forChild(routes)],
-  ]
+  ],
 })
 export class RateComparativeModule { }

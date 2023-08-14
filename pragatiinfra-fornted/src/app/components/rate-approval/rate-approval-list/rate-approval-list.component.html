@@ -62,8 +62,7 @@
   <div style=" margin-right: 600px;margin-top: 30px;display: flex;gap:10px">
     <div style="margin-top: 15px;color: #94A3B8;margin-left: 40px;"> <span>Filter&nbsp;by</span></div>
     <div> <mat-form-field appearance="outline" class="datebar">
-        <input matInput [matDatepicker]="startPicker" placeholder="Date" (click)="startPicker.open()"
-          (dateChange)="dateFilter( $event)" />
+        <input matInput [matDatepicker]="startPicker" placeholder="Date" (click)="startPicker.open()"  (dateChange)="dateFilter( $event)"/>
         <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
         <mat-datepicker #startPicker></mat-datepicker>
       </mat-form-field></div>
@@ -75,7 +74,7 @@
       </mat-form-field></div>
   </div>
 
-  <div style="margin-top: 30px;display: flex;position: relative;right:570px;gap:10px">
+  <div  style="margin-top: 30px;display: flex;position: relative;right:570px;gap:10px">
 
     <div style="margin-top: 15px;color: #94A3B8;"> <span>Filter by Status</span></div>
     <div class="custom-form-control" style="position: relative;">
@@ -94,20 +93,13 @@
   <table style="direction: ltr !important;margin-top: -20px;">
     <tbody>
       <tr *ngFor="let obj of rateComparativeList;let index = index">
-        <td style="color: #4272BF;width:300px;text-align: left;padding: 10px;font-size: 15px;">
-          Request&nbsp;no&nbsp;{{index+1}}
+        <td style="color: #4272BF;width:300px;text-align: left;padding: 10px;font-size: 15px;">Request&nbsp;no&nbsp;{{index+1}}
         </td>
         <hr style="border: 1px solid #D9D9D9;height: 30px;">
         <td style="color: #4272BF;width:200px;font-size: 15px;">Title&nbsp;{{obj.title}} </td>
         <hr style="border: 1px solid #D9D9D9;height: 30px;">
-        <td style="color: #4272BF;width:800px;text-align: left;padding: 10px;font-size: 15px;">
-          Site&nbsp;{{obj.siteData.site_name}}</td>
-        <td style="background-color: #233A61;color:#fff;width:200px;font-size: 14px;cursor: pointer;" *ngIf="obj.status=='pending'"
-          [routerLink]="['/rate-comparative/update',obj._id]">Create&nbsp;Comparative</td>
-        <td style="background-color: #90d656;color:#fff;width:200px;font-size: 14px;cursor: pointer;" *ngIf="obj.status !='pending'"
-          [routerLink]="['/rate-comparative/details',obj._id]">View &nbsp;Details</td>
-
-
+        <td style="color: #4272BF;width:800px;text-align: left;padding: 10px;font-size: 15px;">Site&nbsp;{{obj.siteData.site_name}}</td>
+        <td style="background-color: #233A61;color:#fff;width:200px;font-size: 14px;" [routerLink]="['/rate-approval/update',obj._id]">Create&nbsp;Comparative</td>
         <td style="width: 100px;"><mat-icon>
             arrow_forward_ios
           </mat-icon></td>

@@ -60,7 +60,7 @@ async function getList(req, res) {
 
         let reqObj = req.body;
 
-        let { page, per_page, sort_by, sort_order, list_type, filter_by, filter_value,stage } = req.query;
+        let { page, per_page, sort_by, sort_order, list_type, filter_by, filter_value, stage } = req.query;
         let requestedParam = req.query;
 
         let pageData = Response.validationPagination(page, per_page);
@@ -76,19 +76,16 @@ async function getList(req, res) {
         }
 
         let filterRequest = {};
-        if(filter_by && filter_value){
+        if (filter_by && filter_value) {
             filterRequest[filter_by] = filter_value
         }
-        if(stage){
-            filterRequest[stage] = stage
+        if (stage) {
+            filterRequest.stage = stage
         }
-
-
-
 
         if (page > 0) {
             let allRecords = await RateApprovalSchema.aggregate([
-                {$match:filterRequest},
+                { $match: filterRequest },
                 {
                     $facet: {
                         data: [
@@ -155,7 +152,7 @@ async function getList(req, res) {
             res.status(200).json(await Response.pagination(allRecords, responseMessage(reqObj.langCode, 'SUCCESS'), pageData, req));
         } else {
             let allRecords = await RateApprovalSchema.aggregate([
-                {$match:filterRequest},
+                { $match: filterRequest },
                 {
                     $lookup: {
                         from: 'sites',
@@ -208,6 +205,7 @@ async function getList(req, res) {
                 },
                 { '$sort': sort }
             ]);
+            console.log("allRecords",allRecords);
             res.status(200).json(await Response.success(allRecords, responseMessage(reqObj.langCode, 'SUCCESS'), req));
         }
 

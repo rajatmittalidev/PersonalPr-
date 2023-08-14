@@ -80,6 +80,12 @@ export const routes: Routes = [
       .then(mod => mod.RateComparativeModule),
     canActivate: [AuthGuard]
   },
+  {
+    path: 'rate-approval',
+    loadChildren: () => import('./../components/rate-approval/rate-approval.module')
+      .then(mod => mod.RateApprovalModule),
+    canActivate: [AuthGuard]
+  },
 
   {
     path: 'site',

@@ -4,7 +4,7 @@
   </div>
   <span
     style="font-family: 'Poppins';margin-top: 40px;font-style: normal;font-weight:600;font-size: 30px;color:#1E293B;margin-left: 10px;">Rate
-    approvals details</span>
+    comparative </span>
   <span class="example-spacer"></span>
   <button mat-icon-button style="margin-right: 40px;">
     <mat-icon style="margin-top: 40px;">notifications</mat-icon>
@@ -60,8 +60,7 @@
       <div class="flex-div" style="display: flex;flex-direction: column;">
         <label style="color: #4272BF;font-size: 14px;">Request date</label>
         <mat-form-field appearance="outline">
-          <input matInput [matDatepicker]="date" formControlName="date" placeholder="Auto generate Request Date"
-            readonly />
+          <input matInput [matDatepicker]="date" formControlName="date" placeholder="Auto generate Request Date" readonly/>
           <mat-datepicker-toggle matSuffix [for]="date"></mat-datepicker-toggle>
           <mat-datepicker #date></mat-datepicker>
         </mat-form-field>
@@ -74,7 +73,7 @@
         <div class="custom-form-control">
           <mat-form-field appearance="outline">
             <input matInput [matDatepicker]="requiredByStartDate" formControlName="expected_delivery_date"
-              placeholder="Enter Required by" readonly />
+              placeholder="Enter Required by" readonly/>
             <mat-datepicker-toggle matSuffix [for]="requiredByStartDate"></mat-datepicker-toggle>
             <mat-datepicker #requiredByStartDate></mat-datepicker>
 
@@ -88,7 +87,7 @@
         </label>
         <div class="custom-form-control">
           <mat-form-field appearance="outline">
-            <input matInput formControlName="handle_by" readonly placeholder="Enter handle by name" />
+            <input matInput formControlName="handle_by" placeholder="Enter handle by name" />
 
           </mat-form-field>
         </div>
@@ -176,7 +175,7 @@
           </td>
 
           <td>
-            <!-- <a class="p-btns" (click)="vendorData(item)"> Vendor Rates</a> -->
+            <a class="p-btns" (click)="vendorData(item)"> Vendor Rates</a>
           </td>
         </tr>
       </tbody>
@@ -211,19 +210,13 @@
       <div class="vendor-value-cont" style="background-color: #186D3C14;">
         <div class="vendor-value-label">Freight</div>
         <div class="vendor-value">
-          <!-- <input type="number" min="0" (keyup)="onChangeFreightCharges($event,item)"
-            (change)="onChangeFreightCharges($event,item)" [value]="item.freight_charges"
-            [readonly]="item.subtotal == 0"> -->
-          {{item.freight_charges}}
+          <input type="number" min="0" (keyup)="onChangeFreightCharges($event,item)" (change)="onChangeFreightCharges($event,item)" [value]="item.freight_charges" [readonly]="item.subtotal == 0">
         </div>
       </div>
       <div class="vendor-value-cont" style="background-color: #186D3C14;">
         <div class="vendor-value-label">Freight GST(%)</div>
         <div class="vendor-value">
-          <!-- <input type="number" min="0" (keyup)="onChangeFreightTaxPercent($event,item)"
-            (change)="onChangeFreightTaxPercent($event,item)" [value]="item.freight_tax"
-            [readonly]="item.subtotal == 0"> -->
-          {{item.freight_tax}}
+          <input type="number" min="0" (keyup)="onChangeFreightTaxPercent($event,item)" (change)="onChangeFreightTaxPercent($event,item)" [value]="item.freight_tax" [readonly]="item.subtotal == 0">
         </div>
       </div>
       <div class="vendor-value-cont" style="background-color: #073B4C14;">
@@ -248,13 +241,15 @@
   </div>
   <div class=" button-list">
 
-    <button class="p-btns-button" [disabled]="load">
-      <span *ngIf="details.status=='approved'">Approved</span>
-      <span *ngIf="details.status=='rejected'">Rejected</span>
-      <span *ngIf="details.status=='pending'">Pending</span>
-
+    <button class="p-btns-button" (click)="updateRequest('approved')" [disabled]="load">
+      <span *ngIf="!load">Santion</span>
+      <span *ngIf="load">Please wait...</span>
     </button>
 
+    <button class="p-btns-button" (click)="updateRequest('rejected')" [disabled]="load">
+      <span *ngIf="!load">Reject</span>
+      <span *ngIf="load">Please wait...</span>
+    </button>
 
   </div>
 </form>

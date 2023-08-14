@@ -8,15 +8,15 @@ import { SnackbarService } from '@services/snackbar/snackbar.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '@env/environment';
-import { RateComparativeVendorsComponent } from '../rate-comparative-vendors/rate-comparative-vendors.component';
 import { isEmpty } from 'lodash';
+import { VendorRateListingComponent } from '../vendor-rate-listing/vendor-rate-listing.component';
 
 @Component({
-  selector: 'app-rate-comparative-update',
-  templateUrl: './rate-comparative-update.component.html',
-  styleUrls: ['./rate-comparative-update.component.scss']
+  selector: 'app-rate-approval-update',
+  templateUrl: './rate-approval-update.component.html',
+  styleUrls: ['./rate-approval-update.component.scss']
 })
-export class RateComparativeUpdateComponent implements OnInit {
+export class RateApprovalUpdateComponent implements OnInit {
 
 
 
@@ -24,7 +24,7 @@ export class RateComparativeUpdateComponent implements OnInit {
   siteList: any;
   load = false;
   items: FormArray;
-  rateComparativeForm = new FormGroup({
+  purchaseRequestForm = new FormGroup({
     title: new FormControl('', Validators.required),
     date: new FormControl('', Validators.required),
     expected_delivery_date: new FormControl('', Validators.required),
@@ -58,13 +58,15 @@ export class RateComparativeUpdateComponent implements OnInit {
 
   vendorData(dataObj: any) {
 
-    const dialogPopup = this.dialog.open(RateComparativeVendorsComponent, {
+    const dialogPopup = this.dialog.open(VendorRateListingComponent, {
       data: {
         dataObj: dataObj,
         vendorsList: this.vendorsList
       }
     });
     dialogPopup.afterClosed().subscribe((result: any) => {
+      console.log('result', result)
+
       if (result && result['option'] === 1) {
 
         let vendorTotalData: Array<any> = [];
@@ -74,45 +76,50 @@ export class RateComparativeUpdateComponent implements OnInit {
             o.vendors = result.data.itemVendors;
           }
 
-          // o.vendors.map((vendorObj: any) => {
-          //   if (!(vendorTotalData[vendorObj.vendor_id])) {
-          //     vendorTotalData[vendorObj.vendor_id] = { tax_total: 0, vendor_subtotal: 0 };
-          //   }
-          //   if (!vendorTotalData[vendorObj.vendor_id]['tax_total']) {
-          //     vendorTotalData[vendorObj.vendor_id]['tax_total'] = 0;
-          //   }
-          //   if (!vendorTotalData[vendorObj.vendor_id]['vendor_subtotal']) {
-          //     vendorTotalData[vendorObj.vendor_id]['vendor_subtotal'] = 0;
-          //   }
+          o.vendors.map((vendorObj: any) => {
+            if (!(vendorTotalData[vendorObj.vendor_id])) {
+              vendorTotalData[vendorObj.vendor_id] = { tax_total: 0, vendor_subtotal: 0 };
+            }
+            if (!vendorTotalData[vendorObj.vendor_id]['tax_total']) {
+              vendorTotalData[vendorObj.vendor_id]['tax_total'] = 0;
+            }
+            if (!vendorTotalData[vendorObj.vendor_id]['vendor_subtotal']) {
+              vendorTotalData[vendorObj.vendor_id]['vendor_subtotal'] = 0;
+            }
 
-          //   let taxamount = 0;
-          //   if (o.tax && o.tax.amount) {
-          //     taxamount = (vendorObj.item_subtotal * o.tax.amount) / 100;
-          //   }
-          //   vendorTotalData[vendorObj.vendor_id]['tax_total'] += taxamount;
-          //   vendorTotalData[vendorObj.vendor_id]['vendor_subtotal'] += vendorObj.item_subtotal;
-          // })
+            let taxamount = 0;
+            if (o.tax && o.tax.amount) {
+              taxamount = (vendorObj.item_subtotal * o.tax.amount) / 100;
+            }
+            vendorTotalData[vendorObj.vendor_id]['tax_total'] += taxamount;
+            vendorTotalData[vendorObj.vendor_id]['vendor_subtotal'] += vendorObj.item_subtotal;
+          })
           return o;
         });
 
 
 
-        // this.details.vendors_total = this.details.vendors_total.map((o: any) => {
-        //   let dataObj = vendorTotalData[o.vendor_id];
-        //   o.subtotal = dataObj.vendor_subtotal;
-        //   o.total_tax = dataObj.tax_total;
-        //   let total = o.subtotal + o.total_tax;
+        this.details.vendors_total = this.details.vendors_total.map((o: any) => {
+          let dataObj = vendorTotalData[o.vendor_id];
+          o.subtotal = dataObj.vendor_subtotal;
+          o.total_tax = dataObj.tax_total;
+          let total = o.subtotal + o.total_tax;
 
-        //   if (o.freight_charges) {
-        //     total += Number(o.freight_charges);
-        //   }
-        //   if (o.freight_tax) {
-        //     total += (Number(o.freight_charges) * Number(o.freight_tax)) / 100;
-        //   }
-        //   o.total_amount = total;
-        //   return o;
-        // })
+          if (o.freight_charges) {
+            total += Number(o.freight_charges);
+          }
+          if (o.freight_tax) {
+            total += (Number(o.freight_charges) * Number(o.freight_tax)) / 100;
+          }
+          o.total_amount = total;
+          return o;
+        })
 
+
+
+
+
+        console.log('vendorTotalData', vendorTotalData)
 
       }
     });
@@ -131,7 +138,7 @@ export class RateComparativeUpdateComponent implements OnInit {
   }
 
   patchData(data) {
-    this.rateComparativeForm.patchValue({
+    this.purchaseRequestForm.patchValue({
       title: data.title,
       date: data.date,
       expected_delivery_date: data.expected_delivery_date,
@@ -142,7 +149,7 @@ export class RateComparativeUpdateComponent implements OnInit {
       remarks: data.remarks,
     });
 
-    this.rateComparativeForm.controls['remarks'].disable();
+    this.purchaseRequestForm.controls['remarks'].disable();
   }
 
 
@@ -163,7 +170,7 @@ export class RateComparativeUpdateComponent implements OnInit {
 
   addItems(item: any): void {
 
-    this.items = this.rateComparativeForm.get('items') as FormArray;
+    this.items = this.purchaseRequestForm.get('items') as FormArray;
     if (item) {
       this.items.push(this.createItem(item));
     }
@@ -193,30 +200,35 @@ export class RateComparativeUpdateComponent implements OnInit {
 
 
 
-  updateRequest() {
-    let requestedData: any = this.rateComparativeForm.value;
+  updateRequest(status: any) {
+
+    if (!this.purchaseRequestForm.valid) {
+      return;
+    }
+
+    let requestedData: any = this.purchaseRequestForm.value;
     requestedData['_id'] = this.details._id;
     requestedData['items'] = this.details.items;
-    this.details.stage = 'rate_approval';
+    requestedData['vendors_total'] = this.details.vendors_total;
+    requestedData['status'] = status;
+
     this.load = true;
-    this.httpService.PUT(RATE_COMPARATIVE_API, this.details).subscribe({
-      next: res => {
-        this.snack.notify("Detail has been updated", 1);
-        this.router.navigate(['/rate-comparative'])
-        this.load = false;
-      }, error: (err: any) => {
-        this.load = false;
-        if (err.errors && !isEmpty(err.errors)) {
-          let errMessage = '<ul>';
-          for (let e in err.errors) {
-            let objData = err.errors[e];
-            errMessage += `<li>${objData[0]}</li>`;
-          }
-          errMessage += '</ul>';
-          this.snack.notifyHtml(errMessage, 2);
-        } else {
-          this.snack.notify(err.message, 2);
+    this.httpService.PUT(RATE_COMPARATIVE_API, requestedData).subscribe(res => {
+      this.snack.notify("Detail has been updated", 1);
+      this.router.navigate(['/rate-approval'])
+      this.load = false;
+    }, (err: any) => {
+      this.load = false;
+      if (err.errors && !isEmpty(err.errors)) {
+        let errMessage = '<ul>';
+        for (let e in err.errors) {
+          let objData = err.errors[e];
+          errMessage += `<li>${objData[0]}</li>`;
         }
+        errMessage += '</ul>';
+        this.snack.notifyHtml(errMessage, 2);
+      } else {
+        this.snack.notify(err.message, 2);
       }
     })
   }
@@ -286,5 +298,6 @@ export class RateComparativeUpdateComponent implements OnInit {
       }
     });
   }
+
 
 }

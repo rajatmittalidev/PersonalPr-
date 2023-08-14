@@ -18,6 +18,11 @@ export class NavigationSidePanelComponent implements OnInit, OnDestroy {
   obj = [];
   masterManagementObj = [
     {
+      link_name: "Location Master",
+      link: "/location",
+      img: './assets/images/icons/Buser.svg',
+    },
+    {
       link_name: "Sub Activity Master",
       link: "/activity",
       img: './assets/images/icons/Buser.svg',
@@ -38,7 +43,7 @@ export class NavigationSidePanelComponent implements OnInit, OnDestroy {
       link: "/item",
       img: './assets/images/icons/Buser.svg',
     },
-    
+
     {
       link_name: "Site Master",
       link: "/site",
@@ -66,7 +71,7 @@ export class NavigationSidePanelComponent implements OnInit, OnDestroy {
       img: './assets/images/icons/Bactivity.svg',
     },
 
-    
+
   ]
   menuSidebar = [
     {
@@ -156,7 +161,7 @@ export class NavigationSidePanelComponent implements OnInit, OnDestroy {
       link: null,
       icon: "bx bx-collection",
       img: '../../../assets/images/icons/procure.svg',
-      sub_menu:[
+      sub_menu: [
         {
           link_name: "Add Procurement",
           link: "/procurement",
@@ -201,20 +206,20 @@ export class NavigationSidePanelComponent implements OnInit, OnDestroy {
         link: "/manage-permissions",
         img: '../../../assets/images/icons/Bpermission.svg',
       },
-      // {
-      //   link_name: "Activities",
-      //   link: '/activities',
-      //   icon: "bx bx-collection",
-      //   img: '../../../assets/images/icons/Bactivity.svg',
-      // },
+        // {
+        //   link_name: "Activities",
+        //   link: '/activities',
+        //   icon: "bx bx-collection",
+        //   img: '../../../assets/images/icons/Bactivity.svg',
+        // },
 
-      // {
-      //   link_name: "sub Activities",
-      //   link: '/sub-activities',
-      //   icon: "bx bx-collection",
-      //   img: '../../../assets/images/icons/Bsubactivity.svg',
-      //   //img:'../../../assets/images/icons/activity.svg',
-      // },
+        // {
+        //   link_name: "sub Activities",
+        //   link: '/sub-activities',
+        //   icon: "bx bx-collection",
+        //   img: '../../../assets/images/icons/Bsubactivity.svg',
+        //   //img:'../../../assets/images/icons/activity.svg',
+        // },
       ]
     }
 
@@ -242,7 +247,7 @@ export class NavigationSidePanelComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
 
     this.permissions = JSON.parse(localStorage.getItem('loginData'))
-    this.sideNavOpen=false;
+    this.sideNavOpen = false;
     this.rolePermissionsView = this.permissions.permissions[0]?.ParentChildchecklist[3]?.childList[4]
     this.userPermissionsView = this.permissions.permissions[0]?.ParentChildchecklist[4]?.childList[4]
     this._sidePanelService.panelStateChanges
@@ -277,18 +282,17 @@ export class NavigationSidePanelComponent implements OnInit, OnDestroy {
       this._sidePanelService.changeState(SidePanelState.COLLAPSE);
     }
   }
-  public isCollapse():void{
+  public isCollapse(): void {
     // console.log("hi sameer");
-    this.sideNavOpen=!this.sideNavOpen;
+    this.sideNavOpen = !this.sideNavOpen;
     // console.log(this.SidePanelCollapse);
-    if(this.sideNavOpen)
-    {
+    if (this.sideNavOpen) {
       this._sidePanelService.changeState(SidePanelState.OPEN);
     }
-    else{
+    else {
       this._sidePanelService.changeState(SidePanelState.CLOSE);
     }
-    
+
   }
 
 

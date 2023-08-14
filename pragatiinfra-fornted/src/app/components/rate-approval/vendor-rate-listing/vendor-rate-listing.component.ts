@@ -1,18 +1,16 @@
-import { Component, OnInit, Inject } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
-import { UntypedFormGroup, UntypedFormControl, Validators } from '@angular/forms';
+import { Component, Inject, OnInit } from '@angular/core';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { RateComparativeVendorsComponent } from '@component/rate-comparative/rate-comparative-vendors/rate-comparative-vendors.component';
 import { RequestService } from '@services/https/request.service';
 import { SnackbarService } from '@services/snackbar/snackbar.service';
-import { isEmpty } from 'lodash';
-import * as moment from 'moment';
-import { VENDOR_API } from '@env/api_path';
 
 @Component({
-  selector: 'app-rate-comparative-vendors',
-  templateUrl: './rate-comparative-vendors.component.html',
-  styleUrls: ['./rate-comparative-vendors.component.scss']
+  selector: 'app-vendor-rate-listing',
+  templateUrl: './vendor-rate-listing.component.html',
+  styleUrls: ['./vendor-rate-listing.component.scss']
 })
-export class RateComparativeVendorsComponent implements OnInit {
+export class VendorRateListingComponent implements OnInit {
 
   form = new UntypedFormGroup({
     customer: new UntypedFormControl('', [Validators.required]),
@@ -36,7 +34,6 @@ export class RateComparativeVendorsComponent implements OnInit {
     this.itemVendors = data.dataObj.vendors;
     this.itemVendors = this.itemVendors.map((o: any) => {
       this.totalInputQuantity = this.totalInputQuantity + (o.quantity && o.quantity > 0) ? o.quantity : 0;
-      o.brand = '';
       return o;
     })
 
@@ -101,22 +98,7 @@ export class RateComparativeVendorsComponent implements OnInit {
 
   }
 
-  onChangeItemRate(event, itemObj) {
-    this.itemVendors = this.itemVendors.map((o: any) => {
-      if (o._id == itemObj._id) {
-        o.quantity = (o.quantity && o.quantity >= 0) ? o.quantity : 0;
-        o.item_rate = (event.target.value && event.target.value >= 0) ? Number(event.target.value) : 0;
-        o.item_subtotal = o.quantity * o.item_rate;
-        if (this.pageDetail.tax && this.pageDetail.tax.amount && this.pageDetail.tax.amount > 0) {
-          let tax = (o.item_subtotal * this.pageDetail.tax.amount) / 100;
-          o.item_total_amount = o.item_subtotal + tax;
-        } else {
-          o.item_total_amount = o.item_subtotal;
-        }
-      }
-      return o;
-    });
-  }
+
 
   onClickSubmit() {
     this.data.itemVendors = this.itemVendors;
