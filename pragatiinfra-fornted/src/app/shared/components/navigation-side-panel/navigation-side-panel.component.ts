@@ -175,6 +175,18 @@ export class NavigationSidePanelComponent implements OnInit, OnDestroy {
       ]
     },
     {
+      link_name: "Rate Comparative",
+      link: '/rate-comparative',
+      icon: "bx bx-collection",
+      img: '../../../assets/images/icons/Inventory.svg',
+    },
+    {
+      link_name: "Rate Approval",
+      link: '/rate-approval',
+      icon: "bx bx-collection",
+      img: '../../../assets/images/icons/Inventory.svg',
+    },
+    {
       link_name: "Inventory",
       link: '/inventory',
       icon: "bx bx-collection",

@@ -28,15 +28,13 @@ export class RateComparativeVendorsComponent implements OnInit {
   constructor(
 
     private snack: SnackbarService,
-    private request: RequestService,
-    private dialog: MatDialog,
     public dialogRef: MatDialogRef<RateComparativeVendorsComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any) {
-     this.pageDetail = data.dataObj;
+    this.pageDetail = data.dataObj;
     this.itemVendors = data.dataObj.vendors;
     this.itemVendors = this.itemVendors.map((o: any) => {
       this.totalInputQuantity = this.totalInputQuantity + (o.quantity && o.quantity > 0) ? o.quantity : 0;
-      o.brand = '';
+      o.brand = o.brand ? o.brand : '';
       return o;
     })
 

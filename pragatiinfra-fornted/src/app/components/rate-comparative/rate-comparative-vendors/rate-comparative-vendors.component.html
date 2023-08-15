@@ -17,25 +17,9 @@
   <table class="vendor_list_table">
     <thead>
       <tr>
-        <th>
-          Vendor name
-        </th>
-
-        <th>
-          Brand name
-        </th>
-
-
-        <!-- <th>Quantity
-          <div class="td-subtitle">
-            Required quantity: {{pageDetail.qty}}
-          </div>
-
-        </th> -->
+        <th> Vendor name </th>
+        <th> Brand name </th>
         <th>Item rate(per unit)</th>
-        <!-- <th>Subtotal</th>
-        <th>Tax</th>
-        <th>Total</th> -->
       </tr>
     </thead>
 
@@ -52,37 +36,13 @@
           <input type="text" placeholder="Brand" class="cstm-input" (input)="onChangeBrand($event,item)"
             [value]="item.brand">
         </td>
-        <!-- <td>
-          <input type="number" min="0" placeholder="quantity" class="cstm-input" (keyup)="onChangeQuantity($event,item)"
-            (change)="onChangeQuantity($event,item)" [value]="item.quantity">
-        </td> -->
         <td>
           <input type="number" min="0" placeholder="item rate" class="cstm-input"
             (keyup)="onChangeItemRate($event,item)" (change)="onChangeItemRate($event,item)" [value]="item.item_rate">
         </td>
-        <!-- <td>{{item.item_subtotal}}</td>
-        <td>
-          <ng-container *ngIf="pageDetail.tax && pageDetail.tax.amount">
-            {{pageDetail.tax.name}}({{pageDetail.tax.amount}}%)
-          </ng-container>
-        </td>
-        <td>{{item.item_total_amount}}</td> -->
-      </tr>
-      <tr>
-        <td>
 
-
-        </td>
-        <!-- <td>
-          Total Quantity:{{totalInputQuantity}}
-        </td> -->
-        <td>
-        </td>
-        <td></td>
-        <td>
-        </td>
-        <td></td>
       </tr>
+
     </tbody>
   </table>
 

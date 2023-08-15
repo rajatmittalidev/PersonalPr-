@@ -73,46 +73,8 @@ export class RateComparativeUpdateComponent implements OnInit {
           if (o._id == dataObj._id) {
             o.vendors = result.data.itemVendors;
           }
-
-          // o.vendors.map((vendorObj: any) => {
-          //   if (!(vendorTotalData[vendorObj.vendor_id])) {
-          //     vendorTotalData[vendorObj.vendor_id] = { tax_total: 0, vendor_subtotal: 0 };
-          //   }
-          //   if (!vendorTotalData[vendorObj.vendor_id]['tax_total']) {
-          //     vendorTotalData[vendorObj.vendor_id]['tax_total'] = 0;
-          //   }
-          //   if (!vendorTotalData[vendorObj.vendor_id]['vendor_subtotal']) {
-          //     vendorTotalData[vendorObj.vendor_id]['vendor_subtotal'] = 0;
-          //   }
-
-          //   let taxamount = 0;
-          //   if (o.tax && o.tax.amount) {
-          //     taxamount = (vendorObj.item_subtotal * o.tax.amount) / 100;
-          //   }
-          //   vendorTotalData[vendorObj.vendor_id]['tax_total'] += taxamount;
-          //   vendorTotalData[vendorObj.vendor_id]['vendor_subtotal'] += vendorObj.item_subtotal;
-          // })
           return o;
         });
-
-
-
-        // this.details.vendors_total = this.details.vendors_total.map((o: any) => {
-        //   let dataObj = vendorTotalData[o.vendor_id];
-        //   o.subtotal = dataObj.vendor_subtotal;
-        //   o.total_tax = dataObj.tax_total;
-        //   let total = o.subtotal + o.total_tax;
-
-        //   if (o.freight_charges) {
-        //     total += Number(o.freight_charges);
-        //   }
-        //   if (o.freight_tax) {
-        //     total += (Number(o.freight_charges) * Number(o.freight_tax)) / 100;
-        //   }
-        //   o.total_amount = total;
-        //   return o;
-        // })
-
 
       }
     });
@@ -139,10 +101,9 @@ export class RateComparativeUpdateComponent implements OnInit {
       handle_by: data.handle_by,
       site: data.site,
       local_purchase: data.local_purchase,
-      remarks: data.remarks,
     });
 
-    this.rateComparativeForm.controls['remarks'].disable();
+    // this.rateComparativeForm.controls['remarks'].disable();
   }
 
 

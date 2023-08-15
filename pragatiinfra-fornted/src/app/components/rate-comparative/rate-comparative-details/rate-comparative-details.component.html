@@ -142,43 +142,86 @@
         <th>Uom</th>
         <th>Quantity</th>
         <th>Tax</th>
-        <th>Vendors</th>
+        <th>Vendor Details</th>
       </tr>
 
 
 
       <tbody>
-        <tr style="background-color: #F4F4F5;" *ngFor="let item of details?.items; let i = index;">
-          <td style="text-align: center;">
-            {{i+1}}
-          </td>
-          <td>
-            {{item.item_name}}
+        <ng-container *ngFor="let item of details?.items; let i = index;">
+          <tr style="background-color: #F4F4F5;">
+            <td style="text-align: center;">
+              {{i+1}}
+            </td>
+            <td>
+              {{item.item_name}}
 
-          </td>
-          <td style="color: #000;">
-            {{item.categoryDetail.name}}
-          </td>
-          <td style="color: #000;">
-            {{item.subCategoryDetail.subcategory_name}}
-          </td>
-          <td>
-            {{item.uomDetail.uom_name}}
-          </td>
+            </td>
+            <td style="color: #000;">
+              {{item.categoryDetail.name}}
+            </td>
+            <td style="color: #000;">
+              {{item.subCategoryDetail.subcategory_name}}
+            </td>
+            <td>
+              {{item.uomDetail.uom_name}}
+            </td>
 
-          <td>
-            {{item.qty}}
-          </td>
-          <td>
-            <ng-container *ngIf="item.tax && item.tax.amount">
-              {{item.tax.name}}({{item.tax.amount}}%)
-            </ng-container>
-          </td>
+            <td>
+              {{item.qty}}
+            </td>
+            <td>
+              <ng-container *ngIf="item.tax && item.tax.amount">
+                {{item.tax.name}}({{item.tax.amount}}%)
+              </ng-container>
+            </td>
+            <td>
+              <a class="p-btns vendor-detail-button-{{item._id}}" (click)="vendorData(item)"> Vendor Rates</a>
 
-          <td>
-            <!-- <a class="p-btns" (click)="vendorData(item)"> Vendor Rates</a> -->
-          </td>
-        </tr>
+            </td>
+
+          </tr>
+          <tr class="vendor-detail-{{item._id}} vendor-detail">
+            <td colspan="8">
+              <table>
+                <tr>
+                  <th>Vendor Name</th>
+                  <th>Brand</th>
+                  <th>Quantity</th>
+                  <th>Item Rate</th>
+                  <th>Subtotal</th>
+                  <th>Tax</th>
+                  <th>Total</th>
+                </tr>
+                <tr *ngFor="let vendorItem of item.vendors">
+                  <td>
+                    <ng-container
+                      *ngIf="vendorAssociatedData && vendorAssociatedData[vendorItem.vendor_id] && vendorAssociatedData[vendorItem.vendor_id]['vendor_name']">
+                      {{vendorAssociatedData[vendorItem.vendor_id]['vendor_name']}}
+                    </ng-container>
+                  </td>
+                  <td>
+                    {{vendorItem.brand}}
+                  </td>
+                  <td>
+                    {{vendorItem.quantity}}
+                  </td>
+                  <td>
+                    {{vendorItem.item_rate}}
+                  </td>
+                  <td>{{vendorItem.item_subtotal}}</td>
+                  <td>
+                    <ng-container *ngIf="item.tax && item.tax.amount">
+                      {{item.tax.name}}({{item.tax.amount}}%)
+                    </ng-container>
+                  </td>
+                  <td>{{vendorItem.item_total_amount}}</td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </ng-container>
+
       </tbody>
     </table>
   </div>
@@ -248,7 +291,9 @@
   </div>
   <div class=" button-list">
 
-    <button class="p-btns-button" [disabled]="load">
+    <button class="p-btns-button"
+      [ngStyle]="{'background-color': details.status=='approved' ? '#54AA52' : (details.status=='rejected' ? '#C7323B' : '#233A61') }"
+      [disabled]="load">
       <span *ngIf="details.status=='approved'">Approved</span>
       <span *ngIf="details.status=='rejected'">Rejected</span>
       <span *ngIf="details.status=='pending'">Pending</span>
