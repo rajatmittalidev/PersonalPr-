@@ -10,6 +10,7 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '@env/environment';
 import { isEmpty } from 'lodash';
 import { VendorRateListingComponent } from '../vendor-rate-listing/vendor-rate-listing.component';
+import { UsersService } from '@services/users.service';
 
 @Component({
   selector: 'app-rate-approval-update',
@@ -40,6 +41,7 @@ export class RateApprovalUpdateComponent implements OnInit {
   details: any = {};
   vendorsList: Array<any> = [];
   vendorAssociatedData: Array<any> = [];
+  users: any = [];
 
   constructor(
     private router: Router,
@@ -48,9 +50,13 @@ export class RateApprovalUpdateComponent implements OnInit {
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private dialog: MatDialog,
-    private http: HttpClient
+    private http: HttpClient,
+    private userService: UsersService,
   ) {
     this.getList();
+    this.userService.getUserss().subscribe(data => {
+      this.users = data;
+    })
 
 
   }

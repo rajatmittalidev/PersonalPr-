@@ -10,6 +10,7 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '@env/environment';
 import { RateComparativeVendorsComponent } from '../rate-comparative-vendors/rate-comparative-vendors.component';
 import { isEmpty } from 'lodash';
+import { UsersService } from '@services/users.service';
 
 @Component({
   selector: 'app-rate-comparative-update',
@@ -40,6 +41,7 @@ export class RateComparativeUpdateComponent implements OnInit {
   details: any = {};
   vendorsList: Array<any> = [];
   vendorAssociatedData: Array<any> = [];
+  users: any;
 
   constructor(
     private router: Router,
@@ -48,10 +50,15 @@ export class RateComparativeUpdateComponent implements OnInit {
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private dialog: MatDialog,
-    private http: HttpClient
+    private http: HttpClient,
+    private userService: UsersService,
   ) {
     this.getList();
-
+    this.userService.getUserss().subscribe(data => {
+      this.users = data
+      console.log("this.users", this.users);
+      //console.log(this.tasksData)
+    })
 
   }
 
@@ -155,12 +162,16 @@ export class RateComparativeUpdateComponent implements OnInit {
 
 
   updateRequest() {
+    if (!this.rateComparativeForm.valid) {
+      return;
+    }
+
     let requestedData: any = this.rateComparativeForm.value;
     requestedData['_id'] = this.details._id;
     requestedData['items'] = this.details.items;
-    this.details.stage = 'rate_approval';
+    requestedData['stage'] = 'rate_approval';
     this.load = true;
-    this.httpService.PUT(RATE_COMPARATIVE_API, this.details).subscribe({
+    this.httpService.PUT(RATE_COMPARATIVE_API, requestedData).subscribe({
       next: res => {
         this.snack.notify("Detail has been updated", 1);
         this.router.navigate(['/rate-comparative'])

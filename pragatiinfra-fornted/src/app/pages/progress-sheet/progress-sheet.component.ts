@@ -19,6 +19,7 @@ import { isEmpty } from 'lodash';
 import { LocationPopupComponent } from '@component/project/location-popup/location-popup.component';
 import { ConfirmationPopupComponent } from '@component/project/confirmation-popup/confirmation-popup.component';
 import * as moment from 'moment';
+import { retry } from 'rxjs';
 declare var $: any;
 
 @Component({
@@ -42,8 +43,6 @@ export class ProgressSheetComponent implements OnInit {
   });
   currentDate: any;
   project: any;
-  countTargetTillDateAsPerBaseline: Map<string, any> = new Map();
-  countTargetTillDateAsPerRevisedEndDate: Map<string, any> = new Map();
   permissions: any
   progressPermissionsView: any;
   progressPermissionsEdit: any
@@ -317,8 +316,45 @@ export class ProgressSheetComponent implements OnInit {
       $(`.structure-${id}`).addClass('cl-hide');
     }
   }
+  CurrentDailyAskingRate(activityItem){
+    if(activityItem?.base_line_start_date == null)
+      return;
 
-  TargetTillDateAsPerBaseline(activityItem, locationIndex, structureIndex, activityIndex) {
+    if (activityItem?.dailyCumulativeTotal >= activityItem?.quantity)
+      return 0;
+
+    let temp: any;
+    let Startdate: any;
+    Startdate=moment(activityItem?.base_line_start_date).startOf('day');
+    if(activityItem?.actual_revised_start_date!=null){
+      Startdate=moment(activityItem?.actual_revised_start_date).startOf('day');
+    }
+    let base_line_end_date = moment(activityItem?.base_line_end_date).startOf('day');
+    if(activityItem.addRevisesDates.length <= 0){
+        if(this.currentDate>=base_line_end_date){
+            temp=activityItem?.quantity-activityItem?.dailyCumulativeTotal;
+        }else if(Startdate>this.currentDate){
+          temp=0;
+        }else{
+          temp=Math.ceil((activityItem?.quantity-activityItem?.dailyCumulativeTotal)/( moment(base_line_end_date).diff(this.currentDate, 'days')+1));
+        }
+    }else{
+      let R_end_date = moment(activityItem?.addRevisesDates[activityItem.addRevisesDates.length - 1]['revisedDate']).startOf('day');
+
+      if(this.currentDate>=R_end_date){
+        temp=activityItem?.quantity-activityItem?.dailyCumulativeTotal;
+      }else if(Startdate>this.currentDate){
+        temp=0;
+      }else{
+        temp=Math.ceil((activityItem?.quantity-activityItem?.dailyCumulativeTotal)/( moment(R_end_date).diff(this.currentDate, 'days')+1))
+      }
+    }
+    return temp;
+
+
+
+  }
+  TargetTillDateAsPerBaseline(activityItem) {
     if (activityItem?.base_line_start_date == null)
       return;
 
@@ -339,7 +375,7 @@ export class ProgressSheetComponent implements OnInit {
     return temp;
   }
 
-  TargetTillDateAsPerRevisedEndDate(activityItem, locationIndex, structureIndex, activityIndex) {
+  TargetTillDateAsPerRevisedEndDate(activityItem) {
     if (activityItem?.actual_revised_start_date == null || activityItem.addRevisesDates.length <= 0)
       return;
     let temp: any;
@@ -356,8 +392,6 @@ export class ProgressSheetComponent implements OnInit {
       var RevisedLineWorkingDays = moment(this.currentDate).diff(Revisedbase_line_start_date, 'days');
       temp = activityItem.dailyAskingRateasperRevisedEndDate * (RevisedLineWorkingDays + 1);
     }
-    let str = locationIndex + '' + structureIndex + '' + activityIndex;
-    this.countTargetTillDateAsPerRevisedEndDate.set(str, temp);
     return temp;
   }
 }

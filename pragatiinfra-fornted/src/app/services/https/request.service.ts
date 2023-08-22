@@ -113,6 +113,7 @@ export class RequestService {
   }
 
   PUT(URL: any, request: any) {
+    console.log(request);
 
     URL = `${environment.api_path}${URL}`;
     return this.http.put<Response>(URL, request).pipe(

@@ -92,6 +92,7 @@
         <th>UOM</th>
         <th>Total Quantity</th>
         <th>Cumulative Completed</th>
+        <th>Current Daily Asking Rate</th>
         <th>Target Till Date as per Revised End Date</th>
         <th>No of Days Balance as per revised dates</th>
         <th>Daily Asking Rate as per Revised End Date</th>
@@ -120,6 +121,7 @@
             <td></td>
             <td>{{locationItem.structures | psMinTableDate:'location':'base_line_start_date':'min'}}</td>
             <td>{{locationItem.structures | psMinTableDate:'location':'base_line_end_date':'max'}}</td>
+            <td></td>
             <td></td>
             <td></td>
             <td></td>
@@ -175,6 +177,7 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
 
             <tr *ngFor="let activityItem of structureItem.activities,let activityIndex=index" style="font-size: 10px;"
@@ -204,7 +207,7 @@
               <td>{{activityItem?.baseLineWorkingDays}}</td>
               <td>
                 <ng-container *ngIf="activityItem?.base_line_start_date!=null">
-                  {{TargetTillDateAsPerBaseline(activityItem,locationIndex,structureIndex,activityIndex)}}
+                  {{TargetTillDateAsPerBaseline(activityItem)}}
                 </ng-container>
               </td>
               <td>{{activityItem?.noofDaysBalanceasperbaseLine}}</td>
@@ -220,9 +223,10 @@
                   {{activityItem?.dailyCumulativeTotal}}
                 </ng-container>
               </td>
+              <td>{{CurrentDailyAskingRate(activityItem)}} </td>
               <td>
                 <span *ngIf="activityItem?.actual_revised_start_date!=null && activityItem?.r1EndDate!=null">
-                  {{TargetTillDateAsPerRevisedEndDate(activityItem,locationIndex,structureIndex,activityIndex)}}
+                  {{TargetTillDateAsPerRevisedEndDate(activityItem)}}
                 </span>
               </td>
               <td>{{activityItem?.noofDaysBalanceasperrevisedEnddate}}</td>

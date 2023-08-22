@@ -60,7 +60,8 @@
       <div class="flex-div" style="display: flex;flex-direction: column;">
         <label style="color: #4272BF;font-size: 14px;">Request date</label>
         <mat-form-field appearance="outline">
-          <input matInput [matDatepicker]="date" formControlName="date" placeholder="Auto generate Request Date" readonly/>
+          <input matInput [matDatepicker]="date" formControlName="date" placeholder="Auto generate Request Date"
+            readonly />
           <mat-datepicker-toggle matSuffix [for]="date"></mat-datepicker-toggle>
           <mat-datepicker #date></mat-datepicker>
         </mat-form-field>
@@ -73,7 +74,7 @@
         <div class="custom-form-control">
           <mat-form-field appearance="outline">
             <input matInput [matDatepicker]="requiredByStartDate" formControlName="expected_delivery_date"
-              placeholder="Enter Required by" readonly/>
+              placeholder="Enter Required by" readonly />
             <mat-datepicker-toggle matSuffix [for]="requiredByStartDate"></mat-datepicker-toggle>
             <mat-datepicker #requiredByStartDate></mat-datepicker>
 
@@ -86,38 +87,49 @@
             class="star">*</span>
         </label>
         <div class="custom-form-control">
-          <mat-form-field appearance="outline">
+          <!-- <mat-form-field appearance="outline">
             <input matInput formControlName="handle_by" placeholder="Enter handle by name" />
 
+          </mat-form-field> -->
+          <mat-form-field appearance="outline">
+            <!-- <mat-label>Handle by</mat-label> -->
+            <mat-select matInput formControlName="handle_by">
+              <mat-option *ngFor="let user of users" [value]="user?._id">
+                {{user?.name}}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="rateComparativeForm.controls.handle_by.errors?.['required']">
+              this field is required.
+            </mat-error>
           </mat-form-field>
         </div>
       </div>
 
 
 
-      <div class="flex-div" style="display: flex;flex-direction: column;">
+      <!-- <div class="custom-form-control flex-div">
         <label style="color: #4272BF;font-size: 14px;">Request no </label>
-        <input placeholder="Auto generate" formControlName="rate_approval_number" readonly
-          style="width:100%;padding:10px;border-radius: 6px;border:1px solid #ccc;cursor: pointer;margin-top: 10px;font-family: 'Poppins';">
-      </div>
+        <mat-form-field appearance="outline">
+          <input placeholder="Auto generate" formControlName="rate_approval_number" readonly matInput>
+        </mat-form-field>
+      </div> -->
 
-      <div class="flex-div" style="display: flex;flex-direction: column;">
+      <div class="custom-form-control flex-div">
         <label style="color: #4272BF;font-size: 14px;">Site name <span class="star">*</span></label>
-
-        <mat-select id="site" placeholder="Select site" formControlName="site" [disabled]="true"
-          style="padding: 10px;width: 100;border:1px solid #ccc;border-radius: 6px;cursor: pointer;margin-top: 10px;font-family: 'Poppins';">
-          <mat-option [value]="item._id" *ngFor="let item of siteList">
-            {{item.site_name}}
-          </mat-option>
-
-        </mat-select>
+        <mat-form-field appearance="outline">
+          <mat-select id="site" placeholder="Select site" matInput formControlName="site" [disabled]="true">
+            <mat-option [value]="item._id" *ngFor="let item of siteList">
+              {{item.site_name}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
       </div>
 
-      <div class="flex-div" style="display: flex;flex-direction: column;align-items: center;">
+      <div class="flex-div" style="display: flex;flex-direction: column;margin-left: 10px;">
         <label style="color: #4272BF;    margin-bottom: 10px;">Local Purchase <span class="star">*</span></label>
         <mat-radio-group aria-labelledby="example-radio-group-label" color="primary" class="example-radio-group"
           formControlName="local_purchase" [disabled]="true">
-          <mat-radio-button class="example-radio-button" [value]="'yes'">
+          <mat-radio-button class="example-radio-button" style="margin-right: 10px;" [value]="'yes'">
             Yes
           </mat-radio-button>
           <mat-radio-button class="example-radio-button" [value]="'no'">
@@ -182,62 +194,9 @@
     </table>
   </div>
 
-
-  <!-- <div class="vendor-wapper">
-
-    <div class="vendor-container" *ngFor="let item of details.vendors_total">
-
-      <div class="vendor-name-cl">
-
-        <ng-container
-          *ngIf="vendorAssociatedData && vendorAssociatedData[item.vendor_id] && vendorAssociatedData[item.vendor_id]['vendor_name']">
-          {{vendorAssociatedData[item.vendor_id]['vendor_name']}}
-        </ng-container>
-
-      </div>
-      <div class="vendor-value-cont">
-        <div class="vendor-value-label">Subtotal</div>
-        <div class="vendor-value">
-          {{item.subtotal}}
-        </div>
-      </div>
-      <div class="vendor-value-cont">
-        <div class="vendor-value-label">GST Amount</div>
-        <div class="vendor-value">
-          {{item.total_tax}}
-        </div>
-      </div>
-      <div class="vendor-value-cont" style="background-color: #186D3C14;">
-        <div class="vendor-value-label">Freight</div>
-        <div class="vendor-value">
-          <input type="number" min="0" (keyup)="onChangeFreightCharges($event,item)" (change)="onChangeFreightCharges($event,item)" [value]="item.freight_charges" [readonly]="item.subtotal == 0">
-        </div>
-      </div>
-      <div class="vendor-value-cont" style="background-color: #186D3C14;">
-        <div class="vendor-value-label">Freight GST(%)</div>
-        <div class="vendor-value">
-          <input type="number" min="0" (keyup)="onChangeFreightTaxPercent($event,item)" (change)="onChangeFreightTaxPercent($event,item)" [value]="item.freight_tax" [readonly]="item.subtotal == 0">
-        </div>
-      </div>
-      <div class="vendor-value-cont" style="background-color: #073B4C14;">
-        <div class="vendor-value-label"><strong>Grand total</strong></div>
-        <div class="vendor-value">
-          {{item.total_amount}}
-        </div>
-      </div>
-    </div>
-
-  </div> -->
-
-
-
-
-
   <div class="text-area-section">
-
     <label style="color: #4272BF;font-size: 14px;">Remarks </label>
     <textarea name="" id="" cols="30" rows="5" formControlName="remarks"></textarea>
-
   </div>
   <div class=" button-list">
 
