@@ -3,6 +3,8 @@
 const ObjectID = require('mongodb').ObjectID;
 const NumberingGroupSchema = require('../../models/NumberGroup');
 const RateApprovalSchema = require('../../models/RateApproval');
+const PurchaseOrderSchema = require('../../models/PurchaseOrder');
+const SiteSchema = require('../../models/Site');
 const ItemSchema = require('../../models/Item');
 const VendorSchema = require('../../models/Vendor');
 const ProjectActivityDataSchema = require('../../models/ProjectActivityData');
@@ -15,7 +17,8 @@ module.exports = {
     checkVendorCount,
     getVendorListByLocation,
     updateTotalCumulativeQuantity,
-    checkTotalQuantityValidation
+    checkTotalQuantityValidation,
+    addPurchaseOrder,
 }
 
 /* Generate Number group id */
@@ -36,7 +39,8 @@ function getNextNumberGroupId(groupId, moduleName = "") {
                 nextId = nextId + 1;
                 resolve(nextId);
             } else {
-                resolve("");
+                await new NumberingGroupSchema({ "module": moduleName,next_id: 1 }).save();                   
+                resolve(1);
             }
 
         } catch (error) {
@@ -49,7 +53,6 @@ function getNextNumberGroupId(groupId, moduleName = "") {
 
 /* Update invoice id for next result */
 function updateNextNumberGroupId(groupId, moduleName = "") {
-    console.log('moduleName', moduleName)
 
     return new Promise(async (resolve, reject) => {
         try {
@@ -361,4 +364,57 @@ async function checkTotalQuantityValidation(activityData, updatedQuantity) {
         throw error
     }
 
+}
+
+
+
+/* Rate approval */
+function addPurchaseOrder(dataObj, langCode, currentUserId) {
+    return new Promise(async (resolve, reject) => {
+        try {
+
+            let getSiteData = await SiteSchema.findOne({_id:ObjectID(dataObj.site)}).lean();
+
+            let address = {};
+            if(getSiteData){
+                address = {
+                    company_name:getSiteData.site_name,
+                    gst_number:'',
+                    pan_card:'',
+                    contact_person:getSiteData.store_manager,
+                    email:getSiteData.site_manager_email,
+                    ...getSiteData.address
+                }
+            }
+            
+            let getPONumber = await getNextNumberGroupId('', 'purchase_order');
+            console.log('getPONumber', getPONumber)
+
+            let requestedData = {
+                po_number:getPONumber,
+                rate_approval_id:dataObj._id,
+                date:dataObj.date,
+                items:dataObj.items,
+                status:'pending',
+                remarks:'',
+                vendors_total:dataObj.vendors_total,
+                created_by:dataObj.updated_by,
+                updated_by:dataObj.updated_by,
+                billing_address:address,
+                delivery_address:address,
+            } 
+
+            let savedData = await new PurchaseOrderSchema(requestedData).save();
+
+            /* Update numbering group */
+            updateNextNumberGroupId('', 'purchase_order');
+
+
+            resolve(savedData)
+
+
+        } catch (error) {
+            reject(error);
+        }
+    });
 }

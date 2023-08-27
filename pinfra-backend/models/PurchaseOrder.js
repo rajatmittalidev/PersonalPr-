@@ -4,6 +4,13 @@ const config = require('../config/env');
 
 const PurchaseOrderSchema = new mongoose.Schema({
 
+    po_number: {
+        type: String,
+    },
+    rate_approval_id: {
+        type: schema.Types.ObjectId,
+        required: true
+    },
     date: {
         type: Date,
         required: true

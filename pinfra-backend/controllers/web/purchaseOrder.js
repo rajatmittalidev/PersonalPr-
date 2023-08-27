@@ -92,6 +92,7 @@ async function getList(req, res) {
                             
                             {
                                 "$project": {
+                                    "po_number": 1,
                                     "date": 1,
                                     "items": 1,
                                     "status": 1,
@@ -121,6 +122,7 @@ async function getList(req, res) {
                 { $match: filterRequest },              
                 {
                     "$project": {
+                        "po_number": 1,
                         "date": 1,
                         "items": 1,
                         "status": 1,
@@ -193,6 +195,7 @@ async function getDetails(req, res) {
 
             {
                 "$project": {
+                    "po_number": 1,
                     "date": 1,
                     "items": 1,
                     "status": 1,
@@ -234,6 +237,7 @@ async function getDetails(req, res) {
 
             {
                 "$project": {
+                    "po_number": 1,
                     "date": 1,
                     "items": 1,
                     "status": 1,
@@ -262,6 +266,7 @@ async function getDetails(req, res) {
             },
             {
                 "$project": {
+                    "po_number": 1,
                     "date": 1,
                     "items": 1,
                     "status": 1,
@@ -295,6 +300,7 @@ async function getDetails(req, res) {
             {
                 $group: {
                     _id: '$_id',
+                    po_number: { $first: '$po_number' },                   
                     date: { $first: '$date' },                   
                     vendors_total: { $first: '$vendors_total' },   
                     billing_address: { $first: '$billing_address' },   

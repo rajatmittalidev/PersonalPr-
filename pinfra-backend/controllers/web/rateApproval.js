@@ -2,7 +2,7 @@ const RateApprovalSchema = require('../../models/RateApproval')
 const Response = require('../../libs/response')
 const { responseMessage } = require("../../libs/responseMessages");
 const ObjectID = require('mongodb').ObjectID;
-const { getVendorListByLocation } = require('./utilityController')
+const { getVendorListByLocation,addPurchaseOrder } = require('./utilityController')
 
 module.exports = {
     getList,
@@ -37,6 +37,12 @@ async function updateData(req, res) {
         });
 
         if (updatedData) {
+
+            if (updatedData.status && updatedData.status == 'approved') {
+               await addPurchaseOrder(updatedData.toObject(), reqObj.langCode, loginUserId);
+            }
+
+
             res.status(200).json(await Response.success(updatedData, responseMessage(reqObj.langCode, 'RECORD_UPDATED'), req));
         } else {
             res.status(400).json(await Response.success({}, responseMessage(reqObj.langCode, 'NO_RECORD_FOUND'), req));
