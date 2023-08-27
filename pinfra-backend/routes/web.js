@@ -59,12 +59,7 @@ router.put('/projects/members/:id', middleware.jwtVerify, controllerObj.project.
 router.delete('/projects/:id', middleware.jwtVerify, controllerObj.project.deleteById);
 router.delete('/projects/List/:id', middleware.jwtVerify, controllerObj.project.getListById);
 
-// PO Routes
-router.get('/purchaseorder', middleware.jwtVerify, controllerObj.purchaseOrder.getList);
-router.get('/purchaseorder/:id', middleware.jwtVerify, controllerObj.purchaseOrder.getDataByID);
-router.put('/purchaseorder/:id', middleware.jwtVerify, controllerObj.purchaseOrder.updateData);
-router.post('/purchaseorder', middleware.jwtVerify, controllerObj.purchaseOrder.createData);
-router.delete('/purchaseorder/:id', middleware.jwtVerify, controllerObj.purchaseOrder.deleteData);
+
 
 
 
@@ -225,6 +220,13 @@ router.get('/project/activity_data/detail', middleware.jwtVerify, controllerObj.
 router.put('/project/activity_data', middleware.jwtVerify, controllerObj.projectActivityData.updateData);
 router.post('/project/activity_data', middleware.jwtVerify, controllerObj.projectActivityData.createData);
 router.delete('/project/activity_data', middleware.jwtVerify, controllerObj.projectActivityData.deleteData);
+
+
+// PO Routes
+router.get('/purchase_order', middleware.jwtVerify, controllerObj.purchaseOrder.getList);
+router.get('/purchase_order/detail', middleware.jwtVerify, controllerObj.purchaseOrder.getDetails);
+router.put('/purchase_order', middleware.jwtVerify, controllerObj.purchaseOrder.updateData);
+router.delete('/purchase_order', middleware.jwtVerify, controllerObj.purchaseOrder.deleteData);
 
 
 module.exports = router;

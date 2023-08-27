@@ -1,4 +1,3 @@
-const router = require('express').Router();
 const PurchaseOrderSchema = require('../../models/PurchaseOrder')
 const Response = require('../../libs/response')
 const { responseMessage } = require("../../libs/responseMessages");
