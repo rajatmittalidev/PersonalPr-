@@ -187,6 +187,12 @@ export class NavigationSidePanelComponent implements OnInit, OnDestroy {
       img: '../../../assets/images/icons/Inventory.svg',
     },
     {
+      link_name: "Purchase Order",
+      link: '/purchase-order',
+      icon: "bx bx-collection",
+      img: '../../../assets/images/icons/Inventory.svg',
+    },
+    {
       link_name: "Inventory",
       link: '/inventory',
       icon: "bx bx-collection",

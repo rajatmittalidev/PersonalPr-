@@ -1,10 +1,10 @@
 <mat-toolbar style="height: 100px;background-color: #fff;">
   <div style="margin-top: 50px;margin-left: 20px;">
-    <img src="./assets/images/ratehead.svg">
+    <img src="./assets/images/POL.svg">
   </div>
   <span
-    style="font-family: 'Poppins';margin-top: 40px;font-style: normal;font-weight:600;font-size: 30px;color:#1E293B;margin-left: 10px;">Rate
-    comparative</span>
+    style="font-family: 'Poppins';margin-top: 40px;font-style: normal;font-weight:600;font-size: 30px;color:#1E293B;margin-left: 10px;">Purchase
+    Order</span>
   <span class="example-spacer"></span>
   <button mat-icon-button style="margin-right: 40px;">
     <mat-icon style="margin-top: 40px;">notifications</mat-icon>
@@ -30,7 +30,7 @@
   </div>
   <div style="margin-top: 20px;margin-left: 10px;display: flex;">
     <div> <img src="./assets/images/ratedown.svg"></div>
-    <span style="color: #233A61;margin-left: 5px;font-size: 14px;">Rate&nbsp;Comparative</span>
+    <span style="color: #97989D;margin-left: 5px;font-size: 14px;">Rate&nbsp;Comparative</span>
     <div><mat-divider style="width: 90px;margin-left: 10px;margin-top: 10px;border:1px dashed"></mat-divider></div>
   </div>
   <div style="margin-top: 20px;margin-left: 10px;display: flex;">
@@ -40,7 +40,7 @@
   </div>
   <div style="margin-top: 20px;margin-left: 10px;display: flex;">
     <div><img src="./assets/images/po.svg"></div>
-    <span style="color: #97989D;margin-left: 5px;font-size: 14px;">Purchase&nbsp;orders</span>
+    <span style="color: #233A61;margin-left: 5px;font-size: 14px;">Purchase&nbsp;orders</span>
   </div>
 </div>
 
@@ -77,7 +77,7 @@
 
   <div style="margin-top: 30px;display: flex;position: relative;right:570px;gap:10px">
 
-    <div style="margin-top: 15px;color: #94A3B8;width: 110px;"> <span>Filter by Status</span></div>
+    <div style="margin-top: 15px;color: #94A3B8;width: 110px;"> <span>Filter&nbsp; by&nbsp; Status</span></div>
     <div class="custom-form-control" style="position: relative;">
 
       <mat-form-field appearance="outline">
@@ -104,11 +104,11 @@
         <td style="color: #4272BF;width:800px;text-align: left;padding: 10px;font-size: 15px;">
           Site&nbsp;<span style="color: #000000;">{{obj.siteData.site_name}}</span></td>
         <td style="background-color: #233A61;color:#fff;width:200px;font-size: 14px;cursor: pointer;"
-          *ngIf="obj.status=='pending'" [routerLink]="['/rate-comparative/update',obj._id]">Create&nbsp;Comparative</td>
+          *ngIf="obj.status=='pending'" [routerLink]="['/purchase-order/update',obj._id]">View&nbsp;PO</td>
         <td style="background-color: #54AA52;color:#fff;width:200px;font-size: 14px;cursor: pointer;"
-          *ngIf="obj.status =='approved'" [routerLink]="['/rate-comparative/details',obj._id]">Approved Vendors</td>
+          *ngIf="obj.status =='approved'" [routerLink]="['/purchase-order/details',obj._id]">Approved Vendors</td>
         <td style="background-color: #C7323B;color:#fff;width:200px;font-size: 14px;cursor: pointer;"
-          *ngIf="obj.status =='rejected'" [routerLink]="['/rate-comparative/details',obj._id]">Rejected Rates</td>
+          *ngIf="obj.status =='rejected'" [routerLink]="['/purchase-order/details',obj._id]">Rejected Rates</td>
 
 
         <td style="width: 100px;"><mat-icon>

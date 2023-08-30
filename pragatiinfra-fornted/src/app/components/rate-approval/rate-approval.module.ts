@@ -5,7 +5,7 @@ import { RateApprovalUpdateComponent } from './rate-approval-update/rate-approva
 import { RateApprovalStatusUpdateComponent } from './rate-approval-status-update/rate-approval-status-update.component';
 import { RateComparativeVendorsModule } from '@component/rate-comparative/rate-comparative-vendors/rate-comparative-vendors.module';
 import { ReactiveFormsModule } from '@angular/forms';
-import { RouterModule,Routes } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 import { CustomMaterialModule } from 'app/ang-material.module';
 import { DirectiveModule } from 'app/shared/directives/directive.module';
 import { VendorRateListingComponent } from './vendor-rate-listing/vendor-rate-listing.component';
@@ -15,10 +15,6 @@ const routes: Routes = [
     path: "",
     component: RateApprovalListComponent
   },
-  // {
-  //   path: "details/:id",
-  //   component: RateComparativeDetailsComponent
-  // },
   {
     path: "update/:id",
     component: RateApprovalUpdateComponent
