@@ -42,7 +42,7 @@ async function updateData(req, res) {
             if (updatedData.status && updatedData.status == 'approved') {
                await addPurchaseOrder(updatedData.toObject(), reqObj.langCode, loginUserId);
             }
-            
+
             res.status(200).json(await Response.success(updatedData, responseMessage(reqObj.langCode, 'RECORD_UPDATED'), req));
         } else {
             res.status(400).json(await Response.success({}, responseMessage(reqObj.langCode, 'NO_RECORD_FOUND'), req));
@@ -105,12 +105,11 @@ async function getList(req, res) {
                             },
                             {
                                 "$project": {
-                                    "purchase_request_number": 1,
+                                    "rate_approval_number": 1,
                                     "title": 1,
                                     "handle_by": 1,
                                     "date": 1,
                                     "expected_delivery_date": 1,
-                                    "purchase_request_number": 1,
                                     "site": 1,
                                     "local_purchase": 1,
                                     "stage": 1,
@@ -130,7 +129,7 @@ async function getList(req, res) {
                                     "handle_by": 1,
                                     "date": 1,
                                     "expected_delivery_date": 1,
-                                    "purchase_request_number": 1,
+                                    "rate_approval_number": 1,
                                     "site": 1,
                                     "local_purchase": 1,
                                     "stage": 1,
@@ -173,7 +172,7 @@ async function getList(req, res) {
                         "handle_by": 1,
                         "date": 1,
                         "expected_delivery_date": 1,
-                        "purchase_request_number": 1,
+                        "rate_approval_number": 1,
                         "site": 1,
                         "local_purchase": 1,
                         "stage": 1,
@@ -193,7 +192,7 @@ async function getList(req, res) {
                         "handle_by": 1,
                         "date": 1,
                         "expected_delivery_date": 1,
-                        "purchase_request_number": 1,
+                        "rate_approval_number": 1,
                         "site": 1,
                         "local_purchase": 1,
                         "stage": 1,
@@ -269,7 +268,7 @@ async function getDetails(req, res) {
                     "handle_by": 1,
                     "date": 1,
                     "expected_delivery_date": 1,
-                    "purchase_request_number": 1,
+                    "rate_approval_number": 1,
                     "site": 1,
                     "local_purchase": 1,
                     "stage": 1,
@@ -315,7 +314,7 @@ async function getDetails(req, res) {
                     "handle_by": 1,
                     "date": 1,
                     "expected_delivery_date": 1,
-                    "purchase_request_number": 1,
+                    "rate_approval_number": 1,
                     "site": 1,
                     "local_purchase": 1,
                     "stage": 1,
@@ -346,7 +345,7 @@ async function getDetails(req, res) {
                     "handle_by": 1,
                     "date": 1,
                     "expected_delivery_date": 1,
-                    "purchase_request_number": 1,
+                    "rate_approval_number": 1,
                     "site": 1,
                     "local_purchase": 1,
                     "stage": 1,
@@ -383,7 +382,7 @@ async function getDetails(req, res) {
                     date: { $first: '$date' },
                     vendors_total: { $first: '$vendors_total' },
                     expected_delivery_date: { $first: '$expected_delivery_date' },
-                    purchase_request_number: { $first: '$purchase_request_number' },
+                    rate_approval_number: { $first: '$rate_approval_number' },
                     site: { $first: '$site' },
                     local_purchase: { $first: '$local_purchase' },
                     stage: { $first: '$stage' },
