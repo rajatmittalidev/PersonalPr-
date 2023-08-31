@@ -387,31 +387,84 @@ function addPurchaseOrder(dataObj, langCode, currentUserId) {
                 }
             }
             
-            let getPONumber = await getNextNumberGroupId('', 'purchase_order');
-            console.log('getPONumber', getPONumber)
+            
 
-            let requestedData = {
-                po_number:getPONumber,
-                rate_approval_id:dataObj._id,
-                date:dataObj.date,
-                items:dataObj.items,
-                status:'pending',
-                remarks:'',
-                vendors_total:dataObj.vendors_total,
-                created_by:dataObj.updated_by,
-                updated_by:dataObj.updated_by,
-                billing_address:address,
-                delivery_address:address,
-            } 
+           
 
-            let savedData = await new PurchaseOrderSchema(requestedData).save();
+            let itemsbyVendor = {};
+            if(dataObj.items && dataObj.items.length>0){
+                
+               let allPromise =  dataObj.items.map(async(itemObj)=>{
 
-            /* Update numbering group */
-            updateNextNumberGroupId('', 'purchase_order');
+                 
 
+                    if(itemObj.vendors && itemObj.vendors.length>0){
+                        itemObj.vendors.map((vendorObj)=>{
 
-            resolve(savedData)
+                            let itemData = {...itemObj};
 
+                            if(vendorObj.item_total_amount > 0){
+                                itemData.vendors = [vendorObj];
+                           
+                                let vid = String(vendorObj.vendor_id);
+                              
+                                if(!(itemsbyVendor[vid] && itemsbyVendor[vid].length>0)){
+                                    itemsbyVendor[vid] = [];
+                                }                                
+                                itemsbyVendor[vid].push(itemData)                                
+                            }
+
+                            return vendorObj;
+                        })
+                    }                 
+                    return itemObj;
+                })
+
+                
+                let newData = await Promise.all(allPromise);
+            }
+
+            let allorders = [];
+
+            if(dataObj.vendors_total &&  dataObj.vendors_total.length>0){
+
+                for(let i = 0;i<dataObj.vendors_total.length;i++){
+                    let vendor = dataObj.vendors_total[i];
+
+                    if(vendor.total_amount && vendor.total_amount>0){
+
+                        let getPONumber = await getNextNumberGroupId('', 'purchase_order');
+                       let updatedNUmber =  await updateNextNumberGroupId('', 'purchase_order');
+                     
+                        let order = {
+                            po_number:getPONumber,
+                            rate_approval_id:dataObj._id,
+                            date:dataObj.date,
+                            due_date:dataObj.date,
+                            title:dataObj.title,
+                            site:dataObj.site,
+                            local_purchase:dataObj.local_purchase,
+                            status:'pending',
+                            remarks:'',
+                            created_by:dataObj.updated_by,
+                            updated_by:dataObj.updated_by,
+                            billing_address:address,
+                            delivery_address:address,
+                        } 
+                        order.vendors_total = [vendor];
+                        order.items = itemsbyVendor[vendor.vendor_id];                      
+
+                        allorders.push(order)
+                    }
+                }           
+            }
+
+            if(allorders && allorders.length>0){
+                
+                let savedData =  await PurchaseOrderSchema.insertMany(allorders);
+            }
+
+            resolve(allorders);
 
         } catch (error) {
             reject(error);

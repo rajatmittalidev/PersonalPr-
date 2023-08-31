@@ -40,7 +40,7 @@ export class PurchaseOrderListComponent implements OnInit {
     private httpService: RequestService,
     private snack: SnackbarService,
   ) {
-    this.getList({ filter_by: this.filter_by, filter_value: this.filter_value, stage: 'rate_approval' });
+    this.getList({ filter_by: this.filter_by, filter_value: this.filter_value });
   }
 
   getList(filterObj: any) {

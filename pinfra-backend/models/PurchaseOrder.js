@@ -7,11 +7,28 @@ const PurchaseOrderSchema = new mongoose.Schema({
     po_number: {
         type: String,
     },
+    title: {
+        type: String,
+        required: true
+    },
+    site: {
+        type: schema.Types.ObjectId,
+        required: true
+    },
+    local_purchase: {
+        type: String,
+        enum: ['yes', 'no'],
+        default: 'yes'
+    },
     rate_approval_id: {
         type: schema.Types.ObjectId,
         required: true
     },
     date: {
+        type: Date,
+        required: true
+    },  
+    due_date: {
         type: Date,
         required: true
     },  

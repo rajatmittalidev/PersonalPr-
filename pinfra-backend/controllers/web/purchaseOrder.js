@@ -55,7 +55,7 @@ async function updateData(req, res) {
 
 
 async function getList(req, res) {
-    // stage
+
     try {
 
         let reqObj = req.body;
@@ -94,6 +94,10 @@ async function getList(req, res) {
                                 "$project": {
                                     "po_number": 1,
                                     "date": 1,
+                                    "due_date": 1,
+                                    "title": 1,
+                                    "site": 1,
+                                    "local_purchase": 1,
                                     "items": 1,
                                     "status": 1,
                                     "remarks": 1,
@@ -124,6 +128,10 @@ async function getList(req, res) {
                     "$project": {
                         "po_number": 1,
                         "date": 1,
+                        "due_date": 1,
+                        "title": 1,
+                        "site": 1,
+                        "local_purchase": 1,
                         "items": 1,
                         "status": 1,
                         "remarks": 1,
@@ -139,7 +147,6 @@ async function getList(req, res) {
                 },                
                 { '$sort': sort }
             ]);
-            console.log("allRecords",allRecords);
             res.status(200).json(await Response.success(allRecords, responseMessage(reqObj.langCode, 'SUCCESS'), req));
         }
 
@@ -197,6 +204,10 @@ async function getDetails(req, res) {
                 "$project": {
                     "po_number": 1,
                     "date": 1,
+                    "due_date": 1,
+                    "title": 1,
+                    "site": 1,
+                    "local_purchase": 1,
                     "items": 1,
                     "status": 1,
                     "remarks": 1,
@@ -239,6 +250,10 @@ async function getDetails(req, res) {
                 "$project": {
                     "po_number": 1,
                     "date": 1,
+                    "due_date": 1,
+                    "title": 1,
+                    "site": 1,
+                    "local_purchase": 1,
                     "items": 1,
                     "status": 1,
                     "remarks": 1,
@@ -268,6 +283,10 @@ async function getDetails(req, res) {
                 "$project": {
                     "po_number": 1,
                     "date": 1,
+                    "due_date": 1,
+                    "title": 1,
+                    "site": 1,
+                    "local_purchase": 1,
                     "items": 1,
                     "status": 1,
                     "remarks": 1,

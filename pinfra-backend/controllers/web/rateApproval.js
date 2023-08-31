@@ -30,6 +30,7 @@ async function updateData(req, res) {
 
         let requestedData = { ...reqObj, ...{ updated_by: loginUserId } };
 
+
         let updatedData = await RateApprovalSchema.findOneAndUpdate({
             _id: ObjectID(reqObj._id)
         }, requestedData, {
@@ -37,12 +38,11 @@ async function updateData(req, res) {
         });
 
         if (updatedData) {
-
+           
             if (updatedData.status && updatedData.status == 'approved') {
                await addPurchaseOrder(updatedData.toObject(), reqObj.langCode, loginUserId);
             }
-
-
+            
             res.status(200).json(await Response.success(updatedData, responseMessage(reqObj.langCode, 'RECORD_UPDATED'), req));
         } else {
             res.status(400).json(await Response.success({}, responseMessage(reqObj.langCode, 'NO_RECORD_FOUND'), req));
@@ -211,7 +211,6 @@ async function getList(req, res) {
                 },
                 { '$sort': sort }
             ]);
-            console.log("allRecords",allRecords);
             res.status(200).json(await Response.success(allRecords, responseMessage(reqObj.langCode, 'SUCCESS'), req));
         }
 
