@@ -253,8 +253,7 @@ async function getDetails(req, res) {
                     "due_date": 1,
                     "title": 1,
                     "site": 1,
-                    "local_purchase": 1,
-                    "items": 1,
+                    "local_purchase": 1,                  
                     "status": 1,
                     "remarks": 1,
                     "billing_address": 1,
@@ -287,7 +286,6 @@ async function getDetails(req, res) {
                     "title": 1,
                     "site": 1,
                     "local_purchase": 1,
-                    "items": 1,
                     "status": 1,
                     "remarks": 1,
                     "billing_address": 1,
@@ -342,6 +340,7 @@ async function getDetails(req, res) {
         }
 
     } catch (error) {
+        console.log('error', error)
         return res.status(error.statusCode || 422).json(
             await Response.errors({
                 errors: error.errors,
