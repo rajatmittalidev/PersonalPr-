@@ -9,6 +9,7 @@ const ItemSchema = require('../../models/Item');
 const VendorSchema = require('../../models/Vendor');
 const ProjectActivityDataSchema = require('../../models/ProjectActivityData');
 const ProjectSchema = require('../../models/Project');
+const RecentActivity = require('../../models/recentActivity')
 
 module.exports = {
     getNextNumberGroupId,
@@ -19,6 +20,7 @@ module.exports = {
     updateTotalCumulativeQuantity,
     checkTotalQuantityValidation,
     addPurchaseOrder,
+    updateActivityLog
 }
 
 /* Generate Number group id */
@@ -39,7 +41,7 @@ function getNextNumberGroupId(groupId, moduleName = "") {
                 nextId = nextId + 1;
                 resolve(nextId);
             } else {
-                await new NumberingGroupSchema({ "module": moduleName,next_id: 1 }).save();                   
+                await new NumberingGroupSchema({ "module": moduleName, next_id: 1 }).save();
                 resolve(1);
             }
 
@@ -373,98 +375,117 @@ function addPurchaseOrder(dataObj, langCode, currentUserId) {
     return new Promise(async (resolve, reject) => {
         try {
 
-            let getSiteData = await SiteSchema.findOne({_id:ObjectID(dataObj.site)}).lean();
+            let getSiteData = await SiteSchema.findOne({ _id: ObjectID(dataObj.site) }).lean();
 
             let address = {};
-            if(getSiteData){
+            if (getSiteData) {
                 address = {
-                    company_name:getSiteData.site_name,
-                    gst_number:'',
-                    pan_card:'',
-                    contact_person:getSiteData.store_manager,
-                    email:getSiteData.site_manager_email,
+                    company_name: getSiteData.site_name,
+                    gst_number: '',
+                    pan_card: '',
+                    contact_person: getSiteData.store_manager,
+                    email: getSiteData.site_manager_email,
                     ...getSiteData.address
                 }
             }
-            
-            
 
-           
+
+
+
 
             let itemsbyVendor = {};
-            if(dataObj.items && dataObj.items.length>0){
-                
-               let allPromise =  dataObj.items.map(async(itemObj)=>{
+            if (dataObj.items && dataObj.items.length > 0) {
 
-                 
+                let allPromise = dataObj.items.map(async (itemObj) => {
 
-                    if(itemObj.vendors && itemObj.vendors.length>0){
-                        itemObj.vendors.map((vendorObj)=>{
 
-                            let itemData = {...itemObj};
 
-                            if(vendorObj.item_total_amount > 0){
+                    if (itemObj.vendors && itemObj.vendors.length > 0) {
+                        itemObj.vendors.map((vendorObj) => {
+
+                            let itemData = { ...itemObj };
+
+                            if (vendorObj.item_total_amount > 0) {
                                 itemData.vendors = [vendorObj];
-                           
+
                                 let vid = String(vendorObj.vendor_id);
-                              
-                                if(!(itemsbyVendor[vid] && itemsbyVendor[vid].length>0)){
+
+                                if (!(itemsbyVendor[vid] && itemsbyVendor[vid].length > 0)) {
                                     itemsbyVendor[vid] = [];
-                                }                                
-                                itemsbyVendor[vid].push(itemData)                                
+                                }
+                                itemsbyVendor[vid].push(itemData)
                             }
 
                             return vendorObj;
                         })
-                    }                 
+                    }
                     return itemObj;
                 })
 
-                
+
                 let newData = await Promise.all(allPromise);
             }
 
             let allorders = [];
 
-            if(dataObj.vendors_total &&  dataObj.vendors_total.length>0){
+            if (dataObj.vendors_total && dataObj.vendors_total.length > 0) {
 
-                for(let i = 0;i<dataObj.vendors_total.length;i++){
+                for (let i = 0; i < dataObj.vendors_total.length; i++) {
                     let vendor = dataObj.vendors_total[i];
 
-                    if(vendor.total_amount && vendor.total_amount>0){
+                    if (vendor.total_amount && vendor.total_amount > 0) {
 
                         let getPONumber = await getNextNumberGroupId('', 'purchase_order');
-                       let updatedNUmber =  await updateNextNumberGroupId('', 'purchase_order');
-                     
+                        let updatedNUmber = await updateNextNumberGroupId('', 'purchase_order');
+
                         let order = {
-                            po_number:getPONumber,
-                            rate_approval_id:dataObj._id,
-                            date:dataObj.date,
-                            due_date:dataObj.date,
-                            title:dataObj.title,
-                            site:dataObj.site,
-                            local_purchase:dataObj.local_purchase,
-                            status:'pending',
-                            remarks:'',
-                            created_by:dataObj.updated_by,
-                            updated_by:dataObj.updated_by,
-                            billing_address:address,
-                            delivery_address:address,
-                        } 
+                            po_number: getPONumber,
+                            rate_approval_id: dataObj._id,
+                            date: dataObj.date,
+                            due_date: dataObj.date,
+                            title: dataObj.title,
+                            site: dataObj.site,
+                            local_purchase: dataObj.local_purchase,
+                            status: 'pending',
+                            remarks: '',
+                            created_by: dataObj.updated_by,
+                            updated_by: dataObj.updated_by,
+                            billing_address: address,
+                            delivery_address: address,
+                        }
                         order.vendors_total = [vendor];
-                        order.items = itemsbyVendor[vendor.vendor_id];                      
+                        order.items = itemsbyVendor[vendor.vendor_id];
 
                         allorders.push(order)
                     }
-                }           
+                }
             }
 
-            if(allorders && allorders.length>0){
-                
-                let savedData =  await PurchaseOrderSchema.insertMany(allorders);
+            if (allorders && allorders.length > 0) {
+
+                let savedData = await PurchaseOrderSchema.insertMany(allorders);
             }
 
             resolve(allorders);
+
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
+
+
+function updateActivityLog(description) {
+
+    return new Promise(async (resolve, reject) => {
+        try {
+
+            let recentActivity = new RecentActivity({
+                description: description
+            });
+            recentActivity = await recentActivity.save()
+
+            resolve(recentActivity);
 
         } catch (error) {
             reject(error);

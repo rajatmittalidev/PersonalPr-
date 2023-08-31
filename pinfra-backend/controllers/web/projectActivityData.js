@@ -1,7 +1,7 @@
 const ProjectActivityDataSchema = require('../../models/ProjectActivityData')
 const Response = require('../../libs/response')
 const { responseMessage } = require("../../libs/responseMessages");
-const { updateTotalCumulativeQuantity,checkTotalQuantityValidation } = require("./utilityController");
+const { updateTotalCumulativeQuantity,checkTotalQuantityValidation,updateActivityLog } = require("./utilityController");
 const moment = require('moment');
 const ObjectID = require('mongodb').ObjectID;
 module.exports = {

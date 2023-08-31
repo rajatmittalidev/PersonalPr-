@@ -1,5 +1,4 @@
 const Project = require('../../models/Project')
-const RecentActivity = require('../../models/recentActivity')
 const Task = require('../../models/Task')
 const SubTask = require('../../models/SubTask')
 
@@ -7,6 +6,7 @@ const mongoose = require('mongoose')
 const Response = require('../../libs/response')
 const ObjectId = mongoose.Types.ObjectId;
 const { responseMessage } = require("../../libs/responseMessages");
+const { updateActivityLog } = require("./utilityController");
 
 module.exports = {
     getList,
@@ -76,10 +76,7 @@ async function createData(req, res) {
         });
         project = await project.save()
 
-        // let recentActivity = new RecentActivity({
-        //     description: `${project.projectName} project created`
-        // });
-        // recentActivity = await recentActivity.save()
+        await updateActivityLog(`${project.projectName} project created`);      
 
         res.send(project);
 
@@ -144,6 +141,10 @@ async function updateData(req, res) {
         });
 
         if (updatedData) {
+
+            await updateActivityLog(`${updatedData.projectName} project updated`); 
+
+
             res.status(200).json(await Response.success(updatedData, responseMessage(reqObj.langCode, 'RECORD_UPDATED'), req));
         }
         else {
@@ -225,6 +226,8 @@ async function updateProject(req, res) {
 
         if (!project) return res.send('project not updated')
 
+        await updateActivityLog(`${req.body.projectName} project updated`); 
+
         res.send(project)
     } catch (error) {
         return res.status(error.statusCode || 422).json(
@@ -279,14 +282,7 @@ async function updateMenberById(req, res) {
 
         let newMember = req.body.members.slice(-1)[0]
 
-        let recentActivity = new RecentActivity({
-
-            //activity:project.projectName,
-            description: `new member ${newMember} added to ${project.projectName} project`
-
-        });
-
-        recentActivity = await recentActivity.save()
+        await updateActivityLog(`new member ${newMember} added to ${project.projectName} project`);  
 
         res.send(project)
     }
