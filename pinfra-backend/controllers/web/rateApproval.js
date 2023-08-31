@@ -38,10 +38,10 @@ async function updateData(req, res) {
         });
 
         if (updatedData) {
-           
-            if (updatedData.status && updatedData.status == 'approved') {
-               await addPurchaseOrder(updatedData.toObject(), reqObj.langCode, loginUserId);
-            }
+            await addPurchaseOrder(updatedData.toObject(), reqObj.langCode, loginUserId);
+            // if (updatedData.status && updatedData.status == 'approved') {
+            //    await addPurchaseOrder(updatedData.toObject(), reqObj.langCode, loginUserId);
+            // }
 
             res.status(200).json(await Response.success(updatedData, responseMessage(reqObj.langCode, 'RECORD_UPDATED'), req));
         } else {

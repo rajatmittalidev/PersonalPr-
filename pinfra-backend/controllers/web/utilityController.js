@@ -437,6 +437,7 @@ function addPurchaseOrder(dataObj, langCode, currentUserId) {
 
                         let getPONumber = await getNextNumberGroupId('', 'purchase_order');
                         let updatedNUmber = await updateNextNumberGroupId('', 'purchase_order');
+                        let vendorsDetail = await VendorSchema.findOne({_id:ObjectID(vendor.vendor_id)});
 
                         let order = {
                             po_number: getPONumber,
@@ -452,6 +453,7 @@ function addPurchaseOrder(dataObj, langCode, currentUserId) {
                             updated_by: dataObj.updated_by,
                             billing_address: address,
                             delivery_address: address,
+                            vendor_detail:vendorsDetail
                         }
                         order.vendors_total = [vendor];
                         order.items = itemsbyVendor[vendor.vendor_id];

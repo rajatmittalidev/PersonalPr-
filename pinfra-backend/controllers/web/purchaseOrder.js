@@ -178,7 +178,6 @@ async function getDetails(req, res) {
             }
         }
 
-        let getVendorList = await getVendorListByLocation();
 
 
         let recordDetail = await PurchaseOrderSchema.aggregate([
@@ -334,7 +333,7 @@ async function getDetails(req, res) {
         ]);
 
         if (recordDetail && recordDetail.length > 0) {
-            res.status(200).json(await Response.success({ details: recordDetail[0], vendorsList: getVendorList }, responseMessage(reqObj.langCode, 'SUCCESS')));
+            res.status(200).json(await Response.success(recordDetail[0], responseMessage(reqObj.langCode, 'SUCCESS')));
         } else {
             res.status(422).json(await Response.success({}, responseMessage(reqObj.langCode, 'NO_RECORD_FOUND'), req));
         }
