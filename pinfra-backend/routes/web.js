@@ -229,4 +229,6 @@ router.put('/purchase_order', middleware.jwtVerify, controllerObj.purchaseOrder.
 router.delete('/purchase_order', middleware.jwtVerify, controllerObj.purchaseOrder.deleteData);
 
 
+router.post('/upload_file', middleware.jwtVerify, controllerObj.uploadImage.upload);
+
 module.exports = router;
