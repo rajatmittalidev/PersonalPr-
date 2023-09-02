@@ -37,6 +37,20 @@ const PurchaseOrderSchema = new mongoose.Schema({
             type: schema.Types.ObjectId,
             required: true
         },
+        item_name: {
+            type: String,
+            default: 1
+        }, 
+        uom: {
+            uom_name: {
+                type: String,
+                default: ''
+            }, 
+            uom_id: {
+                type: schema.Types.ObjectId,
+                default: null
+            }, 
+        }, 
         tax: {
             amount: Number,
             name: String
@@ -286,6 +300,10 @@ const PurchaseOrderSchema = new mongoose.Schema({
             type:String,
             default: ''
         }
+    },
+    vendor_message:{
+        type: String,
+        default: ""
     },
     created_by: String,
     updated_by: String

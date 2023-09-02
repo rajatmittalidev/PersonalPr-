@@ -375,6 +375,114 @@ function addPurchaseOrder(dataObj, langCode, currentUserId) {
     return new Promise(async (resolve, reject) => {
         try {
 
+            let getItemList = await ItemSchema.aggregate([
+                       
+                            {
+                                $lookup: {
+                                    from: 'categories',
+                                    localField: 'category',
+                                    foreignField: '_id',
+                                    as: 'categoryDetail',
+                                },
+                            },
+                            {
+                                $lookup: {
+                                    from: 'sub_categories',
+                                    localField: 'sub_category',
+                                    foreignField: '_id',
+                                    as: 'subCategoryDetail',
+                                },
+                            },
+                            {
+                                $lookup: {
+                                    from: 'uoms',
+                                    localField: 'uom',
+                                    foreignField: '_id',
+                                    as: 'uomDetail',
+                                },
+                            },
+                            {
+                                $lookup: {
+                                    from: 'gsts',
+                                    localField: 'gst',
+                                    foreignField: '_id',
+                                    as: 'gstDetail',
+                                },
+                            },
+                            {
+                                "$project": {
+                                    "item_name": 1,
+                                    "item_number": 1,
+                                    "category": 1,
+                                    "sub_category": 1,
+                                    "uom": 1,
+                                    "gst": 1,
+                                    "specification": 1,
+                                    "created_at": 1,
+                                    "updated_at": 1,
+                                    "created_by": 1,
+                                    "updated_by": 1,
+                                    "categoryDetail": { "$arrayElemAt": ["$categoryDetail", 0] },
+                                    "subCategoryDetail": { "$arrayElemAt": ["$subCategoryDetail", 0] },
+                                    "uomDetail": { "$arrayElemAt": ["$uomDetail", 0] },
+                                    "gstDetail": { "$arrayElemAt": ["$gstDetail", 0] },
+                                }
+                            },
+                            {
+                                "$project": {
+                                    "item_name": 1,
+                                    "item_number": 1,
+                                    "category": 1,
+                                    "sub_category": 1,
+                                    "uom": 1,
+                                    "gst": 1,
+                                    "specification": 1,
+                                    "created_at": 1,
+                                    "updated_at": 1,
+                                    "created_by": 1,
+                                    "updated_by": 1,
+                                    "categoryDetail._id": 1,
+                                    "categoryDetail.name": 1,
+                                    "categoryDetail.code": 1,
+                                    "subCategoryDetail._id": 1,
+                                    "subCategoryDetail.subcategory_name": 1,
+                                    "uomDetail._id": 1,
+                                    "uomDetail.uom_name": 1,
+                                    "gstDetail._id": 1,
+                                    "gstDetail.gst_name": 1,
+                                    "gstDetail.gst_percentage": 1
+                                }
+                            }                 
+                
+            ]);
+
+
+            let itemAssociatedArray = {};
+            if(getItemList && getItemList.length>0){
+
+                let allItemsPromise = getItemList.map(async (itemObj) => {
+                    itemAssociatedArray[itemObj._id] = itemObj;
+                    return itemObj;
+                });
+                let allItemsPromiseResp = await Promise.all(allItemsPromise);
+            }
+
+
+
+            let vendorsList = await VendorSchema.find({}).lean();
+
+            let vendorsAssociatedArray = {};
+            if(vendorsList && vendorsList.length>0){
+
+                let allVendorsPromise = vendorsList.map(async (obj) => {
+                    vendorsAssociatedArray[obj._id] = obj;
+                    return obj;
+                });
+                let allVendorsPromiseResp = await Promise.all(allVendorsPromise);
+            }
+
+
+
             let getSiteData = await SiteSchema.findOne({ _id: ObjectID(dataObj.site) }).lean();
 
             let address = {};
@@ -405,6 +513,18 @@ function addPurchaseOrder(dataObj, langCode, currentUserId) {
 
                             let itemData = { ...itemObj };
 
+
+                            if(itemAssociatedArray[itemData.item_id] && itemAssociatedArray[itemData.item_id]['item_name']){
+                                itemData.item_name = itemAssociatedArray[itemData.item_id]['item_name'];
+                            }
+
+                            if(itemAssociatedArray[itemData.item_id] && itemAssociatedArray[itemData.item_id]['uomDetail']){
+                                itemData.uom = {
+                                    uom_name: itemAssociatedArray[itemData.item_id]['uomDetail']['uom_name'],
+                                    uom_id:itemAssociatedArray[itemData.item_id]['uomDetail']['_id']
+                                } 
+                            }
+
                             if (vendorObj.item_total_amount > 0) {
                                 itemData.vendors = [vendorObj];
 
@@ -424,6 +544,7 @@ function addPurchaseOrder(dataObj, langCode, currentUserId) {
 
 
                 let newData = await Promise.all(allPromise);
+
             }
 
             let allorders = [];
@@ -436,8 +557,7 @@ function addPurchaseOrder(dataObj, langCode, currentUserId) {
                     if (vendor.total_amount && vendor.total_amount > 0) {
 
                         let getPONumber = await getNextNumberGroupId('', 'purchase_order');
-                        let updatedNUmber = await updateNextNumberGroupId('', 'purchase_order');
-                        let vendorsDetail = await VendorSchema.findOne({_id:ObjectID(vendor.vendor_id)});
+                        let updatedNUmber = await updateNextNumberGroupId('', 'purchase_order');                        
 
                         let order = {
                             po_number: getPONumber,
@@ -452,11 +572,14 @@ function addPurchaseOrder(dataObj, langCode, currentUserId) {
                             created_by: dataObj.updated_by,
                             updated_by: dataObj.updated_by,
                             billing_address: address,
-                            delivery_address: address,
-                            vendor_detail:vendorsDetail
+                            delivery_address: address
                         }
                         order.vendors_total = [vendor];
                         order.items = itemsbyVendor[vendor.vendor_id];
+
+                        if(vendorsAssociatedArray && vendorsAssociatedArray[vendor.vendor_id]){
+                            order['vendor_detail'] = vendorsAssociatedArray[vendor.vendor_id]
+                        }
 
                         allorders.push(order)
                     }
