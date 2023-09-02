@@ -8,7 +8,8 @@ module.exports = {
     getList,
     getDetails,
     updateData,
-    deleteData
+    deleteData,
+    getInvetoryList
 }
 
 
@@ -89,7 +90,7 @@ async function getList(req, res) {
                 {
                     $facet: {
                         data: [
-                            
+
                             {
                                 "$project": {
                                     "po_number": 1,
@@ -110,7 +111,7 @@ async function getList(req, res) {
                                     "created_at": 1,
                                     "updated_at": 1
                                 }
-                            },                            
+                            },
                             { '$sort': sort },
                             { "$skip": pageData.offset },
                             { "$limit": pageData.limit }
@@ -123,7 +124,7 @@ async function getList(req, res) {
             res.status(200).json(await Response.pagination(allRecords, responseMessage(reqObj.langCode, 'SUCCESS'), pageData, req));
         } else {
             let allRecords = await PurchaseOrderSchema.aggregate([
-                { $match: filterRequest },              
+                { $match: filterRequest },
                 {
                     "$project": {
                         "po_number": 1,
@@ -137,14 +138,14 @@ async function getList(req, res) {
                         "remarks": 1,
                         "billing_address": 1,
                         "delivery_address": 1,
-                        "vendors_total": 1,                
+                        "vendors_total": 1,
                         "status": 1,
                         "updated_by": 1,
                         "created_by": 1,
                         "created_at": 1,
                         "updated_at": 1
                     }
-                },                
+                },
                 { '$sort': sort }
             ]);
             res.status(200).json(await Response.success(allRecords, responseMessage(reqObj.langCode, 'SUCCESS'), req));
@@ -220,7 +221,7 @@ async function getDetails(req, res) {
                     "created_at": 1,
                     "updated_at": 1
                 }
-            },           
+            },
             {
                 $lookup: {
                     from: 'categories',
@@ -254,7 +255,7 @@ async function getDetails(req, res) {
                     "vendor_detail": 1,
                     "title": 1,
                     "site": 1,
-                    "local_purchase": 1,                  
+                    "local_purchase": 1,
                     "status": 1,
                     "remarks": 1,
                     "billing_address": 1,
@@ -319,16 +320,16 @@ async function getDetails(req, res) {
             {
                 $group: {
                     _id: '$_id',
-                    po_number: { $first: '$po_number' },                   
-                    date: { $first: '$date' },  
-                    due_date: { $first: '$due_date' },                  
-                    site: { $first: '$site' },                   
-                    local_purchase: { $first: '$local_purchase' },                   
-                    title: { $first: '$title' },    
-                    vendors_total: { $first: '$vendors_total' },   
-                    vendor_detail: { $first: '$vendor_detail' },   
-                    billing_address: { $first: '$billing_address' },   
-                    delivery_address: { $first: '$delivery_address' },   
+                    po_number: { $first: '$po_number' },
+                    date: { $first: '$date' },
+                    due_date: { $first: '$due_date' },
+                    site: { $first: '$site' },
+                    local_purchase: { $first: '$local_purchase' },
+                    title: { $first: '$title' },
+                    vendors_total: { $first: '$vendors_total' },
+                    vendor_detail: { $first: '$vendor_detail' },
+                    billing_address: { $first: '$billing_address' },
+                    delivery_address: { $first: '$delivery_address' },
                     status: { $first: '$status' },
                     remarks: { $first: '$remarks' },
                     updated_by: { $first: '$updated_by' },
@@ -377,6 +378,85 @@ async function deleteData(req, res) {
         let record = await PurchaseOrderSchema.findOneAndDelete({ company_id: company_id, _id: ObjectID(_id) });
 
         res.status(200).json(await Response.success('', responseMessage(reqObj.langCode, 'RECORD_DELETED'), req));
+
+    } catch (error) {
+        return res.status(error.statusCode || 422).json(
+            await Response.errors({
+                errors: error.errors,
+                message: error.message
+            }, error, req)
+        );
+
+    }
+}
+
+
+
+
+async function getInvetoryList(req, res) {
+
+    try {
+
+        let reqObj = req.body;
+
+        let { page, per_page, sort_by, sort_order, list_type, filter_by, filter_value, stage } = req.query;
+        let requestedParam = req.query;
+
+        let pageData = Response.validationPagination(page, per_page);
+
+
+        let sort = {
+            '_id': -1
+        }
+        if (sort_by) {
+            let order = (sort_order == 'desc') ? -1 : 1;
+            sort = {
+                [sort_by]: order
+            }
+        }
+
+        if (page > 0) {
+            let allRecords = await PurchaseOrderSchema.aggregate([
+                {
+                    $facet: {
+                        data: [
+
+                            { $unwind: "$items" },
+                            {
+                                $group: {
+                                    _id: "$items.item_id",
+                                    item_name: { "$first": "$items.item_name" },
+                                    item_count: { "$sum": 1 },
+                                    uom: { "$first": "$items.uom" },
+                                }
+                            },
+                            { '$sort': sort },
+                            { "$skip": pageData.offset },
+                            { "$limit": pageData.limit }
+
+                        ],
+                        total: [{ $count: 'total' }]
+                    }
+                }
+            ]);
+            res.status(200).json(await Response.pagination(allRecords, responseMessage(reqObj.langCode, 'SUCCESS'), pageData, req));
+        } else {
+            let allRecords = await PurchaseOrderSchema.aggregate([
+                { $unwind: "$items" },
+                {
+                    $group: {
+                        _id: "$items.item_id",
+                        item_name: { "$first": "$items.item_name" },
+                        item_count: { "$sum": 1 },
+                        uom: { "$first": "$items.uom" },
+                    }
+                },
+                { '$sort': sort }
+            ]);
+            res.status(200).json(await Response.success(allRecords, responseMessage(reqObj.langCode, 'SUCCESS'), req));
+        }
+
+
 
     } catch (error) {
         return res.status(error.statusCode || 422).json(

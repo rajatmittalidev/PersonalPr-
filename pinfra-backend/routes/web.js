@@ -224,11 +224,18 @@ router.delete('/project/activity_data', middleware.jwtVerify, controllerObj.proj
 
 // PO Routes
 router.get('/purchase_order', middleware.jwtVerify, controllerObj.purchaseOrder.getList);
+
 router.get('/purchase_order/detail', middleware.jwtVerify, controllerObj.purchaseOrder.getDetails);
 router.put('/purchase_order', middleware.jwtVerify, controllerObj.purchaseOrder.updateData);
 router.delete('/purchase_order', middleware.jwtVerify, controllerObj.purchaseOrder.deleteData);
 
-
+// Upload file
 router.post('/upload_file', middleware.jwtVerify, controllerObj.uploadImage.upload);
+
+// inventory
+router.get('/inventory', middleware.jwtVerify, controllerObj.purchaseOrder.getInvetoryList);
+
+
+
 
 module.exports = router;
