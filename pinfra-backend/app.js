@@ -41,9 +41,6 @@ app.use("/", function (req, res, next) {
   res.send('<html><head><title>Pragati Infra</title></head><body><h1>Welcome to Pragati Infra</h1></body></html>');
 });
 
-// app.use("/uploads", function (req, res, next) { 
-//   res.send('<html><head><title>Pragati Infra</title></head><body><h1>Welcome to Pragati Infra</h1></body></html>');
-// });
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
