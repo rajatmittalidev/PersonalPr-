@@ -424,15 +424,7 @@ async function getInvetoryList(req, res) {
                     $facet: {
                         data: [
 
-                            { $unwind: "$items" },
-                            {
-                                $group: {
-                                    _id: "$items.item_id",
-                                    item_name: { "$first": "$items.item_name" },
-                                    item_count: { "$sum": 1 },
-                                    uom: { "$first": "$items.uom" },
-                                }
-                            },
+                            { $unwind: "$items" },                          
                             { '$sort': sort },
                             { "$skip": pageData.offset },
                             { "$limit": pageData.limit }
@@ -444,16 +436,21 @@ async function getInvetoryList(req, res) {
             ]);
             res.status(200).json(await Response.pagination(allRecords, responseMessage(reqObj.langCode, 'SUCCESS'), pageData, req));
         } else {
+            // let allRecords = await PurchaseOrderSchema.aggregate([
+            //     { $unwind: "$items" },
+            //     {
+            //         $group: {
+            //             _id: "$items.item_id",
+            //             item_name: { "$first": "$items.item_name" },
+            //             item_count: { "$sum": 1 },
+            //             uom: { "$first": "$items.uom" },
+            //         }
+            //     },
+            //     { '$sort': sort }
+            // ]);
+
             let allRecords = await PurchaseOrderSchema.aggregate([
-                { $unwind: "$items" },
-                {
-                    $group: {
-                        _id: "$items.item_id",
-                        item_name: { "$first": "$items.item_name" },
-                        item_count: { "$sum": 1 },
-                        uom: { "$first": "$items.uom" },
-                    }
-                },
+                { $unwind: "$items" },              
                 { '$sort': sort }
             ]);
             res.status(200).json(await Response.success(allRecords, responseMessage(reqObj.langCode, 'SUCCESS'), req));
