@@ -3,6 +3,7 @@ export const environment = {
   app_name:"pragatiinfra",
   encryption: false,
   environmentType:'local',
+  api_base_path: 'https://pr.avidusinteractive.com',
   api_path: 'https://pr.avidusinteractive.com/api/web',
   cookiesOptions: {
     storeUnencoded: true,

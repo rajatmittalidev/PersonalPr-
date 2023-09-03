@@ -22,6 +22,7 @@
     "ejs": "^3.1.6",
     "express": "~4.16.1",
     "fs-extra": "^10.0.0",
+    "html-pdf-node": "^1.0.8",
     "http-errors": "~1.6.3",
     "image-to-base64": "^2.2.0",
     "jade": "~1.11.0",

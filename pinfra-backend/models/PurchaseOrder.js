@@ -309,6 +309,10 @@ const PurchaseOrderSchema = new mongoose.Schema({
         type: String,
         default: ""
     },
+    sign:{
+        type: String,
+        default: ""
+    },
     created_by: String,
     updated_by: String
 }, {

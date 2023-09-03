@@ -1,43 +1,28 @@
 var html_to_pdf = require('html-pdf-node');
 const { convertCurrency, formatDate } = require('../../libs/map');
 const env = require("../../config/env");
-const {countryList}  = require('../../libs/country');
-const InvoiceSchema = require('../../models/invoice');
+const PurchaseOrderSchema = require('../../models/PurchaseOrder');
 const ObjectID = require('mongodb').ObjectID;
-const {footerData} = require('./footer');
+const { footerData } = require('./footer');
 const path = require('path');
 const fs = require('fs');
 const { responseMessage } = require("../../libs/responseMessages");
 
 
 module.exports.generatePdf = (dataObj) => {
-    return new Promise(async(resolve, reject) => {
-    
+    return new Promise(async (resolve, reject) => {
+
         try {
 
-        let requestedData = dataObj.requestedData;
-        let companyData = dataObj.companyData;
-  
-        let fileBase = `${env.fileBasePath}${companyData.slug}/`;
-        let companyLogo = (companyData.company_logo)?`${fileBase}${companyData.company_logo}`:env.companyDefaultLogo;
-        
-        let countryName = companyData.address && companyData.address.country?countryList[companyData.address.country].name:"";
-        let companyName = companyData.company_name?companyData.company_name:"Your company name";        
-        let companyAddressLine1 = companyData.address && companyData.address.street_address?`${companyData.address.street_address}, ${companyData.address.street_address2}`:"Street address here";
-        let companyAddressLine2 = companyData.address && companyData.address.state && companyData.address.city && companyData.address.zip_code?`${companyData.address.state}, ${companyData.address.city}, ${companyData.address.zip_code}, ${countryName}`:`State, city, zipcode, country`;
+            let requestedData = dataObj.requestedData;
+
+            let getDataResp = await getDetails(requestedData.id, 'en');
+
+            let currentlang = "en";
 
 
-        let mobileNumber = (companyData.contact_m_dialcode && companyData.contact_mobile_number)?`+${companyData.contact_m_dialcode}-${companyData.contact_mobile_number}`:'N/A';
-        let tinNumber = `${companyData.tin_or_vat}`;
-        let crnCompany = `${companyData.crn}`;
-
-        let getDataResp = await getDetails(requestedData.id, requestedData.langCode);
-
-        let currentlang = requestedData.langCode;  
-   
-
-        /* Start:- Style */
-        let templateContent = `
+            /* Start:- Style */
+            let templateContent = `
         <style>
         html { -webkit-print-color-adjust: exact; }
         * {
@@ -65,319 +50,290 @@ module.exports.generatePdf = (dataObj) => {
             border: 1px solid #DADADC;
             font-size: 10px;
         }
-    </style>        
-        `;
-
-        if(currentlang == 'ar'){
-            templateContent += `
-            <style>
-               table{
-                direction: rtl;
-               }
-            </style>
-            `
+        .terms-table td,
+        .terms-table th {
+            font-size: 10px;
         }
 
-        /* End:- Style */
+        .section-heading{
+            font-weight:600;
+            font-size:14px;
+        }
+    </style>        
+        `;
+            /* End:- Style */
 
 
 
-        /* Start:- Header */
+            /* Start:- Header */
 
-        let invoiceDate = formatDate(getDataResp.date, companyData);
-        let qrCodeData = formatDate(getDataResp.date, {date_format:"YYYY-MM-DD HH:mm"})
-        let invoiceDueDate = formatDate(getDataResp.due_date, companyData);
-        let totalAmount = convertCurrency(getDataResp.total_amount, companyData);
-        let subTotal = convertCurrency(getDataResp.sub_total, companyData);
-        let invoicePaid = convertCurrency(getDataResp.invoice_paid, companyData);
-        let balance = convertCurrency(getDataResp.balance_amount, companyData);
-        let totalTax = convertCurrency(getDataResp.total_tax, companyData);
-        let adjustment = convertCurrency(getDataResp.adjustment.amount, companyData);
-        let shippingCharges = convertCurrency(getDataResp.shipping_charges, companyData);
-        let creditApplied = convertCurrency(getDataResp.credit_applied, companyData);
-        let invoiceRefund = convertCurrency(getDataResp.refund, companyData);
-        let writeOffamount = convertCurrency(getDataResp.write_off_amount, companyData);
+            let date = formatDate(getDataResp.date, "DD-MM-YYYY");
+            let dueDate = formatDate(getDataResp.due_date, "DD-MM-YYYY");
+            // let totalAmount = convertCurrency(getDataResp.total_amount, companyData);
+            // let subTotal = convertCurrency(getDataResp.sub_total, companyData);
+            // let invoicePaid = convertCurrency(getDataResp.invoice_paid, companyData);
+            // let balance = convertCurrency(getDataResp.balance_amount, companyData);
+            // let totalTax = convertCurrency(getDataResp.total_tax, companyData);
+            // let adjustment = convertCurrency(getDataResp.adjustment.amount, companyData);
+            // let shippingCharges = convertCurrency(getDataResp.shipping_charges, companyData);
+            // let creditApplied = convertCurrency(getDataResp.credit_applied, companyData);
+            // let invoiceRefund = convertCurrency(getDataResp.refund, companyData);
+            // let writeOffamount = convertCurrency(getDataResp.write_off_amount, companyData);
 
-                           
 
-       
 
-        templateContent += `
+            templateContent += `
         <table cellspacing="0" cellpadding="10px" border="0" width="100%" >
         <tr>
             <td>
                 <table  cellspacing="0" cellpadding="10px" border="0" width="100%">
                     <tr>
                         <td colspan="2">                           
-                            <p style="font-size: 16px;width:100%;text-align:center;font-weight:600">${responseMessage(currentlang, 'TAX_INVOICE')}</p>                          
+                            <p style="font-size: 16px;width:100%;text-align:center;font-weight:600">Purchase Order</p>                          
                         </td>                        
                     </tr>
                     
                     <tr>
                         <td>
                             <div id="logo" >
-                                <img src="${companyLogo}" style="  max-height: 100px;  min-height: 50px; padding: 10px; ">
+                                Billing Address
                             </div>
-                            <p style="font-size: 10px;">${companyName}</p>
-                            <p style="font-size: 10px;color: #292F4C;">${companyAddressLine1} <br>
-                            ${companyAddressLine2}
-                            </p>
-                            <p style="font-size: 10px;color: #292F4C;"><strong>${responseMessage(currentlang, 'PHONE')}</strong> :
-                            <span style="direction:ltr !important;unicode-bidi: embed;">${mobileNumber}</span></p>
-                            <p style="font-size: 10px;color: #292F4C;"><strong>${responseMessage(currentlang, 'TIN_VAT')}</strong> : ${tinNumber}</p>
-                            <p style="font-size: 10px;color: #292F4C;"><strong>${responseMessage(currentlang, 'CRN')}</strong> : ${crnCompany}</p>
+                            <p style="font-size: 10px;color: #292F4C;"><strong>Company</strong> :
+                            <span style="direction:ltr !important;unicode-bidi: embed;">${getDataResp.billing_address.company_name}</span></p>
+
+                            <p style="font-size: 10px;color: #292F4C;"><strong>Address</strong> : ${getDataResp.billing_address.street_address} <br>
+                            ${getDataResp.billing_address.street_address2}<br>
+                            ${getDataResp.billing_address.city},${getDataResp.billing_address.state}, ${getDataResp.billing_address.country}, ${getDataResp.billing_address.zip_code}</p>
+
+                            <p style="font-size: 10px;color: #292F4C;"><strong>GST</strong> : ${getDataResp.billing_address.gst_number}</p>
+                            <p style="font-size: 10px;color: #292F4C;"><strong>PAN</strong> : ${getDataResp.billing_address.pan_card}</p>
+                            <p style="font-size: 10px;color: #292F4C;"><strong>Contact Person</strong> : ${getDataResp.billing_address.contact_person}</p>
+                            <p style="font-size: 10px;color: #292F4C;"><strong>Email</strong> : ${getDataResp.billing_address.email}</p>
                         </td>
-                        <td style="text-align: end; font-size: 16px;color: #292F4C;vertical-align: top;padding-top:25px; "><b>${responseMessage(currentlang, 'INVOICE_NUMBER_STR')}</b>: 
-                        <span style="direction:ltr !important;unicode-bidi: embed;"> #${getDataResp.invoice_number} </span>
+                        <td style="text-align: end; font-size: 16px;color: #292F4C;vertical-align: top;padding-top:25px;>
+                            <div id="logo" >
+                            Delivery Address
+                            </div>
+                            <p style="font-size: 10px;color: #292F4C;"><strong>DATE</strong> :
+                            <span style="direction:ltr !important;unicode-bidi: embed;">${date}</span></p>
+                            <p style="font-size: 10px;color: #292F4C;"><strong>VALIDITY</strong> : <span style="direction:ltr !important;unicode-bidi: embed;">${dueDate}</span></p>
+                            <p style="font-size: 10px;color: #292F4C;"><strong>PO Number</strong> : <span style="direction:ltr !important;unicode-bidi: embed;">${getDataResp.po_number}</span></p>
+
+                            <p style="font-size: 10px;color: #292F4C;"><strong>Address</strong> : ${getDataResp.delivery_address.street_address} <br>
+                            ${getDataResp.delivery_address.street_address2}<br>
+                            ${getDataResp.delivery_address.city},${getDataResp.delivery_address.state}, ${getDataResp.delivery_address.country}, ${getDataResp.delivery_address.zip_code}</p>
+                            <p style="font-size: 10px;color: #292F4C;"><strong>Contact Person</strong> : ${getDataResp.delivery_address.contact_person}</p>
                         </td>
                     </tr>
-                </table>                 
-        `;
-
-
-        let customerBilingcountryName = getDataResp.customer && getDataResp.customer.billing_address && getDataResp.customer.billing_address.country ? countryList[getDataResp.customer.billing_address.country].name : "";
-        let customerPhone = (getDataResp.customer && getDataResp.customer.contact_phone_number)?`+${getDataResp.customer.contact_p_dialcode}-${getDataResp.customer.contact_phone_number}`:'';
-        let customerMobile = (getDataResp.customer && getDataResp.customer.contact_mobile_number)?`+${getDataResp.customer.contact_m_dialcode}-${getDataResp.customer.contact_mobile_number}`:'';
-        templateContent += `
-            <table cellspacing="0" cellpadding="10px"  width="100%" style="background: #EDF0F2; border: 1px solid #DADADC; border-radius: 3.81625px; padding: 10px; margin-bottom:20px; " >
-                    <tr>                        
-                        <td align="center">
-                            <div style="text-align: start; font-size: 10px;color: #292F4C; dir:auto">
-                                <pT>${responseMessage(currentlang, 'BILL_TO')}: <br> <span style=" font-size: 12px; font-weight: 600;">${getDataResp.customer.customer_name}</span> </pT>
-                                <p>
-                                ${getDataResp.customer.billing_address.street_address} <br>
-                                ${getDataResp.customer.billing_address.street_address2}<br>
-                                ${getDataResp.customer.billing_address.state}, ${getDataResp.customer.billing_address.city}, ${customerBilingcountryName}, ${getDataResp.customer.billing_address.zip_code} <br>
-                                </p>
-                                <p>${responseMessage(currentlang, 'PHONE_NUMBER')}: <span style="direction:ltr !important;unicode-bidi: embed;">${customerPhone}</span></p>
-                                <p>${responseMessage(currentlang, 'MOBILE_NUMBER')}: <span style="direction:ltr !important;unicode-bidi: embed;">${customerMobile}</span></p>
-                                <p>${responseMessage(currentlang, 'VAT_NO')}: ${(getDataResp.customer.tin_or_vat_id)?getDataResp.customer.tin_or_vat_id:""}</p>
-                                <p>${responseMessage(currentlang, 'CRN')}: ${(getDataResp.customer.crn)?getDataResp.customer.crn:""}</p>
-        
-                            </div>
-                        </td>
-                        <td align="center">
-                            <div style="text-align: end; font-size: 12px;color: #292F4C;">               
-                            
-                                <p>${responseMessage(currentlang, 'DATE')}: <span style="font-weight: 600;direction:ltr !important;unicode-bidi: embed;">${invoiceDate}</span></p>
-
-                                <p>${responseMessage(currentlang, 'DUE_DATE')}: <span style="font-weight: 600;direction:ltr !important;unicode-bidi: embed;">${invoiceDueDate}</span></p>
-                                
-                                <p>${responseMessage(currentlang, 'AMOUNT')}: <span style="font-weight: 600;direction:ltr !important;unicode-bidi: embed;">${totalAmount}</span></p>
-                            </div>
-                        </td>
-                    </tr>
-            </table>                 
-        `;
-
-         /* End:- Header */
-
-        templateContent += `
-                <table cellspacing="0" cellpadding="10px" class="invoice-table" border="0" width="100%" >
-                    <thead background="">
-                        <tr align="center">
-                            <th > ${responseMessage(currentlang, 'PRODUCT')} </th>
-                            <th >${responseMessage(currentlang, 'DESCRIPTION')}</th>
-                            <th >${responseMessage(currentlang, 'QTY') }</th>
-                            <th  class="price">${responseMessage(currentlang, 'PRICE')}</th>
-                            <th  class="price">${responseMessage(currentlang, 'DISCOUNT')}</th>
-                            <th  class="price">${responseMessage(currentlang, 'TAX_VAT')}</th>
-                            <th >${responseMessage(currentlang, 'TOTAL_AMOUNT_')} </th>
-                        </tr>
-                    </thead>             
-                    <tbody align="center">
-                    `;
-
-            if(getDataResp.products && getDataResp.products.length>0){
-
-                getDataResp.products.map((o)=>{
-                    if(o){
-                        let productPrice = convertCurrency(o.price, companyData);
-                        let productTotal = convertCurrency(o.total, companyData);
-    
-                        let productDiscount = (o.discount && o.discount.name) ? `${o.discount.name}<span style="display:inline-block;direction:ltr;">(${o.discount.amount}%)</span>` : ``;
-                    let productTax = (o.tax && o.tax.name) ? `${o.tax.name}<span style="display:inline-block;direction:ltr;">(${o.tax.amount}%)</span>` : ``;;
-                        
-                        templateContent += `
-                        <tr>
-                            <td  style="">${o.product_name}</td>
-                            <td style=" ">${(o.product_description)?o.product_description:""}</td>
-                              <td  style=" ">${o.quantity}</td>
-                              <td  style="">${productPrice}</td>
-                              <td  style="">${productDiscount}</td>
-                              <td  style="">${productTax}</td>
-                              <td  style="">${productTotal}</td>
-                          </tr>`;
-                    }
-                   
-
-                })                
-            }
-        
-
-            let shippingChargeHTML = '';
-            if (getDataResp && getDataResp.shipping_charges && getDataResp.shipping_charges > 0) {
-                shippingChargeHTML = `<tr>
-                                        <td  align="end" style="font-size: 10px; color: #292F4C;  border-top: 1px solid #979797;">${responseMessage(currentlang, 'SHIPPING_CHARGES')}:</td>
-                                        <td  align="end" style="font-size: 10px; color: #292F4C;  border-top: 1px solid #979797;"> ${shippingCharges}</td>
-                                    </tr>`;
-            }
-
-
-            let adjustmentHTML = '';
-            if (getDataResp && getDataResp.adjustment && getDataResp.adjustment.amount && getDataResp.adjustment.amount > 0) {
-                adjustmentHTML = `<tr>
-                                    <td  align="end" style="font-size: 10px; color: #292F4C;  border-top: 1px solid #979797;">${responseMessage(currentlang, 'ADJUSTMENT')}:</td>
-                                    <td  align="end" style="font-size: 10px; color: #292F4C;  border-top: 1px solid #979797;"> ${adjustment}</td>
-                                </tr>`;
-            }
-
-
-        templateContent += `</tbody>
                 </table>
-                <table cellspacing="0" cellpadding="10px" width="100%"  border="0" >
-                    <tr>
-                        <td width="60%" > </td>
-                        <td width="40%">
-                            <table cellspacing="0" cellpadding="10px" width="100%" class="invoice-total" border="0" >
-
-                                <tr>
-                                    <td  align="end" style="font-size: 10px; color: #292F4C;">${responseMessage(currentlang, 'SUB_TOTAL')}:</td>
-                                    <td  align="end" style="font-size: 10px; color: #292F4C;"> ${subTotal}</td>
-                                </tr>
-
-                                 ${shippingChargeHTML}
-
-                               ${adjustmentHTML}
-                                
-                                
-                                <tr>
-                                    <td  align="end" style="font-size: 10px; color: #292F4C;  border-top: 1px solid #979797;">${responseMessage(currentlang, 'TAX_VAT')}:</td>
-                                    <td  align="end" style="font-size: 10px; color: #292F4C;  border-top: 1px solid #979797;"> ${totalTax}</td>
-                                </tr>
-                            `;
-
-            if(getDataResp.invoice_tax && getDataResp.invoice_tax.length>0){
-
-
-                getDataResp.invoice_tax.map((o)=>{
-                    let tAmount = convertCurrency(o.total, companyData);
-                    let taxType = (o.tax_type=="discount")?"-":"";
-                    let colorData = (o.tax_type=="discount")?"#ff3333":"#292F4C";
-                    templateContent += `
-
-                        <tr>
-                            <td  align="end" style="font-size: 10px; color: #292F4C;">${o.name}(${o.amount}%):</td>
-                            <td  align="end" style="font-size: 10px; color: ${colorData};">${taxType}${tAmount}</td>
-                        </tr>                 
-                    `;
-                })
-
-            }
                 
-                        
-        templateContent += `
-                        <tr>
-                            <td  align="end" style="font-size: 10px; color: #292F4C; font-weight:700;  border-top: 1px solid #979797;"> ${responseMessage(currentlang, 'TOTAL_AMOUNT_')}
-                            <td  align="end" style="font-size: 10px; color: #292F4C; font-weight:700;  border-top: 1px solid #979797;"> ${totalAmount}</td>
-                        </tr>
-
-
-                        
-
-                        ${
-                            (getDataResp.credit_applied && getDataResp.credit_applied>0)
-                            ?
-                            `<tr>
-                                <td  align="end" style="font-size: 10px; color: #292F4C;  border-top: 1px solid #979797;">${responseMessage(currentlang, 'CREDIT_APPLIED')}:</td>
-                                <td  align="end" style="font-size: 10px; color: #ff3333;  border-top: 1px solid #979797;"> -${creditApplied}</td>
-                            </tr>`
-                            :""
-                        } 
-                        
-
-                        ${
-                            (getDataResp.refund && getDataResp.refund>0)
-                            ?
-                            `<tr>
-                                <td  align="end" style="font-size: 10px; color: #292F4C;  border-top: 1px solid #979797;">${responseMessage(currentlang, 'REFUND')}:</td>
-                                <td  align="end" style="font-size: 10px; color: #ff3333;  border-top: 1px solid #979797;"> -${invoiceRefund}</td>
-                            </tr>`
-                            :""
-                        }  
-
-
-                        <tr>
-                            <td  align="end" style="font-size: 10px; color: #292F4C;  border-top: 1px solid #979797;">${responseMessage(currentlang, 'INVOICE_PAID')}:</td>
-                            <td  align="end" style="font-size: 10px; color: #292F4C;  border-top: 1px solid #979797;"> ${invoicePaid}</td>
-                        </tr>
-
-                        
-
-                        ${
-                            (getDataResp.write_off)
-                            ?
-                            `<tr>
-                                <td  align="end" style="font-size: 10px; color: #292F4C;  border-top: 1px solid #979797;">${responseMessage(currentlang, 'WRITE_OFF') }:</td>
-                                <td  align="end" style="font-size: 10px; color: #ff3333;  border-top: 1px solid #979797;"> ${writeOffamount}</td>
-                            </tr>`
-                            :""
-                        }                        
-                                        
-                        <tr>
-                            <td  align="end" style="font-size: 10px; color: #292F4C;  font-weight:700; border-top: 1px solid #979797;">${responseMessage(currentlang, 'BALANCE_DUE')}:</td>
-                            <td  align="end" style="font-size: 10px; color: #292F4C; font-weight:700;  border-top: 1px solid #979797;"> ${balance}</td>
-                        </tr>
-                    </table>
-                </td> 
-            </tr>
-        </table>
+                </td>
+            </tr>  
         `;
 
+            /* End:- Header */
 
-        templateContent += `                      
-                      
-                  </td>
-                </tr>
+
+        /* Start:- Mail content */
+
+
+
+
+        /* End:- Mail content */
+
+
+              /* start:- item table */
+
+              templateContent += `
+              <tr>  
+                <td colspan="2">
+                    <table cellspacing="0" cellpadding="10px" class="invoice-table" border="0" width="100%" >
+                        <thead background="">
+                            <tr align="center">
+                                <th> Item No	 </th>
+                                <th>Item Name</th>
+                                <th>Brand</th>
+                                <th>Required Quantity</th>
+                                <th>Purchased Quantity</th>
+                                <th class="price">Rate</th>
+                                <th class="price">Sub Total</th>
+                                <th class="price">Tax</th>
+                                <th class="price">Total</th>
+                            </tr>
+                        </thead>             
+                        <tbody align="center">
+                        `;
+
+                if (getDataResp.items && getDataResp.items.length > 0) {
+
+                    getDataResp.items.map((o,i) => {
+                        if (o) {
+                            let itemRate = convertCurrency(o.vendors[0]['item_rate']);
+                            let item_subtotal = convertCurrency(o.vendors[0]['item_subtotal']);
+                            let item_total_amount = convertCurrency(o.vendors[0]['item_total_amount']);
+
+                            let productDiscount = (o.discount && o.discount.name) ? `${o.discount.name}<span style="display:inline-block;direction:ltr;">(${o.discount.amount}%)</span>` : ``;
+                            let productTax = (o.tax && o.tax.name) ? `${o.tax.name}<span style="display:inline-block;direction:ltr;">(${o.tax.amount}%)</span>` : ``;;
+
+                            templateContent += `
+                            <tr>
+                                <td  style="">${i+1}</td>
+                                <td  style="">${o.item_name}</td>
+                                <td style=" ">${(o.brand)}</td>
+                                    <td  style=" ">${o.qty}</td>
+                                    <td  style="">${o.vendors[0]['quantity']}</td>
+                                    <td  style="">${itemRate}</td>
+                                    <td  style="">${item_subtotal}</td>
+                                    <td  style="">${productTax}</td>
+                                    <td  style="">${item_total_amount}</td>
+                                </tr>`;
+                        }
+                    })
+                }   
+
+                
+                templateContent += `</tbody>
+                </table>   
+          
+          </td>
+        </tr>  
+  `;
+
+ 
+              /* End:- item table */
+
+          
+
+      /* Start:- Terms & condition &  Vendor Total */
+
+      let subtotal = convertCurrency(getDataResp.vendors_total[0]['subtotal']);
+      let total_tax = convertCurrency(getDataResp.vendors_total[0]['total_tax']);
+      let freight_charges = convertCurrency(getDataResp.vendors_total[0]['freight_charges']);
+      let freight_tax = convertCurrency(getDataResp.vendors_total[0]['freight_tax']);
+      let total_amount = convertCurrency(getDataResp.vendors_total[0]['total_amount']);
+
+
+      templateContent += ` 
+      <tr>  
+      <td>`;
+
+          templateContent += `            
+            <table cellspacing="0" cellpadding="10px" class="invoice-table" border="0" width="100%" > 
+            <thead> 
+            <tr> 
+                <th> 
+                    <div class="section-heading" >
+                    Vendor terms & other conditions
+                    </div>
+                </th> 
+            
+                <th> 
+                    <div class="section-heading">
+                        Vendor Total
+                    </div>
+                </th> 
+            </tr>    
+            </thead>                
+                <tbody>
+
+                    <tr>
+                        <td> 
+                            <div class="terms_content" >
+                                ${getDataResp.vendor_detail.terms_condition}
+                            </div>
+                        </td> 
+                        
+                        <td>
+                            
+                            <div>
+                                <table class="downtable">
+                                    <tr>
+                                        <td style="border: none;font-size: small;">Total amount</td>
+                                        <td style="border: none;font-size: small;">${subtotal}</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border: none;font-size: small;">GST amount</td>
+                                        <td style="border: none;font-size: small;">${total_tax}</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border: none;font-size: small;">Freight Charges</td>
+                                        <td style="border: none;font-size: small;">${freight_charges}
+                                        </td>
+
+                                    </tr>
+                                    <tr>
+                                        <td style="border: none;font-size: small;">Freight GST</td>
+                                        <td style="border: none;font-size: small;">${freight_tax}
+                                        </td>
+
+                                    </tr>
+                                    <tr>
+                                        <td style="border: none;font-size: small;">Grand total</td>
+                                        <td style="border: none;color:#073B4C;font-weight: bold;font-size: small;">
+                                            ${total_amount}</td>
+
+                                    </tr>
+                                </table>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table> 
+            `;
+
+    templateContent += ` 
+    </td>
+    </tr>    
+    `;
+
+        /* End:- erms & condition &  Vendor Total */
+
+
+
+
+
+
+            templateContent += `                      
+                     
             </table>     
         `;
 
 
-        let isFile = requestedData.isFile;    
-        let footerContent = await footerData(companyData);  
+            let isFile = requestedData.isFile;
+            let footerContent = await footerData('');
 
-            let options = { 
+            let options = {
                 format: 'A4',
-                date:false,
+                date: false,
                 printBackground: true,
                 displayHeaderFooter: true,
-                headerTemplate:'<div></div>',                               
-                footerTemplate:footerContent,                               
+                headerTemplate: '<div></div>',
+                footerTemplate: footerContent,
                 margin: {
                     top: "50px",
                     bottom: "230px",
                     right: "0px",
                     left: "0px",
-                }        
+                }
             };
             let file = {
                 content: templateContent
             };
             html_to_pdf.generatePdf(file, options).then(async (pdfBuffer) => {
 
-                if(isFile && isFile == 1){
-                    let randomNumber = new Date().getTime()+Math.floor(Math.random() * 10000000);
-                    let fileName =   `${requestedData.template}-${randomNumber}.pdf`;  
-                    let pdfFilePath =  path.resolve('public/pdf')+`/${fileName}`;                 
+                if (isFile && isFile == 1) {
+                    let randomNumber = new Date().getTime() + Math.floor(Math.random() * 10000000);
+                    let fileName = `${requestedData.template}-${randomNumber}.pdf`;
+                    let pdfFilePath = path.resolve('public/pdf') + `/${fileName}`;
 
                     fs.writeFile(`${pdfFilePath}`, pdfBuffer, (err) => {
-                        if(err) {
+                        if (err) {
                             throw err;
-                        } 
+                        }
                         resolve({
-                            file:fileName
+                            file: fileName
                         });
-                      });
+                    });
 
                     // let getUploadedFile  = await uploadToBucket({
                     //     fileName:fileName,
@@ -387,7 +343,7 @@ module.exports.generatePdf = (dataObj) => {
                     resolve(pdfFilePath);
 
 
-                } else if(dataObj.isMailData){
+                } else if (dataObj.isMailData) {
 
                     // let randomNumber = new Date().getTime()+Math.floor(Math.random() * 10000000);
                     // let fileName =   `${requestedData.template}-${randomNumber}.pdf`;  
@@ -404,14 +360,16 @@ module.exports.generatePdf = (dataObj) => {
                     //     pdfBuffer:pdfBuffer
                     // });      
 
-                } else {                    
+                } else {
                     resolve(pdfBuffer);
                 }
-                
-            }).catch((err)=>{               
+
+            }).catch((err) => {
+                console.log('err', err)
                 reject(err)
             });
-        } catch (e) {          
+        } catch (e) {
+            console.log('e', e)
             reject(e)
         }
     })
@@ -422,120 +380,36 @@ module.exports.generatePdf = (dataObj) => {
 
 
 
-function getDetails(invoiceId, langCode) {
+function getDetails(id, langCode) {
 
-    return new Promise(async(resolve,reject)=>{
+    return new Promise(async (resolve, reject) => {
 
-        try{
+        try {
 
-            if (!invoiceId) {
+            if (!id) {
                 throw {
                     errors: [],
-                    message: responseMessage(langCode, 'ID_MISSING'),
+                    message: "Id missing",
                     statusCode: 412
                 }
             }
 
-            let recordDetail = await InvoiceSchema.aggregate([
-                { $match: { _id: ObjectID(invoiceId) } },
-                {
-                    $lookup: {
-                        from: 'customers',
-                        localField: 'customer',
-                        foreignField: '_id',
-                        as: 'customer',
-                    },
-                },
-                {
-                    "$project": {
-                        "description": 1,
-                        "invoice_number": 1,
-                        "date": 1,
-                        "due_date": 1,
-                        "status": 1,
-                        "currency": 1,
-                        "shipping_charges": 1,
-                        "file_attachment": 1,
-                        "requested_deposite": 1,
-                        "credit_applied": 1,
-                        "adjustment": 1,
-                        "write_off": 1,
-                        "write_off_amount": 1,
-                        "products": 1,
-                        "sub_total": 1,
-                        "total_tax": 1,
-                        "total_discount": 1,
-                        "invoice_tax": 1,
-                        "refund": 1,
-                        "total_amount": 1,
-                        "invoice_paid": 1,
-                        "balance_amount": 1,
-                        "customer_notes": 1,
-                        "invoice_terms": 1,
-                        "created_at": 1,
-                        "updated_at": 1,
-                        "customer": { "$arrayElemAt": ["$customer", 0] }
-                    }
-                },
-                {
-                    "$project": {
-                        "description": 1,
-                        "invoice_number": 1,
-                        "date": 1,
-                        "due_date": 1,
-                        "status": 1,
-                        "currency": 1,
-                        "shipping_charges": 1,
-                        "file_attachment": 1,
-                        "requested_deposite": 1,
-                        "credit_applied": 1,
-                        "adjustment": 1,
-                        "write_off": 1,
-                        "write_off_amount": 1,
-                        "products": 1,
-                        "sub_total": 1,
-                        "total_tax": 1,
-                        "total_discount": 1,
-                        "customer_notes": 1,
-                        "invoice_terms": 1,
-                        "invoice_tax": 1,
-                        "refund": 1,
-                        "total_amount": 1,
-                        "invoice_paid": 1,
-                        "balance_amount": 1,
-                        "created_at": 1,
-                        "updated_at": 1,
-                        "customer._id": 1,
-                        "customer.customer_name": 1,
-                        "customer.crn": 1,
-                        "customer.tin_or_vat_id": 1,
-                        "customer.contact_phone_number": 1,
-                        "customer.contact_p_dialcode": 1,
-                        "customer.contact_mobile_number": 1,
-                        "customer.contact_m_dialcode": 1,
-                        "customer.email": 1,
-                        "customer.billing_address": 1
-                    }
-                }
-    
-            ]);
+            let recordDetail = await PurchaseOrderSchema.findOne({ _id: ObjectID(id) });
 
-            if(recordDetail && recordDetail.length>0){
-                resolve(recordDetail[0]);
+            if (recordDetail) {
+                resolve(recordDetail);
             } else {
                 throw {
                     errors: [],
-                    message: responseMessage(langCode, 'SOMETHING_WRONG'),
+                    message: "Something went wrong",
                     statusCode: 412
                 }
             }
 
-          
-
-        } catch($e){
+        } catch ($e) {
             return reject($e);
         }
 
-    })  
-    
+    })
+
 }

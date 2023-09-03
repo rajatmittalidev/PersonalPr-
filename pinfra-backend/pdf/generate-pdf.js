@@ -1,5 +1,4 @@
 const pdfObj = require('./index');
-const GeneralSettingSchema = require('../models/generalSetting');
 
 function generatePDF(requestedData) {
     return new Promise(async(resolve, reject) => {
@@ -17,14 +16,9 @@ function generatePDF(requestedData) {
                 return false;
             }
 
-            let company_id = requestedData.login_company_id;
-            let companyRecord = await GeneralSettingSchema.findOne({ company_id: company_id });
-
-
 
             let finalData = {
-                requestedData: requestedData,
-                companyData: companyRecord
+                requestedData: requestedData
             }
 
             let pdfBuffer = await pdfObj[requestedData.template].generatePdf(finalData);         

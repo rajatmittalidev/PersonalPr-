@@ -2,13 +2,13 @@ const createError = require('http-errors');
 const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
-
 const routes = require('./routes');
 const database = require('./libs/mongoose');
 const env = require("./config/env");
 const app = express();
 const cors = require("cors");
 const compression = require('compression');
+const generatePDF = require('./pdf/generate-pdf');
 
 app.use(compression({
   threshold: 0
@@ -37,9 +37,26 @@ app.use(function (err, req, res, next) {
 
 app.use(env.API.web, compression({ level: 9 }), routes.webRoutes);
 
+
+app.post(`${env.serverBasePath}/generate/pdf`, async function (request, response) {
+  try {
+    let requestedBody = request.body;
+    let pdfBuffer = await generatePDF(requestedBody);
+    if(requestedBody && requestedBody.isFile && requestedBody.isFile == 2){
+      response.setHeader('Content-Type','application/pdf')
+    }  
+    response.send(pdfBuffer);
+  } catch (e) {
+     response.status(422).json(e);
+  }
+});
+
 app.use("/", function (req, res, next) { 
   res.send('<html><head><title>Pragati Infra</title></head><body><h1>Welcome to Pragati Infra</h1></body></html>');
 });
+
+
+
 
 
 // catch 404 and forward to error handler

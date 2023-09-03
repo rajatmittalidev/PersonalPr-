@@ -3,7 +3,7 @@ module.exports =  {
     admin: {
         path: "/manager"
     },
-    serverBasePath:"/",
+    serverBasePath:"",
     sessionSecret: process.env.SESSION_SECRET,
     /**prefix for endpoints */
     API: {
