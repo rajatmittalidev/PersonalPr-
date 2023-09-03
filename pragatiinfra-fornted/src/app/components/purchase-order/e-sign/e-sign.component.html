@@ -1,0 +1,48 @@
+<div id="esignature-container" class="esignature-container" aria-modal="true" modal-focus role="dialog"
+  aria-labelledby="esignModal">
+  <div class="modal-header">
+    <div class="row">
+      <h4 id="esignModal" class="modal-title">e-Signature
+        <div class="icon icon-2x icon-delete-small pull-right" aria-label="Close" title="Close" (click)="cancel()">
+        </div>
+      </h4>
+    </div>
+
+  </div>
+
+  <div class="modal-body">
+    <h5>E-Signature</h5>
+    <!-- <esignature active-tab-index="$ctrl.activeTabIndex" save-call-back="$ctrl.saveEsign"
+      active-group-index="$ctrl.docGroupIndex" applicant-type="$ctrl.applicantType" page-error="$ctrl.pageError">
+    </esignature> -->
+    <div class="esign-panel" id="esign-panel">
+
+      <div class="form-group hsbc-alert alert-user-error" id="esign-info" *ngIf="esignRequiredError" role="alert"
+        aria-live="assertive" aria-atomic="true">
+        <label for="esign-info">Please provide your signature before continuing.</label>
+      </div>
+      <div class="esign-container">
+        <signature-pad [options]="signaturePadOptions" (onBeginEvent)="drawStart()" (onEndEvent)="drawComplete($event)">
+        </signature-pad>
+        <!-- <canvas id="signCanvas"></canvas> -->
+      </div>
+
+
+    </div>
+  </div>
+
+
+  <div id="step-footer">
+    <hr aria-hidden="true" tabindex="-1">
+    <div id="footer-container">
+      <div id="buttons-container">
+        <button type="button" class="button-outline button-spacer" (click)="clearSignature()"
+          aria-label="Send To Customer">Clear</button>
+        <button type="button" id="continueButtonId" class="button-primary button-spacer" (click)="savePad()"
+          aria-label="Continue">Continue</button>
+      </div>
+    </div>
+  </div>
+
+
+</div>

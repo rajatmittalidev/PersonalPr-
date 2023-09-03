@@ -26,10 +26,10 @@ export class PurchaseOrderListComponent implements OnInit {
       value: 'rejected',
       label: 'Rejected'
     },
-    // {
-    //   value: 'revise',
-    //   label: 'Revise'
-    // },
+    {
+      value: 'revise',
+      label: 'Revise'
+    },
   ]
   rateComparativeList: any;
   filter_by = "status";
@@ -67,14 +67,8 @@ export class PurchaseOrderListComponent implements OnInit {
   }
 
   onStatusChange(item) {
-    let stage;
-    if (item == 'pending') {
-      stage = 'rate_comparitive';
-    }
-    else {
-      stage = 'rate_approval'
-    }
-    this.getList({ filter_by: this.filter_by, filter_value: item.value, stage: stage })
+
+    this.getList({ filter_by: this.filter_by, filter_value: item.value })
 
   }
 

@@ -9,6 +9,9 @@ import { DirectiveModule } from 'app/shared/directives/directive.module';
 import { PurchaseOrderUpdateComponent } from './purchase-order-update/purchase-order-update.component';
 import { PurchaseOrderDetailsComponent } from './purchase-order-details/purchase-order-details.component';
 import { SignaturePadModule } from 'angular2-signaturepad';
+import { ESignComponent } from './e-sign/e-sign.component';
+import { BillingAddressPopupComponent } from './billing-address-popup/billing-address-popup.component';
+import { MailingAddressPopupComponent } from './mailing-address-popup/mailing-address-popup.component';
 const routes: Routes = [
   {
     path: "",
@@ -19,7 +22,7 @@ const routes: Routes = [
     component: PurchaseOrderDetailsComponent
   },
   {
-    path: "update",
+    path: "update/:id",
     component: PurchaseOrderUpdateComponent
   },
 ];
@@ -28,7 +31,10 @@ const routes: Routes = [
   declarations: [
     PurchaseOrderListComponent,
     PurchaseOrderUpdateComponent,
-    PurchaseOrderDetailsComponent
+    PurchaseOrderDetailsComponent,
+    ESignComponent,
+    BillingAddressPopupComponent,
+    MailingAddressPopupComponent
   ],
   imports: [
     [RouterModule.forChild(routes)],

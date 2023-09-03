@@ -41,6 +41,10 @@ const PurchaseOrderSchema = new mongoose.Schema({
             type: String,
             default: 1
         }, 
+        brand: {
+            type: String,
+            default: 1
+        }, 
         uom: {
             uom_name: {
                 type: String,

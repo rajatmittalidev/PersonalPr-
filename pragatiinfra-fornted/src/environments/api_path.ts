@@ -19,6 +19,8 @@ export const PROJECT_API = "/projects";
 export const PROJECT_ACTIVITY_DATA_API = "/project/activity_data";
 export const PROJECT_ACTIVITY_REMARK_DATA_API = "/project/activity_data/remarks";
 export const PROJECT_ACTIVITY_DATA_DETAIL_API = "/project/activity_data/detail";
+export const ESIGN_UPLOAD_API = "/upload_file";
+export const INVENTORY_API = "/inventory";
 
 
 
