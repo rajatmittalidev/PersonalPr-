@@ -137,12 +137,69 @@ module.exports.generatePdf = (dataObj) => {
         /* Start:- Mail content */
 
 
+        templateContent += `
+        <tr>
+            <td>
+                <table  cellspacing="0" cellpadding="10px" border="0" width="100%">  
+                    <tr>
+                        <td>
+                            <div style="font-size: 10px;color: #292F4C;" >
+                                To,
+                            </div>
+                            <div style="font-size: 10px;color: #292F4C;" >
+                            M/s ${getDataResp.vendor_detail.vendor_name},
+                            </div>
+                            <div style="font-size: 10px;color: #292F4C;" >
+                            ${getDataResp.vendor_detail.address.street_address}  ${getDataResp.vendor_detail.address.street_address2} ${getDataResp.vendor_detail.address.city} ${getDataResp.vendor_detail.address.state} ${getDataResp.vendor_detail.address.country} ${getDataResp.vendor_detail.address.zip_code},
+                            </div>
+                            <div style="font-size: 10px;color: #292F4C;" >
+                            GSTIN: ${getDataResp.vendor_detail.gst_number}
+                            </div>                            
+                        </td>
+                        <td>
+                            
+                        </td>
+                    </tr>
+                </table>
+                
+                </td>
+            </tr>  
+        `;
+
+
+        templateContent += `
+        <tr>
+            <td>
+                <table  cellspacing="0" cellpadding="10px" border="0" width="100%">  
+                    <tr>
+                        <td colspan="2">
+                            <div style="font-size: 10px;color: #292F4C;" >
+                            Sir,
+                            </div>
+                            <div style="font-size: 10px;color: #292F4C;" >
+                            With reference to your quotation and final negotiation, we are pleased to inform you that your final offer  (Description mentioned below) has been accepted and work is  awarded to you based on the terms & conditions mentioned below. No extra payment will be made on any account.
+                            </div>                                                 
+                        </td>
+                    </tr>
+                </table>
+                
+                </td>
+            </tr>  
+        `;
 
 
         /* End:- Mail content */
 
 
               /* start:- item table */
+
+
+              let subtotal = convertCurrency(getDataResp.vendors_total[0]['subtotal']);
+              let total_tax = convertCurrency(getDataResp.vendors_total[0]['total_tax']);
+              let freight_charges = convertCurrency(getDataResp.vendors_total[0]['freight_charges']);
+              let freight_tax = convertCurrency(getDataResp.vendors_total[0]['freight_tax']);
+              let total_amount = convertCurrency(getDataResp.vendors_total[0]['total_amount']);
+
 
               templateContent += `
               <tr>  
@@ -152,6 +209,7 @@ module.exports.generatePdf = (dataObj) => {
                             <tr align="center">
                                 <th> Item No	 </th>
                                 <th>Item Name</th>
+                                <th>Item Description</th>
                                 <th>Brand</th>
                                 <th>Required Quantity</th>
                                 <th>Purchased Quantity</th>
@@ -177,9 +235,10 @@ module.exports.generatePdf = (dataObj) => {
 
                             templateContent += `
                             <tr>
-                                <td  style="">${i+1}</td>
-                                <td  style="">${o.item_name}</td>
-                                <td style=" ">${(o.brand)}</td>
+                                    <td  style="">${i+1}</td>
+                                    <td  style="">${o.item_name}</td>
+                                    <td  style="">${o.item_description}</td>
+                                    <td style=" ">${(o.brand)}</td>
                                     <td  style=" ">${o.qty}</td>
                                     <td  style="">${o.vendors[0]['quantity']}</td>
                                     <td  style="">${itemRate}</td>
@@ -191,8 +250,38 @@ module.exports.generatePdf = (dataObj) => {
                     })
                 }   
 
+                templateContent += `
+                
+                    <tr>
+                        <td colspan="9"  style="font-weight:600;">Subtotal</td>                   
+                        <td  style="">${subtotal}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="9"  style="font-weight:600;">Tax</td>                   
+                        <td  style="">${total_tax}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="9"  style="font-weight:600;"> Freight charges </td>                   
+                        <td  style="">${freight_charges}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="9"  style="font-weight:600;">Freight tax</td>                   
+                        <td  style="">${freight_tax}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="9"  style="font-weight:600;">Total amount</td>                   
+                        <td  style="">${total_amount}</td>
+                    </tr>
+                
+                `;
+                
+
+
+
+
                 
                 templateContent += `</tbody>
+
                 </table>   
           
           </td>
@@ -206,85 +295,7 @@ module.exports.generatePdf = (dataObj) => {
 
       /* Start:- Terms & condition &  Vendor Total */
 
-      let subtotal = convertCurrency(getDataResp.vendors_total[0]['subtotal']);
-      let total_tax = convertCurrency(getDataResp.vendors_total[0]['total_tax']);
-      let freight_charges = convertCurrency(getDataResp.vendors_total[0]['freight_charges']);
-      let freight_tax = convertCurrency(getDataResp.vendors_total[0]['freight_tax']);
-      let total_amount = convertCurrency(getDataResp.vendors_total[0]['total_amount']);
-
-
-      templateContent += ` 
-      <tr>  
-      <td>`;
-
-          templateContent += `            
-            <table cellspacing="0" cellpadding="10px" class="invoice-table" border="0" width="100%" > 
-            <thead> 
-            <tr> 
-                <th> 
-                    <div class="section-heading" >
-                    Vendor terms & other conditions
-                    </div>
-                </th> 
-            
-                <th> 
-                    <div class="section-heading">
-                        Vendor Total
-                    </div>
-                </th> 
-            </tr>    
-            </thead>                
-                <tbody>
-
-                    <tr>
-                        <td> 
-                            <div class="terms_content" >
-                                ${getDataResp.vendor_detail.terms_condition}
-                            </div>
-                        </td> 
-                        
-                        <td>
-                            
-                            <div>
-                                <table class="downtable">
-                                    <tr>
-                                        <td style="border: none;font-size: small;">Total amount</td>
-                                        <td style="border: none;font-size: small;">${subtotal}</td>
-                                    </tr>
-                                    <tr>
-                                        <td style="border: none;font-size: small;">GST amount</td>
-                                        <td style="border: none;font-size: small;">${total_tax}</td>
-                                    </tr>
-                                    <tr>
-                                        <td style="border: none;font-size: small;">Freight Charges</td>
-                                        <td style="border: none;font-size: small;">${freight_charges}
-                                        </td>
-
-                                    </tr>
-                                    <tr>
-                                        <td style="border: none;font-size: small;">Freight GST</td>
-                                        <td style="border: none;font-size: small;">${freight_tax}
-                                        </td>
-
-                                    </tr>
-                                    <tr>
-                                        <td style="border: none;font-size: small;">Grand total</td>
-                                        <td style="border: none;color:#073B4C;font-weight: bold;font-size: small;">
-                                            ${total_amount}</td>
-
-                                    </tr>
-                                </table>
-                            </div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table> 
-            `;
-
-    templateContent += ` 
-    </td>
-    </tr>    
-    `;
+    
 
         /* End:- erms & condition &  Vendor Total */
 
