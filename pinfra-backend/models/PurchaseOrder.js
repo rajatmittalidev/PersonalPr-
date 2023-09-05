@@ -39,11 +39,15 @@ const PurchaseOrderSchema = new mongoose.Schema({
         },
         item_name: {
             type: String,
-            default: 1
+            default: ""
+        }, 
+        item_description: {
+            type: String,
+            default: ""
         }, 
         brand: {
             type: String,
-            default: 1
+            default: ""
         }, 
         uom: {
             uom_name: {
@@ -305,11 +309,19 @@ const PurchaseOrderSchema = new mongoose.Schema({
             default: ''
         }
     },
+    vendor_message_header:{
+        type: String,
+        default: ""
+    },
     vendor_message:{
         type: String,
         default: ""
     },
     sign:{
+        type: String,
+        default: ""
+    },
+    terms_condition:{
         type: String,
         default: ""
     },

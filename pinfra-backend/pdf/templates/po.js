@@ -45,10 +45,22 @@ module.exports.generatePdf = (dataObj) => {
             width: 100%;
         }
         
-        .invoice-table td,
-        .invoice-table th {
-            border: 1px solid #DADADC;
+        .invoice-table td{
+            border-bottom: 1px solid #DADADC;
+            border-right: 1px solid #DADADC;
             font-size: 10px;
+        }
+        .invoice-table tr td:first-child{
+            border-left: 1px solid #DADADC;
+        }
+        .invoice-table th {
+            border-bottom: 1px solid #DADADC;
+            border-top: 1px solid #DADADC;
+            border-right: 1px solid #DADADC;
+            font-size: 10px;
+        }
+        .invoice-table tr th:first-child {
+            border-left: 1px solid #DADADC;
         }
         .terms-table td,
         .terms-table th {
@@ -98,17 +110,11 @@ module.exports.generatePdf = (dataObj) => {
                             <div id="logo" >
                                 Billing Address
                             </div>
-                            <p style="font-size: 10px;color: #292F4C;"><strong>Company</strong> :
-                            <span style="direction:ltr !important;unicode-bidi: embed;">${getDataResp.billing_address.company_name}</span></p>
+                            <p style="font-size: 10px;color: #292F4C;"><strong>${getDataResp.billing_address.company_name}</strong></p>
 
-                            <p style="font-size: 10px;color: #292F4C;"><strong>Address</strong> : ${getDataResp.billing_address.street_address} <br>
-                            ${getDataResp.billing_address.street_address2}<br>
-                            ${getDataResp.billing_address.city},${getDataResp.billing_address.state}, ${getDataResp.billing_address.country}, ${getDataResp.billing_address.zip_code}</p>
-
-                            <p style="font-size: 10px;color: #292F4C;"><strong>GST</strong> : ${getDataResp.billing_address.gst_number}</p>
-                            <p style="font-size: 10px;color: #292F4C;"><strong>PAN</strong> : ${getDataResp.billing_address.pan_card}</p>
+                            <p style="font-size: 10px;color: #292F4C;">${getDataResp.billing_address.street_address} ${getDataResp.billing_address.street_address2} ${getDataResp.billing_address.city} ${getDataResp.billing_address.state} ${getDataResp.billing_address.country} ${getDataResp.billing_address.zip_code}</p>
+                            <p style="font-size: 10px;color: #292F4C;"><strong>GSTIN</strong> : ${getDataResp.billing_address.gst_number}</p>
                             <p style="font-size: 10px;color: #292F4C;"><strong>Contact Person</strong> : ${getDataResp.billing_address.contact_person}</p>
-                            <p style="font-size: 10px;color: #292F4C;"><strong>Email</strong> : ${getDataResp.billing_address.email}</p>
                         </td>
                         <td style="text-align: end; font-size: 16px;color: #292F4C;vertical-align: top;padding-top:25px;>
                             <div id="logo" >
@@ -119,9 +125,7 @@ module.exports.generatePdf = (dataObj) => {
                             <p style="font-size: 10px;color: #292F4C;"><strong>VALIDITY</strong> : <span style="direction:ltr !important;unicode-bidi: embed;">${dueDate}</span></p>
                             <p style="font-size: 10px;color: #292F4C;"><strong>PO Number</strong> : <span style="direction:ltr !important;unicode-bidi: embed;">${getDataResp.po_number}</span></p>
 
-                            <p style="font-size: 10px;color: #292F4C;"><strong>Address</strong> : ${getDataResp.delivery_address.street_address} <br>
-                            ${getDataResp.delivery_address.street_address2}<br>
-                            ${getDataResp.delivery_address.city},${getDataResp.delivery_address.state}, ${getDataResp.delivery_address.country}, ${getDataResp.delivery_address.zip_code}</p>
+                            <p style="font-size: 10px;color: #292F4C;"><strong>Site Address</strong> :  ${getDataResp.delivery_address.street_address} ${getDataResp.delivery_address.street_address2} ${getDataResp.delivery_address.city} ${getDataResp.delivery_address.state} ${getDataResp.delivery_address.country} ${getDataResp.delivery_address.zip_code}</p>
                             <p style="font-size: 10px;color: #292F4C;"><strong>Contact Person</strong> : ${getDataResp.delivery_address.contact_person}</p>
                         </td>
                     </tr>
@@ -275,11 +279,6 @@ module.exports.generatePdf = (dataObj) => {
                 
                 `;
                 
-
-
-
-
-                
                 templateContent += `</tbody>
 
                 </table>   
@@ -294,8 +293,38 @@ module.exports.generatePdf = (dataObj) => {
           
 
       /* Start:- Terms & condition &  Vendor Total */
+// ${getDataResp.terms_condition}
+      templateContent += `
+      <tr>
+          <td>
+              <table  cellspacing="0" cellpadding="10px" border="0" width="100%">  
+                  <tr>
+                      <td colspan="2">
+                          <div style="font-size: 12px;color: #292F4C; font-weight:600" >
+                          Payment Terms & Other Conditions:
+                          </div>
+                          <div style="font-size: 10px;color: #292F4C;white-space: pre-line" >
+                         1.&nbsp;\tGST 18% & freight included in above WO amount.\n2.&nbsp;\tWork Completion : work will complete within 02 months from the date of WO.\n3.&nbsp;\tAmount of Rs 30 Lakh Shall be paid as advance and after execution of work at site of that advance amount further advance of 30 lakh shall be paid and this to be followed 3 times as per direction from site Project Head/Director.\n4.&nbsp;\tAdvance is for Bitumen material only, For rest material payment will be released against RA Bills.\n5.&nbsp;\tFurther Balance Payment shall be paid after successful completion and handover of Work.\n6.&nbsp;\tGST amount will be released after GST filed by the contractor & the same is reflected on GST portal.\n7.&nbsp;\tAbove rates are valid till 2026.\n8.&nbsp;\tRoyltee required percentage 100 ( adress-PISL patli)\n9.&nbsp;\tWarranty of work- 05 Years for total work done as per this WO.\n10.&nbsp;\tAcceptance of this order shall be conveyed to us within 24Hr. Otherwise, it will be accepted by Vendor as it is.\n11.&nbsp;\tWork to be done as per direction of Engineer Incharge.\n12.&nbsp;\tWater & Electricity will be provided at a single point by PISL on FOC basis & contracor has to make its own arrangement for further distribution of electricity.\n13.&nbsp;\tAll machinery and consumables in Rao Builder.\n14.&nbsp;\tAll work check list required with signature PISL than bill processing start.\n15.&nbsp;\tCotractor Deploy atleast 1 technical staff of 7+ yrs experience.\n16.&nbsp;\tEvery lot material testing than unloading otherwise return material.\n17.&nbsp;\tRaw material shall be sourced from Kothputli and Bitumen  shall be sourced from IOCL.\n18.&nbsp;\tFor all base rate material Rao Builder has to submit 03 quotes for client approval before the delivery of material at site.\n19.&nbsp;\tInitial Level sheet to be checked by contractor & signed of from Pragati- engineer in-charge.\n20.&nbsp;\tFinal rolling will be done by Vendor before flooring as per direction of Engineer incharge.\n21.&nbsp;\tRetention of 5% will be made against RA Bills & retention made shall be released after 24 months from the date completion of work.\n22.&nbsp;\tCompany reserves the right to increase or decrease the WO quantity at any time & Contractor can not claim any overhead or any kind of other charges due to reduction in WO qty. \n23.&nbsp;\tThe Contractor shall follow all quality & safety (EHS) requirements, rules & regulations and terms & conditions of & PISL.\n24.&nbsp;\tContractor during the period of providing labours services shall maintain at its own cost liability insurance for bodily injury, death, accident of labours. Upon request by Company, a Contractor shall provide to Company a certificate(s) of insurance and/or copies of policies evidencing compliance with the provisions of applicable Section as per applicable law in India. During the duration of the Service, Company shall request a Contractor to obtain, increase, or otherwise modify the aforesaid insurance.\n25.&nbsp;\tContractor shall comply with Provident Fund Act, Employees State Insurance Act and other statutory acts applicable as per the labour laws in India. Upon request by Company, Contractor shall provide to Company a certificate(s) of Provident Fund, Employees State Insurance and other certificate as necessary evidencing compliance with the provisions of applicable section as per applicable labour law in India. During the duration of the Service, Company shall request Contractor to obtain the aforesaid certificate or other certificate as per the applicable Labour law in India.\n26.&nbsp;\tIf work will not completed on given date than Penalty should be imposed i.e.-01% of total value per day or part thereof for delay beyond the Date of Completion of supply subject to a maximum of 10% of total value, shall be deducted as Liquidated Damages. \n27.&nbsp;\tVendor's Bank Name, Account No., IFSC Code, Branch Address should be mentioned on invoice copy.\n28.&nbsp;\tAny increase/decrease in govt taxes & policies will be paid/deduct as per actual.\n29.&nbsp;\tCompany Reserves the right to increase or decrease WO Qty at any time.\n30.&nbsp;\tJuridiction for any dispute against this order will be Gurugram, Haryana.\n
+                          </div>                                                 
+                      </td>
+                  </tr>
+              </table>
 
-    
+
+
+              <table  cellspacing="0" cellpadding="10px" border="0" width="100%">  
+                  <tr>
+                      <td colspan="2">
+                          <div style="font-size: 13px;color: #292F4C; font-weight:600" >
+                          For Pragati Infra Solutions Pvt. Ltd.
+                          </div>                                               
+                      </td>
+                  </tr>
+              </table>
+              
+              </td>
+          </tr>  
+      `;
 
         /* End:- erms & condition &  Vendor Total */
 
@@ -322,7 +351,7 @@ module.exports.generatePdf = (dataObj) => {
                 footerTemplate: footerContent,
                 margin: {
                     top: "50px",
-                    bottom: "230px",
+                    bottom: "100px",
                     right: "0px",
                     left: "0px",
                 }

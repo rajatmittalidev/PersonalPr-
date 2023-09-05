@@ -9,7 +9,8 @@ const ItemSchema = require('../../models/Item');
 const VendorSchema = require('../../models/Vendor');
 const ProjectActivityDataSchema = require('../../models/ProjectActivityData');
 const ProjectSchema = require('../../models/Project');
-const RecentActivity = require('../../models/recentActivity')
+const RecentActivity = require('../../models/recentActivity');
+const {  billingAddress, mailContentHeader,  mailContent,  termsConsition} = require('../../libs/constant');
 
 module.exports = {
     getNextNumberGroupId,
@@ -517,6 +518,9 @@ function addPurchaseOrder(dataObj, langCode, currentUserId) {
                             if(itemAssociatedArray[itemData.item_id] && itemAssociatedArray[itemData.item_id]['item_name']){
                                 itemData.item_name = itemAssociatedArray[itemData.item_id]['item_name'];
                             }
+                            if(itemAssociatedArray[itemData.item_id] && itemAssociatedArray[itemData.item_id]['specification']){
+                                itemData.item_description = itemAssociatedArray[itemData.item_id]['specification'];
+                            }
 
                             if(itemAssociatedArray[itemData.item_id] && itemAssociatedArray[itemData.item_id]['uomDetail']){
                                 itemData.uom = {
@@ -571,8 +575,11 @@ function addPurchaseOrder(dataObj, langCode, currentUserId) {
                             remarks: '',
                             created_by: dataObj.updated_by,
                             updated_by: dataObj.updated_by,
-                            billing_address: address,
-                            delivery_address: address
+                            billing_address: billingAddress,
+                            delivery_address: address,
+                            vendor_message_header:mailContentHeader,
+                            vendor_message:mailContent,
+                            terms_condition:termsConsition
                         }
                         order.vendors_total = [vendor];
                         order.items = itemsbyVendor[vendor.vendor_id];

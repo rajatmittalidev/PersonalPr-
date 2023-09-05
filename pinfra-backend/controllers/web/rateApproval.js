@@ -38,7 +38,7 @@ async function updateData(req, res) {
         });
 
         if (updatedData) {
-            // await addPurchaseOrder(updatedData.toObject(), reqObj.langCode, loginUserId);
+            await addPurchaseOrder(updatedData.toObject(), reqObj.langCode, loginUserId);
             if (updatedData.status && updatedData.status == 'approved') {
                await addPurchaseOrder(updatedData.toObject(), reqObj.langCode, loginUserId);
             }
