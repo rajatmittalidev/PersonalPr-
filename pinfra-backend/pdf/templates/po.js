@@ -346,7 +346,7 @@ module.exports.generatePdf = (dataObj) => {
                 content: templateContent
             };
             html_to_pdf.generatePdf(file, options).then(async (pdfBuffer) => {
-
+            
                 if (isFile && isFile == 1) {
                     let randomNumber = new Date().getTime() + Math.floor(Math.random() * 10000000);
                     let fileName = `${requestedData.template}-${randomNumber}.pdf`;
@@ -386,7 +386,7 @@ module.exports.generatePdf = (dataObj) => {
                     //     pdfBuffer:pdfBuffer
                     // });      
 
-                } else {
+                } else {                   
                     resolve(pdfBuffer);
                 }
 

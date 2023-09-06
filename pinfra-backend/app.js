@@ -45,7 +45,8 @@ app.post(`${env.serverBasePath}/generate/pdf`, async function (request, resp) {
     let requestedBody = request.body;
     let pdfBuffer = await generatePDF(requestedBody);
     if(requestedBody && requestedBody.isFile && requestedBody.isFile == 2){
-      resp.setHeader('Content-Type','application/pdf')
+      resp.setHeader('Content-Type','application/pdf');
+      resp.send(pdfBuffer);
     } else if(requestedBody && requestedBody.isFile && requestedBody.isFile == 1){
       resp.setHeader('Content-Type','application/json')
       resp.status(200).json(await Response.success({pdf:pdfBuffer}, responseMessage('en', 'SUCCESS'), request));
