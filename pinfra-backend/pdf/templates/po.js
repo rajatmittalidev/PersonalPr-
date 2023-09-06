@@ -366,7 +366,7 @@ module.exports.generatePdf = (dataObj) => {
                     //     file:pdfBuffer,
                     //     companySlug:companyData.slug
                     // })
-                    resolve(pdfFilePath);
+                    resolve(fileName);
 
 
                 } else if (dataObj.isMailData) {

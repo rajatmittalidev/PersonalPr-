@@ -9,6 +9,8 @@ const app = express();
 const cors = require("cors");
 const compression = require('compression');
 const generatePDF = require('./pdf/generate-pdf');
+const Response = require('./libs/response')
+const { responseMessage } = require("./libs/responseMessages");
 
 app.use(compression({
   threshold: 0
@@ -38,16 +40,20 @@ app.use(function (err, req, res, next) {
 app.use(env.API.web, compression({ level: 9 }), routes.webRoutes);
 
 
-app.post(`${env.serverBasePath}/generate/pdf`, async function (request, response) {
+app.post(`${env.serverBasePath}/generate/pdf`, async function (request, resp) {
   try {
     let requestedBody = request.body;
     let pdfBuffer = await generatePDF(requestedBody);
     if(requestedBody && requestedBody.isFile && requestedBody.isFile == 2){
-      response.setHeader('Content-Type','application/pdf')
+      resp.setHeader('Content-Type','application/pdf')
+    } else if(requestedBody && requestedBody.isFile && requestedBody.isFile == 1){
+      resp.setHeader('Content-Type','application/json')
+      resp.status(200).json(await Response.success({pdf:pdfBuffer}, responseMessage('en', 'SUCCESS'), request));
+    }  else {
+      resp.send(pdfBuffer);
     }  
-    response.send(pdfBuffer);
   } catch (e) {
-     response.status(422).json(e);
+     resp.status(422).json(e);
   }
 });
 
