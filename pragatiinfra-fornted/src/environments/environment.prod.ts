@@ -4,7 +4,7 @@ export const environment = {
   encryption: false,
   environmentType:'local',
   api_base_path: 'https://pr.avidusinteractive.com',
-  api_path: 'https://pr.avidusinteractive.com/api/web',
+  api_path: 'https://pback.onrender.com/api/web',
   cookiesOptions: {
     storeUnencoded: true,
     sameSite: 'Strict',
