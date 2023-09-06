@@ -8,7 +8,9 @@ module.exports =  {
     /**prefix for endpoints */
     API: {
          web: "/api/web",
+         serverBasePath: `${process.env.SERVER_BASE_PATH}`
     },
+    signBasePath: `${process.env.SERVER_BASE_PATH}/uploads`,
      /**email */
     sendgrid: {
         service: 'SendGrid',
