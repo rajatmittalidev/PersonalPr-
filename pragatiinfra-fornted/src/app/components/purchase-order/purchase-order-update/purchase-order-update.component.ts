@@ -83,6 +83,7 @@ export class PurchaseOrderUpdateComponent implements OnInit {
     });
     esignPopup.afterClosed().subscribe((result: any) => {
       if (result && result.option == 1) {
+        this.poDetails.sign = result.data;
         this.createOrder();
       }
     });
