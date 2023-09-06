@@ -12,6 +12,8 @@ const billingAddress = {
     "country": ""
 }
 
+const companyLogo = "https://d2yt4av5mvk7ck.cloudfront.net/assets/images/logo3.svg";
+
 const mailContentHeader = "Sir,"
 const mailContent = "With reference to your quotation and final negotiation, we are pleased to inform you that your final offer  (Description mentioned below) has been accepted and work is  awarded to you based on the terms & conditions mentioned below. No extra payment will be made on any account.";
 
@@ -22,5 +24,6 @@ module.exports = {
     billingAddress,
     mailContentHeader,
     mailContent,
-    termsConsition
+    termsConsition,
+    companyLogo
 };

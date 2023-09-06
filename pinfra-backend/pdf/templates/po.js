@@ -6,7 +6,7 @@ const ObjectID = require('mongodb').ObjectID;
 const { footerData } = require('./footer');
 const path = require('path');
 const fs = require('fs');
-const { responseMessage } = require("../../libs/responseMessages");
+const { companyLogo } = require("../../libs/constant");
 
 
 module.exports.generatePdf = (dataObj) => {
@@ -371,20 +371,19 @@ module.exports.generatePdf = (dataObj) => {
 
                 } else if (dataObj.isMailData) {
 
-                    // let randomNumber = new Date().getTime()+Math.floor(Math.random() * 10000000);
-                    // let fileName =   `${requestedData.template}-${randomNumber}.pdf`;  
+                    let randomNumber = new Date().getTime()+Math.floor(Math.random() * 10000000);
+                    let fileName =   `${requestedData.template}-${randomNumber}.pdf`;  
 
-                    // resolve({
-                    //     companyData:companyData,
-                    //     companyLogo:companyLogo,
-                    //     dataObj:getDataResp,
-                    //     fileName:fileName,
-                    //     subject:`Invoice - #${getDataResp.invoice_number} from ${companyData.company_name}`,
-                    //     to:getDataResp.customer.email,
-                    //     sender_name:companyData.company_name,
-                    //     receiver_name: getDataResp.customer.customer_name,
-                    //     pdfBuffer:pdfBuffer
-                    // });      
+                    resolve({
+                        companyLogo:companyLogo,
+                        dataObj:getDataResp,
+                        fileName:fileName,
+                        subject:`Purchase Order - #${getDataResp.po_number} from ${getDataResp.billing_address.company_name}`,
+                        to:getDataResp.vendor_detail.email,
+                        sender_name:getDataResp.billing_address.company_name,
+                        receiver_name: getDataResp.vendor_detail.vendor_name,
+                        pdfBuffer:pdfBuffer
+                    });      
 
                 } else {                   
                     resolve(pdfBuffer);

@@ -3,12 +3,17 @@ const fs = require('fs');
 const path = require('path');
 const router = express.Router();
 const middleware = require('../middleware');
+const emailCtrl = require(path.resolve(`./controllers/common/email`));
+
 const controllerObj = {};
 
 fs.readdirSync(path.resolve('./controllers/web')).forEach(file => {
   let name = file.substr(0, file.indexOf('.'));
   controllerObj[name] = require(path.resolve(`./controllers/web/${name}`));
 });
+
+
+router.post('/mail/template', middleware.jwtVerify, emailCtrl.sendTemplateFn);
 
 router.get('/aboutUs', middleware.jwtVerify, controllerObj.aboutUs.getList);
 router.get('/aboutUs/:id', middleware.jwtVerify, controllerObj.aboutUs.getDetails);
