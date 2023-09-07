@@ -8,7 +8,7 @@ import { SnackbarService } from '@services/snackbar/snackbar.service';
 @Component({
   selector: 'app-e-sign',
   templateUrl: './e-sign.component.html',
-  styleUrls: ['./e-sign.component.css']
+  styleUrls: ['./e-sign.component.scss']
 })
 export class ESignComponent implements OnInit {
   signaturePadOptions: any = { // passed through to szimek/signature_pad constructor

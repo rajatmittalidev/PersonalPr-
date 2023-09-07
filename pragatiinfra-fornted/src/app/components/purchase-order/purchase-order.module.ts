@@ -12,6 +12,7 @@ import { SignaturePadModule } from 'angular2-signaturepad';
 import { ESignComponent } from './e-sign/e-sign.component';
 import { BillingAddressPopupComponent } from './billing-address-popup/billing-address-popup.component';
 import { MailingAddressPopupComponent } from './mailing-address-popup/mailing-address-popup.component';
+import { MatIconModule } from '@angular/material/icon';
 const routes: Routes = [
   {
     path: "",
@@ -45,6 +46,7 @@ const routes: Routes = [
     RateComparativeVendorsModule,
     DirectiveModule,
     SignaturePadModule,
+    MatIconModule,
   ]
 })
 export class PurchaseOrderModule { }

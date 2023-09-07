@@ -77,6 +77,10 @@ export class PurchaseOrderUpdateComponent implements OnInit {
   }
 
   openEsignModal() {
+    if(!this.validityDate.valid){
+      this.snack.notify("Please provide validity date",2);
+      return;
+    }
     const esignPopup = this.dialog.open(ESignComponent, {
       maxWidth: '80vw',
       maxHeight: '80vh',
