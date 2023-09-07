@@ -14,7 +14,7 @@ export const environment = {
   encryption: false,
   environmentType:'local',
   // api_path: 'https://pr.avidusinteractive.com/api/web',
-  api_base_path: 'http://localhost:3000',
+  api_base_path: 'https://pback.onrender.com',
   // api_path: 'http://localhost:3000/api/web',
   api_path: 'https://pback.onrender.com/api/web',
   cookiesOptions: {
