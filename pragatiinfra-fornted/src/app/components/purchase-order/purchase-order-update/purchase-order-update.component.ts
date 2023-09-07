@@ -36,7 +36,8 @@ export class PurchaseOrderUpdateComponent implements OnInit {
       if (params['id']) {
         this.httpService.GET(`${PURCHASE_ORDER_API}/detail`, { _id: params['id'] }).subscribe(res => {
           this.poDetails = res.data;
-          this.term_condition.patchValue(this.poDetails.vendor_detail.terms_condition);
+          this.mail_section.patchValue(this.poDetails.vendor_message);
+          this.term_condition.patchValue(this.poDetails.terms_condition);
         })
       }
     });
