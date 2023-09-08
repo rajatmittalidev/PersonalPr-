@@ -6,11 +6,12 @@ import { PURCHASE_ORDER_API } from '@env/api_path';
 import { RequestService } from '@services/https/request.service';
 import { SnackbarService } from '@services/snackbar/snackbar.service';
 import { saveAs } from 'file-saver';
+import { MailPopupComponent } from '../mail-popup/mail-popup.component';
 
 @Component({
   selector: 'app-purchase-order-details',
   templateUrl: './purchase-order-details.component.html',
-  styleUrls: ['./purchase-order-details.component.css']
+  styleUrls: ['./purchase-order-details.component.scss']
 })
 export class PurchaseOrderDetailsComponent implements OnInit {
   term_condition = new FormControl();
@@ -21,11 +22,12 @@ export class PurchaseOrderDetailsComponent implements OnInit {
   poDetails: any;
   load: boolean;
   downloadLoading = false;
-  pageId:any;
+  pageId: any;
 
   constructor(
     private route: ActivatedRoute,
-    private httpService: RequestService
+    private httpService: RequestService, private dialog: MatDialog,
+
   ) {
     console.log("new Date().setMonth(new Date().getMonth() + 2)", new Date(new Date().setMonth(new Date().getMonth() + 2)));
 
@@ -52,12 +54,38 @@ export class PurchaseOrderDetailsComponent implements OnInit {
     this.downloadLoading = true;
     this.httpService.GETPDF('generate/pdf', {
       template: "po",
-      id:this.pageId
-     }).subscribe((res: any) => {
+      id: this.pageId
+    }).subscribe((res: any) => {
       this.downloadLoading = false;
       var blob = new Blob([res], { type: 'application/pdf' });
       let id = new Date().getTime();
       saveAs(blob, `po-${id}.pdf`);
+    });
+  }
+
+  sendEmail(data) {
+    this.downloadLoading = true;
+    this.httpService.POST('mail/template', {
+      template: "po",
+      id: this.pageId,
+      mails: data
+    }).subscribe((res: any) => {
+      this.downloadLoading = true;
+
+    });
+  }
+
+  enterMail() {
+    const esignPopup = this.dialog.open(MailPopupComponent, {
+      maxWidth: '80vw',
+      maxHeight: '80vh',
+      autoFocus: false,
+      data: this.poDetails
+    });
+    esignPopup.afterClosed().subscribe((result: any) => {
+      if (result && result.option == 1) {
+        this.sendEmail(result.data)
+      }
     });
   }
 
