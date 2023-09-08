@@ -222,7 +222,7 @@ module.exports.generatePdf = (dataObj) => {
                         let itemRate = convertCurrency(o.vendors[0]['item_rate']);
                         let item_subtotal = convertCurrency(o.vendors[0]['item_subtotal']);
                         let item_total_amount = convertCurrency(o.vendors[0]['item_total_amount']);
-                        let productTax = (o.tax && o.tax.name) ? `${o.tax.name}<span style="display:inline-block;direction:ltr;">(${o.tax.amount}%)</span>` : ``;;
+                        let productTax = (o.tax && o.tax.name) ? `${o.tax.name}<span style="display:inline-block;direction:ltr;">(${o.tax.amount}%)</span>` : ``;
 
                         templateContent += `
                             <tr>
@@ -373,13 +373,23 @@ module.exports.generatePdf = (dataObj) => {
 
                     let randomNumber = new Date().getTime()+Math.floor(Math.random() * 10000000);
                     let fileName =   `${requestedData.template}-${randomNumber}.pdf`;  
+                   
+                    let emailData = {...getDataResp};
+
+                    emailData.date = formatDate(getDataResp.date, "DD-MM-YYYY");
+                    emailData.due_date = formatDate(getDataResp.due_date, "DD-MM-YYYY");
+                    emailData.subtotal = convertCurrency(getDataResp.vendors_total[0]['subtotal']);
+                    emailData.total_tax = convertCurrency(getDataResp.vendors_total[0]['total_tax']);
+                    emailData.freight_charges = convertCurrency(getDataResp.vendors_total[0]['freight_charges']);
+                    emailData.freight_tax = convertCurrency(getDataResp.vendors_total[0]['freight_tax']);
+                    emailData.total_amount = convertCurrency(getDataResp.vendors_total[0]['total_amount']);
 
                     resolve({
                         companyLogo:companyLogo,
-                        dataObj:getDataResp,
+                        dataObj:emailData,
                         fileName:fileName,
-                        subject:`Purchase Order - #${getDataResp.po_number} from ${getDataResp.billing_address.company_name}`,
-                        to:getDataResp.vendor_detail.email,
+                        subject:`Purchase Order Request - #${getDataResp.po_number} from ${getDataResp.billing_address.company_name}`,
+                        to:requestedData.emails,
                         sender_name:getDataResp.billing_address.company_name,
                         receiver_name: getDataResp.vendor_detail.vendor_name,
                         pdfBuffer:pdfBuffer
@@ -419,7 +429,7 @@ function getDetails(id, langCode) {
                 }
             }
 
-            let recordDetail = await PurchaseOrderSchema.findOne({ _id: ObjectID(id) });
+            let recordDetail = await PurchaseOrderSchema.findOne({ _id: ObjectID(id) }).lean();
 
             if (recordDetail) {
                 resolve(recordDetail);

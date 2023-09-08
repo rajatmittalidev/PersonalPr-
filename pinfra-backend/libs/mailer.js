@@ -15,7 +15,8 @@ const options = {
 async function send(opt) {
     try {     
         let optionsDetail = options;
-        let transporter = await nodemailer.createTransport(optionsDetail);       
+        let transporter = await nodemailer.createTransport(optionsDetail);     
+          
         return await mailer(opt, transporter);
     } catch (err) {
         throw  new Error(err)
@@ -74,8 +75,10 @@ async function mailer(opt, transporter) {
     
             transporter.use('compile', hbs(options));    
             let mailsent = await transporter.sendMail(email_obj);    
+            console.log('mailsent', mailsent)
             return mailsent;
         } catch (err) {           
+            console.log('err', err)
             throw  new Error(err)
         }
 

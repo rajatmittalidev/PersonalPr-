@@ -33,7 +33,7 @@ async function sendTemplateFn(req, res) {
 
       
             let getPdfData = await pdfObj[requestedData.template].generatePdf(finalData);
-          
+                     
              sendMail({
                 logo: getPdfData.companyLogo,
                 to: getPdfData.to,
@@ -41,7 +41,8 @@ async function sendTemplateFn(req, res) {
                 template: requestedData.template,
                 context: {
                     receiver_name: getPdfData.receiver_name,
-                    sender_name: getPdfData.sender_name
+                    sender_name: getPdfData.sender_name,
+                    dataObj:getPdfData.dataObj
                 },
                 attachments: [
                     {
@@ -58,8 +59,6 @@ async function sendTemplateFn(req, res) {
 
 
     } catch (error) {
-        console.log('error', error)
-
         return res.status(error.statusCode || 422).json(
             await Response.errors({
                 errors: error.errors,
