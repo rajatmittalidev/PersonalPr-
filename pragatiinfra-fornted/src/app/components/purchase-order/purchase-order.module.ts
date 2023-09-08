@@ -13,6 +13,7 @@ import { ESignComponent } from './e-sign/e-sign.component';
 import { BillingAddressPopupComponent } from './billing-address-popup/billing-address-popup.component';
 import { MailingAddressPopupComponent } from './mailing-address-popup/mailing-address-popup.component';
 import { MatIconModule } from '@angular/material/icon';
+import { MailPopupComponent } from './mail-popup/mail-popup.component';
 const routes: Routes = [
   {
     path: "",
@@ -35,7 +36,8 @@ const routes: Routes = [
     PurchaseOrderDetailsComponent,
     ESignComponent,
     BillingAddressPopupComponent,
-    MailingAddressPopupComponent
+    MailingAddressPopupComponent,
+    MailPopupComponent
   ],
   imports: [
     [RouterModule.forChild(routes)],

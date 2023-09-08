@@ -6,10 +6,6 @@
     style="font-family: 'Poppins';margin-top: 40px;font-style: normal;font-weight:600;font-size: 30px;color:#1E293B;margin-left: 10px;">Purchase
     orders</span>
   <span class="example-spacer"></span>
-  <button mat-icon-button style="margin-right: 40px;">
-    <mat-icon style="margin-top: 40px;">notifications</mat-icon>
-  </button>
-
 </mat-toolbar>
 <div>
   <hr style="width: 1130px;border: 2px solid #C5C5C5;margin-left: 30px;">
@@ -44,7 +40,7 @@
   </div>
 </div>
 <div>
-  <mat-card *ngIf="poDetails">
+  <div *ngIf="poDetails" class="main-wrapper">
     <div style="margin-top: 20px;">
       <div style="display: flex;gap:50px">
         <div class="topleft">
@@ -52,15 +48,14 @@
             Address</span><br>
           <div class="textarealeft">
 
-            <span
-              style="margin-left: 20px;margin-top: 10px;">Company:{{poDetails?.billing_address?.company_name}}</span>
-            <span style="margin-left: 20px">Address:
-              {{poDetails?.billing_address?.street_address}},{{poDetails?.billing_address?.street_address2}}
-              <br>{{poDetails?.billing_address?.city}},{{poDetails?.billing_address?.state}} </span>
-            <span style="margin-left: 20px">GST:{{poDetails?.billing_address?.gst_number}}</span>
-            <span style="margin-left: 20px">PAN:{{poDetails?.billing_address?.pan_card}}</span>
-            <span style="margin-left: 20px">CONTACT PERSON:{{poDetails?.billing_address?.contact_person}}</span>
-            <span style="margin-left: 20px">Email:{{poDetails?.billing_address?.email}}</span>
+            <span><b>{{poDetails?.billing_address?.company_name}}</b></span>
+            <span>
+              {{poDetails?.billing_address?.street_address}} {{poDetails?.billing_address?.street_address2}}
+              <br>{{poDetails?.billing_address?.city}} {{poDetails?.billing_address?.state}}
+              {{poDetails?.billing_address?.zip_code}} </span>
+            <span>GSTIN:{{poDetails?.billing_address?.gst_number}}</span>
+            <span>PAN:{{poDetails?.billing_address?.pan_card}}</span>
+            <span>{{poDetails?.billing_address?.contact_person}}</span>
 
           </div>
 
@@ -71,51 +66,43 @@
           <br>
           <div class="textarearight">
 
-            <span style="margin-left: 20px;margin-top: 10px;">DATE:{{poDetails.date | date:'dd-MM-yyyy'}}</span>
-            <span style="margin-left: 20px">VALIDITY:
-              <mat-form-field style="width:120px;padding:5px;border:1px solid #94A3B8">
-                <input matInput [formControl]="validityDate" [min]="minDate" [max]="maxDate" [matDatepicker]="picker">
+            <span><b>Date</b>: {{poDetails.date | date:'dd-MM-yyyy'}}</span>
+            <span><b>Validity</b>:
+              <mat-form-field>
+                <input matInput [formControl]="validityDate" (focus)="picker.open()" [min]="minDate" [max]="maxDate"
+                  [matDatepicker]="picker">
                 <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                 <mat-datepicker #picker></mat-datepicker>
               </mat-form-field>
-              <!-- <input type="text" style="width:120px;padding:5px;border:1px solid #94A3B8"> -->
-              <!-- <mat-icon style="position: relative;right:30px;font-size: 18px;top:9px">border_color</mat-icon> -->
             </span>
-            <span style="margin-left: 20px">PO NO:{{poDetails?.po_number}}<input type="text"
+            <span><b>PO NO</b>: {{poDetails?.po_number}}<input type="text"
                 style="width:120px;padding:5px;border:none;margin-left: 16px;"> </span>
-            <span
-              style="margin-left: 20px">ADDRESS::{{poDetails?.billing_address?.street_address}},{{poDetails?.billing_address?.street_address2}}
-              <br>{{poDetails?.billing_address?.city}},{{poDetails?.billing_address?.state}}<input type="text"
-                style="width:300px;padding:5px;border:none;margin-left: 16px;"> </span>
-            <span style="margin-left: 20px">CONTACT PERSON: {{poDetails?.billing_address?.contact_person}}<input
-                type="text" style="width:150px;padding:5px;border:none;margin-left: 16px;"> </span>
+            <span><b>Site Address</b> </span>
+            <span>{{poDetails?.billing_address?.street_address}} {{poDetails?.billing_address?.street_address2}}
+              {{poDetails?.billing_address?.city}},{{poDetails?.billing_address?.state}}
+              {{poDetails?.billing_address?.zip_code}} </span>
+            <span><b>Contact Person</b>: {{poDetails?.billing_address?.contact_person}}<input type="text"
+                style="width:150px;padding:5px;border:none;margin-left: 16px;"> </span>
 
           </div>
         </div>
       </div>
       <div class="topdown">
-        <span style="font-size: 14px;font-family: 'Poppins';color:#3568BA;margin-bottom: 10px;">To</span><br>
-        <div style="border: 1px solid #94A3B8;height:380px ;border-radius: 5px;">
+        <span style="font-size: 14px;font-family: 'Poppins';color:#3568BA;margin-bottom: 10px;">To,</span><br>
+        <div style="border: 1px solid #94A3B8;border-radius: 5px;padding: 5px 0 20px 0;">
           <div type="text" class="textareadown">
             <span style="margin-left: 20px;margin-top: 10px;width:500px">{{poDetails.vendor_detail.vendor_name}}
               <br>
-              {{poDetails.vendor_detail.address.street_address}},
-              {{poDetails.vendor_detail.address.street_address2}},
-              {{poDetails.vendor_detail.address.city}},
-              {{poDetails.vendor_detail.address.state}},
-              {{poDetails.vendor_detail.address.country}},
-              {{poDetails.vendor_detail.address.zip_code}}
-
-
+              {{poDetails.vendor_detail.address.street_address}} {{poDetails.vendor_detail.address.street_address2}}
+              {{poDetails.vendor_detail.address.city}} {{poDetails.vendor_detail.address.state}}
+              {{poDetails.vendor_detail.address.country}} {{poDetails.vendor_detail.address.zip_code}}
             </span>
-            <span style="margin-left: 20px">PAN:{{poDetails.vendor_detail.pan_number}}</span>
-            <span style="margin-left: 20px">GST:{{poDetails.vendor_detail.gst_number}}</span>
+            <span style="margin-left: 20px">GSTIN:{{poDetails.vendor_detail.gst_number}}</span>
           </div>
           <div
-            style="width:700px;height:172px;background-color: #233A61;position: relative;bottom:-10px;margin-left: 15px;border-radius: 5px;color: #fff;font-family: 'Poppins';padding:20px;">
-            <p>Sir</p>
-            <textarea [formControl]="mail_section"
-              style="width:680px;height: 120px;background-color: #233A61;border: none;color: #fff;font-family: 'Poppins';">
+            style="width:700px;background-color: #233A61;    margin-top: 15px;margin-left: 15px;border-radius: 5px;color: #fff;font-family: 'Poppins';padding:20px;">
+            <p>{{poDetails.vendor_message_header}}</p>
+            <textarea [formControl]="mail_section" class="vendor-message-textarea">
             </textarea>
           </div>
         </div>
@@ -179,11 +166,10 @@
     <div style="display: flex;gap:20px;">
       <div style="width:700px;height: 500px;">
         <div
-          style="width:640px;height:450px;background-color: #233A61;position: relative;bottom:50px;margin-left: 15px;border-radius: 5px;color: #fff;font-family: 'Poppins';padding:20px;">
+          style="width:640px;background-color: #233A61;margin-left: 15px;border-radius: 5px;color: #fff;font-family: 'Poppins';padding:20px;">
           <p>Vendor terms & other conditions <mat-icon
               style="font-size: medium;position: relative;top:10px">border_color</mat-icon></p>
-          <textarea [formControl]="term_condition"
-            style="width:600px;height: 388px;background-color: #233A61;border: none;color: #fff;font-family: 'Poppins';">
+          <textarea class="terms-condition-textarea" [formControl]="term_condition">
 
       </textarea>
 
@@ -223,8 +209,12 @@
       </div>
     </div>
 
+    <!-- <div>
+      <h4>E-sign</h4>
+      <img [src]="esignImage" alt="" style="">
+    </div> -->
 
-    <div style="display: flex;flex-direction: row;gap: 20px;margin-left: 330px;">
+    <div style="display: flex;gap: 20px;justify-content: end;">
       <div><button *ngIf="poDetails.status=='approved'"
           style="padding: 8px;width: 180px;background-color: #54AA52;color: #fff;border-radius: 5px;border-color: lightgrey;font-family: 'Poppins';font-size: 14px;">Approved</button>
       </div>
@@ -241,11 +231,24 @@
 
       <div>
         <button
-          style="padding: 8px ;width: 180px;background-color: #fff;cursor: pointer;border: 0.5px solid #94A3B8;border-radius: 5px;color:#797979;font-family: 'Poppins';font-size: 14px;" (click)="downloadPdf()">
+          style="padding: 8px ;width: 180px;background-color: #fff;cursor: pointer;border: 0.5px solid #94A3B8;border-radius: 5px;color:#797979;font-family: 'Poppins';font-size: 14px;"
+          (click)="downloadPdf()">
           Download PDF <img src="./assets/images/pdfd.svg" class="imgstyle"></button>
       </div>
+      <div>
+        <button
+          style="padding: 8px ;width: 180px;background-color: #fff;cursor: pointer;border: 0.5px solid #94A3B8;border-radius: 5px;color:#797979;font-family: 'Poppins';font-size: 14px;"
+          (click)="enterMail()">
+          Send Mail <img src="./assets/images/pdfd.svg" class="imgstyle"></button>
+      </div>
+      <!-- <div> <button
+          style="padding: 8px ;width: 120px;background-color: #fff;cursor: pointer;border: 0.5px solid #94A3B8;border-radius: 5px;color:#797979;font-family: 'Poppins';font-size: 14px;">
+          Print <i class="fa fa-print"></i> </button>
+
+      </div> -->
+
     </div>
 
-  </mat-card>
+  </div>
 
 </div>
