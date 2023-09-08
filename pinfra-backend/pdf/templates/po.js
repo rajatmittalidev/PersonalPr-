@@ -90,7 +90,7 @@ module.exports.generatePdf = (dataObj) => {
                 <table  cellspacing="0" cellpadding="10px" border="0" width="100%">
                     <tr>
                         <td colspan="2">                           
-                            <p style="font-size: 16px;width:100%;text-align:center;font-weight:600">Purchase Order</p>                          
+                            <p style="font-size: 16px;width:100%;text-align:center;font-weight:600">Work Order</p>                          
                         </td>                        
                     </tr>
                     
