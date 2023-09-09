@@ -1,22 +1,20 @@
 <mat-toolbar style="height: 100px;background-color: #fff;">
     <span style="font-family: 'Poppins';margin-top: 40px;font-style: normal;font-weight:600;font-size: 30px;color:#1E293B;margin-left: 10px;">Summary</span>
     <span class="example-spacer"></span>
-    <button mat-icon-button style="margin-right: 40px;">
-    <mat-icon style="margin-top: 40px;">notifications</mat-icon>
-    </button>
-   
+
+
   </mat-toolbar>
     <div><hr style="width: 1130px;border: 2px solid #C5C5C5;margin-left: 30px;"></div>
     <div style="display: flex;flex-direction: row;font-family: 'Poppins';font-weight: 600;">
-      
+
             <div style="margin-top: 20px;margin-left: 30px;display: flex;">
-               
+
                 <div><img src="./assets/images/prl.svg"></div>
                 <span style="color: #233A61;margin-left: 5px;font-size: 14px;">Purchase&nbsp;request</span>
                 <div ><mat-divider style="width: 90px;margin-left: 10px;margin-top: 10px;border:1px dashed"></mat-divider></div>
             </div>
             <div style="margin-top: 20px;margin-left: 10px;display: flex;">
-                
+
                <div> <img src="./assets/images/approval.svg" ></div>
                 <span style="color: #97989D;margin-left: 5px;font-size: 14px;">Approvals</span>
                 <div ><mat-divider style="width: 90px;margin-left: 10px;margin-top: 10px;border:1px dashed"></mat-divider></div>
@@ -73,9 +71,9 @@
         </form>
          </mat-card>
 
-       
 
-           
+
+
                 <div class="scroll-bar1" >
                   <table style="direction: ltr !important;border-left: 2px solid #000 !important;">
                   <tr>
@@ -89,9 +87,9 @@
                  <th>Attachments</th>
                  <th>Remarks</th>
               </tr>
-                  
-                  
-                 
+
+
+
                   <tbody>
                       <tr  style="background-color: #F4F4F5;" *ngFor="let num of [1,2,3,]">
                           <td style="text-align: center;">
@@ -109,7 +107,7 @@
                           </td>
                           <td style="color: #000;">
                             Auto&nbsp;Generated
-                          </td> 
+                          </td>
                           <td >
                             <input list="browsers" name="myBrowser" placeholder="Select"  style="padding: 10px;width: 150px;border:1px solid #9F9F9F;border-radius: 20px;cursor: pointer;background-color: Transparent !important;"/>
                             <datalist id="browsers" >
@@ -132,13 +130,13 @@
                           </td>
                           <td >
                             <input placeholder="Enter" style="width:120px;padding:10px;border-radius: 6px;border:1px solid #9F9F9F;cursor: pointer;background-color: Transparent">
-                          
+
                           </td>
                       </tr>
-                      
+
                   </tbody>
                 </table>
-            </div> 
+            </div>
             <div class="remarktab">
                 <label style="color: #3568BA;font-size: 15px;">Remarks</label><br>
                 <textarea placeholder="Please describe"></textarea>
@@ -146,9 +144,9 @@
             <div style="display: flex;flex-direction: row;gap: 10px;float: right;position: relative;top:-150px;right:60px;">
                 <div><button style="padding: 15px ;width: 200px;background-color: #ECD172;color: #fff;border-color: lightgrey;font-family: 'Poppins';border: none;font-size: 14px;">Update&nbsp;material&nbsp;request</button></div>
                 <div><button style="padding: 15px ;width: 120px;background-color: #C7323B;color: #fff;border: 1px solid #94A3B8;font-family: 'Poppins';border: none;font-size: 14px;">Reject</button></div>
-               
+
             </div>
-           
+
             <div style="display: flex;gap:20px;margin-left: 40px;position: relative;top:-150px;;">
                 <button style="padding: 8px ;width: 120px;background-color: #fff;cursor: pointer;border: 0.5px solid #94A3B8;border-radius: 5px;font-size: 15px;color:#797979;font-family: 'Poppins';font-size: 14px;">  <img src="./assets/images/print.svg" class="imgstyle">  Print
             </button>
