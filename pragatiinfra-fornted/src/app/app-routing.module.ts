@@ -82,7 +82,7 @@ const routes: Routes = [
     path: 'purchase-order',
     loadChildren: () => import('./components/purchase-order/purchase-order.module')
       .then(mod => mod.PurchaseOrderModule),
-    // canActivate: [AuthGuard]
+    canActivate: [AuthGuard]
   },
 
   {
