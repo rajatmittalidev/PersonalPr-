@@ -92,20 +92,20 @@ export class EditDataComponent implements OnInit {
       }
     });
     this.editForm.patchValue({
-      location: data.location,
-      site_name: data.site_name,
-      code: data.code,
-      store_manager: user[0].name,
+      location: data.location ? data.location : '',
+      site_name: data.site_name ? data.site_name : '',
+      code: data.code ? data.code : '',
+      store_manager: user[0].name ? user[0].name : (data.store_manager ? data.store_manager : ''),
       store_manager_phone_number_dialcode: '+91',
-      store_manager_phone_number: data.store_manager_phone_number,
-      site_manager_email: data.site_manager_email,
+      store_manager_phone_number: data.store_manager_phone_number ? data.store_manager_phone_number : '',
+      site_manager_email: data.site_manager_email ? data.site_manager_email : '',
       address: {
-        street_address: data.address.street_address,
-        street_address2: data.address.street_address2,
-        state: data.address.state,
-        city: data.address.city,
-        zip_code: data.address.zip_code,
-        country: data.address.country,
+        street_address: data.address.street_address ? data.address.street_address : '',
+        street_address2: data.address.street_address2 ? data.address.street_address2 : '',
+        state: data.address.state ? data.address.state : '',
+        city: data.address.city ? data.address.city : '',
+        zip_code: data.address.zip_code ? data.address.zip_code : '',
+        country: data.address.country ? data.address.country : '',
       },
       _id: data._id
 
