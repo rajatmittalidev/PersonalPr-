@@ -95,7 +95,7 @@ export class EditDataComponent implements OnInit {
       location: data.location ? data.location : '',
       site_name: data.site_name ? data.site_name : '',
       code: data.code ? data.code : '',
-      store_manager: user[0].name ? user[0].name : (data.store_manager ? data.store_manager : ''),
+      store_manager: user[0] && user[0].name ? user[0].name : (data.store_manager ? data.store_manager : ''),
       store_manager_phone_number_dialcode: '+91',
       store_manager_phone_number: data.store_manager_phone_number ? data.store_manager_phone_number : '',
       site_manager_email: data.site_manager_email ? data.site_manager_email : '',
