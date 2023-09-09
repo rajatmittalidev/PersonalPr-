@@ -52,30 +52,6 @@
       </li>
 
 
-<!--
-      <li *ngFor="let item of menuSidebar | menuFilter:link_name" class="sidebar" #itemEl routerLinkActive="active">
-        <div class="dropdown-title">
-          <a routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" (click)="addSubItems(item)">
-            <div class="allignSvg">
-              <img [src]="item.img">
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              <span class="link_name">{{ caseconverter(item.link_name) }} <span><mat-icon
-                    *ngIf="item.link_name == 'User Management'"
-                    style="top: 9px;position: relative;">arrow_drop_down</mat-icon></span></span>
-            </div>
-          </a>
-        </div>
-        <ul class="sub-menu">
-          <li *ngFor="let item_sub of item.sub_menu" routerLinkActive="active">
-            <a [routerLink]="[item_sub.link]">
-              <div class="allignSvg">
-                <img [src]="item_sub.img"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                {{item_sub.link_name | lowercase}}
-              </div>
-            </a>
-          </li>
-        </ul>
-      </li> -->
       <hr >
       <li>
         <a [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact: true}">

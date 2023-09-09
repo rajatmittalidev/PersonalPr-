@@ -227,11 +227,43 @@ async function loginUser(req, res) {
 
         if (!validPassword) return res.status(400).send('wrong password')
 
-        const role = await Role.findOne({ role: userExits.role })
-
         const token = jwt.sign({ id: userExits._id, name: userExits.name }, 'secret');
 
-        res.send({ token: token, user: userExits, permissions: role.dashboard_permissions })
+        let role = await Role.findOne({ role: userExits.role });
+    
+        let permission = {};
+        let modulesArray = [];
+
+        if(role && role.dashboard_permissions && role.dashboard_permissions[0] && role.dashboard_permissions[0]['ParentChildchecklist'] && role.dashboard_permissions[0]['ParentChildchecklist']['length']>0){
+            role.dashboard_permissions[0]['ParentChildchecklist'].map((moduleObj)=>{
+
+                if(moduleObj.isSelected){
+                    modulesArray.push(moduleObj.moduleName);
+                    permission[moduleObj.moduleName] = [];
+    
+                    if(moduleObj.childList && moduleObj.childList.length>0){
+                        moduleObj.childList.map((permisObj)=>{
+                            if(permisObj.isSelected){
+                                permission[moduleObj.moduleName].push(permisObj.value);
+                            }
+                        })
+                    }
+                }
+               
+
+                return moduleObj;
+            })
+        }
+
+
+
+        res.send({ 
+            token: token, 
+            user: userExits, 
+            permissions: role.dashboard_permissions,
+            modules:modulesArray,
+            module_permissions:permission
+        })
 
     } catch (error) {
         return res.status(error.statusCode || 422).json(
