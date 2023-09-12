@@ -29,7 +29,6 @@ export class PurchaseOrderDetailsComponent implements OnInit {
     private httpService: RequestService, private dialog: MatDialog,
 
   ) {
-    console.log("new Date().setMonth(new Date().getMonth() + 2)", new Date(new Date().setMonth(new Date().getMonth() + 2)));
 
     this.route.params.subscribe(params => {
       this.pageId = params['id'];
@@ -65,7 +64,7 @@ export class PurchaseOrderDetailsComponent implements OnInit {
 
   sendEmail(data) {
     this.downloadLoading = true;
-    this.httpService.POST('mail/template', {
+    this.httpService.POST('/mail/template', {
       template: "po",
       id: this.pageId,
       mails: data

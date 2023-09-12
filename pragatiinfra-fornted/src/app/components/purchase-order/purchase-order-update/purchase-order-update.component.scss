@@ -2,9 +2,11 @@ mat-toolbar {
   height: 100px;
   background-color: #fff;
 }
+
 .example-spacer {
   flex: 1 1 auto;
 }
+
 mat-card {
   margin-left: 30px;
   margin-bottom: 20px;
@@ -13,6 +15,7 @@ mat-card {
   height: 240vh;
   box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.25) !important;
 }
+
 /* .topleft{
   background-color: burlywood;
   width:530px;
@@ -25,12 +28,32 @@ mat-card {
 } */
 .topdown {
   width: 800px;
-  height: 400px;
+  min-height: 400px;
   margin-top: 50px;
+
+  @media only screen and (max-width: 965px) {
+    width: 90%;
+  }
 }
+
+.msg-teatarea {
+  width: 700px;
+  background-color: #233A61;
+  margin-top: 15px;
+  margin-left: 15px;
+  border-radius: 5px;
+  color: #fff;
+  font-family: 'Poppins';
+  padding: 20px;
+
+  @media only screen and (max-width: 965px) {
+    width: 90%;
+  }
+}
+
 .textarealeft {
-  width: 520px;
-  height: 224px;
+  width: 440px;
+  min-height: 245px;
   border-radius: 5px;
   border: 1px solid #94a3b8;
   color: #697e9b;
@@ -42,8 +65,10 @@ mat-card {
   padding: 10px;
   margin-top: 10px;
 }
+
 .textarearight {
-  width: 520px;
+  width: 440px;
+  min-height: 245px;
   border-radius: 5px;
   border: 1px solid #94a3b8;
   color: #697e9b;
@@ -55,6 +80,7 @@ mat-card {
   padding: 10px;
   margin-top: 10px;
 }
+
 .textareadown {
   width: 780px;
   color: #697e9b;
@@ -76,6 +102,7 @@ table {
   margin-top: 8px;
   width: 1166px;
 }
+
 th {
   background-color: #233a61;
   border: 1px solid #94a3b8;
@@ -100,6 +127,7 @@ td {
   font-family: "Poppins";
   /* width:100px; */
 }
+
 tr:nth-child(even) {
   background-color: #e5e6eb !important;
 }
@@ -107,21 +135,25 @@ tr:nth-child(even) {
 .scroll-bar1 {
   margin-bottom: 100px;
   margin-top: 50px;
+  overflow-x: auto;
 }
 
 ::-webkit-scrollbar {
   width: 7px;
   height: 7px;
 }
+
 ::-webkit-scrollbar-track {
   border: 1px solid lightgrey;
   border-radius: 5px;
   background-color: lightgrey;
 }
+
 ::-webkit-scrollbar-thumb {
   background: #1e293b;
   border-radius: 5px;
 }
+
 ::-webkit-scrollbar-thumb:hover {
   background: lightblue;
 }
@@ -146,16 +178,18 @@ tr:nth-child(even) {
   padding: 0;
   margin: 0;
 }
+
 .downtable td {
   background-color: #e5e6eb;
 }
+
 .imgstyle {
   position: relative;
   top: 1px;
 }
 
 
-.main-wrapper{
+.main-wrapper {
   padding: 0 15px 0 30px;
 }
 
@@ -184,9 +218,20 @@ tr:nth-child(even) {
 }
 
 .main-wrapper {
-  border: 1px solid #ccc;
-  display: inline-block;
-  border-radius: 4px;
-  margin: 20px 26px;
-  padding: 0 15px 20px 30px;
+  margin: 0px 26px;
+  padding: 0 15px 20px 10px;
+}
+
+.terms-condition-wrap {
+  width: 640px;
+  background-color: #233A61;
+  margin-left: 15px;
+  border-radius: 5px;
+  color: #fff;
+  font-family: 'Poppins';
+  padding: 20px;
+
+  @media only screen and (max-width: 836px) {
+    width: 90%;
+  }
 }

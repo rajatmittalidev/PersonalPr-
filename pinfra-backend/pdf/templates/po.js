@@ -389,7 +389,7 @@ module.exports.generatePdf = (dataObj) => {
                         dataObj:emailData,
                         fileName:fileName,
                         subject:`Purchase Order Request - #${getDataResp.po_number} from ${getDataResp.billing_address.company_name}`,
-                        to:requestedData.emails,
+                        to:requestedData.mails,
                         sender_name:getDataResp.billing_address.company_name,
                         receiver_name: getDataResp.vendor_detail.vendor_name,
                         pdfBuffer:pdfBuffer

@@ -42,7 +42,7 @@
 <div>
   <div *ngIf="poDetails" class="main-wrapper">
     <div style="margin-top: 20px;">
-      <div style="display: flex;gap:50px">
+      <div style="display: flex;gap:50px;flex-wrap: wrap;">
         <div class="topleft">
           <span style="font-size: 14px;font-family: 'Poppins';color:#3568BA;margin-bottom: 10px;">Billing
             Address</span><br>
@@ -99,8 +99,7 @@
             </span>
             <span style="margin-left: 20px">GSTIN:{{poDetails.vendor_detail.gst_number}}</span>
           </div>
-          <div
-            style="width:700px;background-color: #233A61;    margin-top: 15px;margin-left: 15px;border-radius: 5px;color: #fff;font-family: 'Poppins';padding:20px;">
+          <div class="msg-teatarea">
             <p>{{poDetails.vendor_message_header}}</p>
             <textarea [formControl]="mail_section" class="vendor-message-textarea">
             </textarea>
@@ -163,10 +162,9 @@
     </div>
 
 
-    <div style="display: flex;gap:20px;">
+    <div style="display: flex;gap:20px;flex-wrap: wrap;">
       <div style="width:700px;height: 500px;">
-        <div
-          style="width:640px;background-color: #233A61;margin-left: 15px;border-radius: 5px;color: #fff;font-family: 'Poppins';padding:20px;">
+        <div class="terms-condition-wrap">
           <p>Vendor terms & other conditions <mat-icon
               style="font-size: medium;position: relative;top:10px">border_color</mat-icon></p>
           <textarea class="terms-condition-textarea" [formControl]="term_condition">
@@ -235,7 +233,7 @@
           (click)="downloadPdf()">
           Download PDF <img src="./assets/images/pdfd.svg" class="imgstyle"></button>
       </div>
-      <div>
+      <div style="display: none;">
         <button
           style="padding: 8px ;width: 180px;background-color: #fff;cursor: pointer;border: 0.5px solid #94A3B8;border-radius: 5px;color:#797979;font-family: 'Poppins';font-size: 14px;"
           (click)="enterMail()">
