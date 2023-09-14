@@ -9,6 +9,7 @@ const ItemSchema = require('../../models/Item');
 const VendorSchema = require('../../models/Vendor');
 const ProjectActivityDataSchema = require('../../models/ProjectActivityData');
 const ProjectSchema = require('../../models/Project');
+const _ = require('lodash');
 const RecentActivity = require('../../models/recentActivity');
 const {  billingAddress, mailContentHeader,  mailContent,  termsConsition} = require('../../libs/constant');
 
@@ -87,6 +88,25 @@ function updateNextNumberGroupId(groupId, moduleName = "") {
 
 }
 
+
+/* Filter VendorByCategory */
+function filterVendorByCategory(vendorList,categoryId) {
+    return new Promise(async (resolve, reject) => {
+        if(vendorList && vendorList.length>0){
+
+            let vendorListData = vendorList.filter((o)=>{
+                if(o.category.includes(String(categoryId))){
+                    return o;
+                }
+            });
+            resolve(vendorListData);
+        } else {
+            resolve([]);
+        }
+
+    });
+}
+
 /* Rate approval */
 function addRateApproval(dataObj, langCode, currentUserId) {
     return new Promise(async (resolve, reject) => {
@@ -97,7 +117,8 @@ function addRateApproval(dataObj, langCode, currentUserId) {
                 {
                     "$project": {
                         "vendor_id": "$_id",
-                        "vendor_name": 1
+                        "vendor_name": 1,
+                        "category": 1
                     }
                 },
                 {
@@ -116,18 +137,9 @@ function addRateApproval(dataObj, langCode, currentUserId) {
             ]);
 
             let vendorTotal = [];
-            getVendors.map((o) => {
-                vendorTotal.push({
-                    vendor_id: o.vendor_id,
-                    vendor_name: o.vendor_name,
-                    brand: '',
-                    subtotal: 0,
-                    total_tax: 0,
-                    freight_charges: 0,
-                    freight_tax: 0,
-                    total_amount: 0
-                })
-            });
+           
+
+            
 
             delete cloneData._id;
             delete cloneData.items;
@@ -135,14 +147,15 @@ function addRateApproval(dataObj, langCode, currentUserId) {
             delete cloneData.remark;
             cloneData.purchase_request_id = dataObj._id;
             cloneData.status = 'pending';
-            cloneData.vendors_total = vendorTotal;
+            
             cloneData.stage = 'rate_comparitive';
-
-            console.log('cloneData', cloneData)
 
             let itemArray = [];
 
             if (dataObj.items && dataObj.items.length > 0) {
+
+                let selectedVendorArray = [];
+
                 let promises = dataObj.items.map(async (o) => {
 
                     let getItemDetail = await ItemSchema.aggregate([
@@ -192,6 +205,9 @@ function addRateApproval(dataObj, langCode, currentUserId) {
                     ]);
                     if (getItemDetail && getItemDetail.length > 0) {
 
+                        let filteredVendor = await filterVendorByCategory(getVendors,getItemDetail[0]['category']);
+                        selectedVendorArray = selectedVendorArray.concat(filteredVendor);
+                    
                         itemArray.push({
                             item_id: o.item_id,
                             tax: {
@@ -201,15 +217,39 @@ function addRateApproval(dataObj, langCode, currentUserId) {
                             qty: o.qty,
                             attachment: o.attachment,
                             remark: o.remark,
-                            vendors: getVendors
+                            vendors: filteredVendor
                         });
 
                     }
                 });
 
+             
+
+
                 let newData = await Promise.all(promises);
 
+                   selectedVendorArray = _.uniqBy(selectedVendorArray, function (e) {
+                    return e.vendor_id;
+                });              
+
+                if(selectedVendorArray && selectedVendorArray.length>0){
+                    selectedVendorArray.map((o) => {
+                        vendorTotal.push({
+                            vendor_id: o.vendor_id,
+                            vendor_name: o.vendor_name,
+                            brand: '',
+                            subtotal: 0,
+                            total_tax: 0,
+                            freight_charges: 0,
+                            freight_tax: 0,
+                            total_amount: 0
+                        })
+                    });
+                }
+                cloneData.vendors_total = vendorTotal;
+
                 cloneData.items = itemArray;
+           
             }
 
             let getNumber = await getNextNumberGroupId('', 'rate_approval');
@@ -220,7 +260,6 @@ function addRateApproval(dataObj, langCode, currentUserId) {
 
             /* Update numbering group */
             updateNextNumberGroupId('', 'rate_approval');
-
 
             resolve(savedData)
 
