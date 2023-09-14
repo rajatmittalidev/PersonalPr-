@@ -90,7 +90,7 @@ table.items-table {
 
 .scroll-bar1 {
   height: auto;
-  width: 89%;
+  width: calc(100% - 25px);
   margin-left: 25px;
   margin-bottom: 10px;
   margin-top: 50px;
@@ -193,5 +193,5 @@ table.items-table {
 }
 
 .main-container {
-  margin: 10px 330px 0 15px;
+  margin: 10px 20px 0 15px;
 }

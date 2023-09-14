@@ -122,13 +122,13 @@ export class NavigationSidePanelComponent implements OnInit, OnDestroy {
           link_name: "Add Procurement",
           link: "/procurement",
           img: './assets/images/icons/Buser.svg',
-          module_name: ''
+          module_name: 'Add_Procurement'
         },
         {
           link_name: "Procurements List",
           link: "/procurement/prlist",
           img: './assets/images/icons/Buser.svg',
-          module_name: ''
+          module_name: 'Procurement_Approval'
         }
       ]
     },
@@ -137,28 +137,28 @@ export class NavigationSidePanelComponent implements OnInit, OnDestroy {
       link: '/rate-comparative',
       icon: "bx bx-collection",
       img: '../../../assets/images/icons/Inventory.svg',
-      module_name: ''
+      module_name: 'Rate_Comparitive'
     },
     {
       link_name: "Rate Approval",
       link: '/rate-approval',
       icon: "bx bx-collection",
       img: '../../../assets/images/icons/Inventory.svg',
-      module_name: ''
+      module_name: 'Rate_Approval'
     },
     {
       link_name: "Purchase Order",
       link: '/purchase-order',
       icon: "bx bx-collection",
       img: '../../../assets/images/icons/Inventory.svg',
-      module_name: ''
+      module_name: 'Purchase_Order'
     },
     {
       link_name: "Inventory",
       link: '/inventory',
       icon: "bx bx-collection",
       img: '../../../assets/images/icons/Inventory.svg',
-      module_name: ''
+      module_name: 'Inventory'
     },
 
     {

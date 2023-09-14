@@ -1,8 +1,10 @@
 const router = require('express').Router();
 const Role = require('../../models/Role')
 const RecentActivity = require('../../models/recentActivity')
+const User = require('../../models/User')
 const mongoose = require('mongoose')
 const Response = require('../../libs/response')
+const { responseMessage } = require("../../libs/responseMessages");
 const ObjectId = mongoose.Types.ObjectId;
 
 
@@ -14,7 +16,8 @@ module.exports = {
     updateData,
     deleteList,
     updatePermData,
-    deleteData
+    deleteData,
+    getUserPermission
 }
 
 async function getList(req, res) {
@@ -192,3 +195,79 @@ async function deleteData(req, res) {
 }
 
 
+
+
+
+async function getUserPermission(req, res) {
+
+    try {
+        let reqObj = req.body;
+        let { user_id } = req.query;
+
+        if (!user_id) {
+            throw {
+                errors: [],
+                message: responseMessage(reqObj.langCode, 'ID_MISSING'),
+                statusCode: 412
+            }
+        }
+
+        const userExits = await User.findOne({ _id: ObjectId(user_id) })
+        console.log('userExits', userExits)
+
+        if (!userExits) {
+            throw {
+                errors: [],
+                message: responseMessage(reqObj.langCode, 'SOMETHING_WRONG'),
+                statusCode: 412
+            }
+        }
+
+
+        let role = await Role.findOne({ role: userExits.role });
+
+        let permission = {};
+        let modulesArray = [];
+
+        if(role && role.dashboard_permissions && role.dashboard_permissions[0] && role.dashboard_permissions[0]['ParentChildchecklist'] && role.dashboard_permissions[0]['ParentChildchecklist']['length']>0){
+            role.dashboard_permissions[0]['ParentChildchecklist'].map((moduleObj)=>{
+
+                if(moduleObj.isSelected){
+                    modulesArray.push(moduleObj.moduleName);
+                    permission[moduleObj.moduleName] = [];
+    
+                    if(moduleObj.childList && moduleObj.childList.length>0){
+                        moduleObj.childList.map((permisObj)=>{
+                            if(permisObj.isSelected){
+                                permission[moduleObj.moduleName].push(permisObj.value);
+                            }
+                        })
+                    }
+                }
+               
+
+                return moduleObj;
+            })
+        }
+
+        if (role) {
+            res.status(200).json(await Response.success({    
+                    permissions: role.dashboard_permissions,
+                    modules:modulesArray,
+                    module_permissions:permission
+                
+             }, responseMessage(reqObj.langCode, 'SUCCESS')));
+        } else {
+            res.status(422).json(await Response.success({}, responseMessage(reqObj.langCode, 'NO_RECORD_FOUND'), req));
+        }
+
+    } catch (error) {
+        return res.status(error.statusCode || 422).json(
+            await Response.errors({
+                errors: error.errors,
+                message: error.message
+            }, error, req)
+        );
+
+    }
+}

@@ -81,6 +81,7 @@ router.put('/roles/update-perm/:role', middleware.jwtVerify, controllerObj.role.
 router.post('/roles', middleware.jwtVerify, controllerObj.role.createData);
 router.delete('/roles/:id', middleware.jwtVerify, controllerObj.role.deleteData);
 router.delete('/roles', middleware.jwtVerify, controllerObj.role.deleteList);
+router.get('/user/permission', middleware.jwtVerify, controllerObj.role.getUserPermission);
 
 
 // Task Routes
